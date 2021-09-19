@@ -5,26 +5,33 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import classes from "./Card.module.css";
+import classes from "./TripCard.module.css";
 
 function TripCard(props) {
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card
+      sx={{
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       <CardMedia
         component="img"
-        alt="brc"
+        alt={props.title}
         height="140"
-        image="https://media.staticontent.com/media/pictures/0a834808-256d-4047-8437-3dc3145fa761/1120x700?op=TRUNCATE&enlarge=false&gravity=sm&quality=80&dpr=1"
+        image={props.image}
       />
-      <CardContent>
+      <CardContent sx={{ flexGrow: 1 }}>
         <Typography gutterBottom variant="h5" component="div">
-          Una escapada de aventura en San Carlos de Bariloche
+          {props.title}
         </Typography>
-        <Typography className={classes.description} variant="body2" color="text.secondary">
-          Encontrá en San Carlos de Bariloche una invitación a vivir una
-          experiencia llena de adrenalina en un lugar maravilloso.Sus paisajes y
-          recorridos hacia sus rincones mágicos, no van a dejar de sorprenderte.
-          ¡Una dosis de adrenalina es todo lo que necesitás!
+        <Typography
+          className={classes.description}
+          variant="body2"
+          color="text.secondary"
+        >
+          {props.description}
         </Typography>
       </CardContent>
       <CardActions>

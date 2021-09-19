@@ -33,7 +33,7 @@ function Header() {
             color="inherit"
             startIcon={<TravelExplore />}
           >
-            Trips
+            Viajes
           </Button>
           <Button
             component={Link}
@@ -41,7 +41,7 @@ function Header() {
             color="inherit"
             startIcon={<Favorite />}
           >
-            Favorites
+            Favoritos
           </Button>
         </Toolbar>
       </AppBar>
