@@ -23,18 +23,21 @@ function Favorites() {
         </Container>
       </Box>
       <Container>
-        {!hasFavorites && <p>Aún no tienes favoritos..</p>}
-        <Grid container spacing={4}>
-          {favorites.map((card) => (
-            <Grid item key={card} xs={12} sm={6} md={4}>
-              {/* <TripCard
-                title={cardTitle}
-                description={cardDescription}
-                image={cardImage}
-              /> */}
-            </Grid>
-          ))}
-        </Grid>
+        {!hasFavorites ? 
+          <p>Aún no tienes favoritos..</p> 
+          : 
+          <Grid container spacing={4}>
+            {favorites.map((card) => (
+              <Grid item key={card} xs={12} sm={6} md={4}>
+                {/* <TripCard
+                  title={cardTitle}
+                  description={cardDescription}
+                  image={cardImage}
+                /> */}
+              </Grid>
+            ))}
+          </Grid>
+        }        
       </Container>
     </div>
   );

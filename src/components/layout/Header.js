@@ -4,45 +4,42 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
 import classes from "./Header.module.css";
-import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
 import { Favorite, TravelExplore } from "@mui/icons-material";
+import { styled } from "@mui/system";
+
+const NavButton = styled(Button)({
+  color: "white",
+  "&:hover": {
+    backgroundColor: "#05445E",
+  },
+});
 
 function Header() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
-        <Toolbar className={classes.header} >
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
+        <Toolbar className={classes.header}>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Solo Travel
           </Typography>
-          <Button
+          <NavButton
             component={Link}
             to="/"
-            color="inherit"
+            className={classes.navigationBtn}
             startIcon={<TravelExplore />}
           >
             Viajes
-          </Button>
-          <Button
+          </NavButton>
+          <NavButton
             component={Link}
             to="/favorites"
-            color="inherit"
+            className={classes.navigationBtn}
             startIcon={<Favorite />}
           >
             Favoritos
-          </Button>
+          </NavButton>
         </Toolbar>
       </AppBar>
     </Box>
