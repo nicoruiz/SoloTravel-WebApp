@@ -6,3 +6,13 @@
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 }
+
+.title {
+  padding: 0 5px 0 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  height: 4rem;
+}

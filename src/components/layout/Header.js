@@ -3,18 +3,11 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import classes from "./Header.module.css";
 import { Link } from "react-router-dom";
 import { Favorite, TravelExplore } from "@mui/icons-material";
-import { styled } from "@mui/system";
-
-const NavButton = styled(Button)({
-  color: "white",
-  "&:hover": {
-    backgroundColor: "#05445E",
-  },
-});
+// Styled components
+import { NavButton } from "./../ui/Buttons";
 
 function Header() {
   return (

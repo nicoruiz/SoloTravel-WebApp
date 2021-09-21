@@ -1,36 +1,31 @@
-import * as React from 'react';
+import * as React from "react";
 import { useState } from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import classes from "./TripCard.module.css";
-import { Favorite } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
-import { makeStyles } from '@mui/styles';
+import { AttachMoney, Favorite, LocationOn } from "@mui/icons-material";
+import { CardActionArea, Divider, IconButton } from "@mui/material";
+import { makeStyles } from "@mui/styles";
+// Styled components
+import { PrimaryButton } from "./ui/Buttons";
 
 const useStyles = makeStyles({
-  detailBtn: {
-    background: "#189AB4",
-    '&:hover': {
-      background: "#05445E",
-    }
-  },
   favoriteBtn: {
     color: "red",
   },
   notFavoriteBtn: {
-    color: "lightgrey",
-    '&:hover': {
+    "&:hover": {
       color: "red",
-    }
+    },
   },
 });
 
 function TripCard(props) {
   const [isFavorite, setFavorite] = useState(false);
+  const [isRaised, setRaised] = useState(false);
   const styles = useStyles();
 
   function toggleFavoriteStatusHandler() {
@@ -38,36 +33,68 @@ function TripCard(props) {
     setFavorite(!isFavorite);
   }
 
+  function toggleRaised() {
+    setRaised(!isRaised);
+  }
+
+  function tripDetailsHandler() {
+    console.log(`Trip: ${props.title}`);
+  }
+
   return (
     <Card
+      raised={isRaised}
+      onMouseOver={toggleRaised}
+      onMouseOut={toggleRaised}
       sx={{
         height: "100%",
         display: "flex",
         flexDirection: "column",
       }}
     >
-      <CardMedia
-        component="img"
-        alt={props.title}
-        height="140"
-        image={props.image}
-      />
-      <CardContent sx={{ flexGrow: 1 }}>
-        <Typography gutterBottom variant="h5" component="div">
-          {props.title}
-        </Typography>
-        <Typography
-          className={classes.description}
-          variant="body2"
-          color="text.secondary"
-        >
-          {props.description}
-        </Typography>
-      </CardContent>
+      <CardActionArea onClick={tripDetailsHandler}>
+        <CardMedia
+          component="img"
+          alt={props.title}
+          height="140"
+          image={props.image}
+        />
+        <CardContent sx={{ flexGrow: 1 }}>
+          <Typography className={classes.title} gutterBottom variant="h5">
+            {props.title}
+          </Typography>
+          <Typography
+            className={classes.description}
+            variant="body2"
+            color="text.secondary"
+          >
+            {props.description}
+          </Typography>
+          <Typography
+            sx={{ pt: 2, display: "flex", alignItems: "center" }}
+            variant="overline"
+          >
+            <LocationOn sx={{ pr: 0.5 }} fontSize="small" />
+            {props.location}
+          </Typography>
+          <Typography
+            sx={{ pt: 2, display: "flex", alignItems: "center" }}
+            variant="h4"
+          >
+            <AttachMoney fontSize="small" />
+            {props.price}
+          </Typography>
+        </CardContent>
+        <Divider variant="middle" />
+      </CardActionArea>
       <CardActions sx={{ display: "flex", justifyContent: "space-around" }}>
-        <Button className={styles.detailBtn} size="small" variant="contained">
-          Ver viaje
-        </Button>
+        <PrimaryButton
+          className={styles.detailBtn}
+          variant="contained"
+          onClick={tripDetailsHandler}
+        >
+          Ver detalle
+        </PrimaryButton>
         <IconButton
           aria-label="favorite"
           size="large"
