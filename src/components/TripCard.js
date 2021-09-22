@@ -75,7 +75,7 @@ function TripCard(props) {
             variant="overline"
           >
             <LocationOn sx={{ pr: 0.5 }} fontSize="small" />
-            {props.location}
+            {props.destination}
           </Typography>
           <Typography
             sx={{ pt: 2, display: "flex", alignItems: "center" }}
