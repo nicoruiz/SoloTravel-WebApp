@@ -28,40 +28,40 @@ function TripCard(props) {
   const [isRaised, setRaised] = useState(false);
   const styles = useStyles();
 
-  function toggleFavoriteStatusHandler() {
+  function handleToggleFavoriteStatus() {
     // TODO: Call API and set this trip as a favorite
     setFavorite(!isFavorite);
   }
 
-  function toggleRaised() {
+  function handleToggleRaised() {
     setRaised(!isRaised);
   }
 
-  function tripDetailsHandler() {
+  function handleTripDetails() {
     console.log(`Trip: ${props.title}`);
   }
 
   return (
     <Card
       raised={isRaised}
-      onMouseOver={toggleRaised}
-      onMouseOut={toggleRaised}
+      onMouseOver={handleToggleRaised}
+      onMouseOut={handleToggleRaised}
       sx={{
         height: "100%",
         display: "flex",
         flexDirection: "column",
       }}
     >
-      <CardActionArea onClick={tripDetailsHandler}>
+      <CardActionArea onClick={handleTripDetails}>
         <CardMedia
           component="img"
-          alt={props.title}
+          alt={props.name}
           height="140"
           image={props.image}
         />
         <CardContent sx={{ flexGrow: 1 }}>
           <Typography className={classes.title} gutterBottom variant="h5">
-            {props.title}
+            {props.name}
           </Typography>
           <Typography
             className={classes.description}
@@ -91,7 +91,7 @@ function TripCard(props) {
         <PrimaryButton
           className={styles.detailBtn}
           variant="contained"
-          onClick={tripDetailsHandler}
+          onClick={handleTripDetails}
         >
           Ver detalle
         </PrimaryButton>
@@ -99,7 +99,7 @@ function TripCard(props) {
           aria-label="favorite"
           size="large"
           className={isFavorite ? styles.favoriteBtn : styles.notFavoriteBtn}
-          onClick={toggleFavoriteStatusHandler}
+          onClick={handleToggleFavoriteStatus}
         >
           <Favorite fontSize="inherit" />
         </IconButton>
