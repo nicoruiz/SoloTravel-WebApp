@@ -56,7 +56,7 @@ function AllTrips() {
                     name={trip.name}
                     description={trip.description}
                     image={trip.image}
-                    location={trip.location}
+                    destination={trip.destination}
                     price={trip.price}
                   />
                 </Grid>
