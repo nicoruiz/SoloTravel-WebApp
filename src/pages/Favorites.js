@@ -1,14 +1,44 @@
-import Grid from "@mui/material/Grid";
+import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
-import TripCard from "../components/TripCard";
 import { Container, Typography } from "@mui/material";
+import * as usersService from "./../services/usersService";
+import TripList from "../components/TripList";
+import Spinner from "../components/ui/Spinner";
+import CustomSnackbar from "../components/ui/Snackbar";
+
+const guestUser = 1;
 
 function Favorites() {
-  const favorites = [];
-  const hasFavorites = favorites.length > 0;
+  const [favorites, setFavorites] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  // Initial render
+  useEffect(() => {
+    const getTrips = async () => {
+      try {
+        setLoading(true);
+
+        const data = await usersService.getFavorites(guestUser);
+        setFavorites(data.trips);
+      } catch (err) {
+        showError(err.message);
+      }
+      setLoading(false);
+    };
+    // Call fetch function
+    getTrips();
+  }, []);
+
+  const showError = (message) => {
+    setErrorMsg(message);
+    setError(true);
+  }
 
   return (
-    <div>
+    <>
+      {error && <CustomSnackbar message={errorMsg} isError={true} /> }
       <Box sx={{ pt: 8, pb: 6 }}>
         <Container maxWidth="sm">
           <Typography
@@ -22,24 +52,15 @@ function Favorites() {
           </Typography>
         </Container>
       </Box>
-      <Container>
-        {!hasFavorites ? 
-          <p>Aún no tienes favoritos..</p> 
-          : 
-          <Grid container spacing={4}>
-            {favorites.map((card) => (
-              <Grid item key={card} xs={12} sm={6} md={4}>
-                {/* <TripCard
-                  title={cardTitle}
-                  description={cardDescription}
-                  image={cardImage}
-                /> */}
-              </Grid>
-            ))}
-          </Grid>
-        }        
+      <Container>        
+        {loading ? <Spinner /> :
+          <>
+            {favorites.length === 0 && <p>Aún no tienes favoritos..</p>}
+            <TripList trips={favorites} />
+          </>
+        }
       </Container>
-    </div>
+    </>
   );
 }
 
