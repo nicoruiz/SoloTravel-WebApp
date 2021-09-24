@@ -45,7 +45,10 @@ function TripCard(props) {
       await usersService.removeFavorite(guestUser, props.id);
       setFavorite(false);
       setShowRemoveSnackbar(true);
-      props.onFavoriteRemove(props.id);
+      setTimeout(() => {
+        props.onFavoriteRemove(props.id);
+      }, 1000);
+      
     }
   }
 

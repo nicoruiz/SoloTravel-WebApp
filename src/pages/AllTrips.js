@@ -7,6 +7,8 @@ import TripList from "../components/TripList";
 import CustomSnackbar from "../components/ui/Snackbar";
 import SearchInput from "../components/ui/SearchInput";
 
+const guestUser = 1;
+
 function AllTrips() {
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -22,7 +24,7 @@ function AllTrips() {
     try {
       setLoading(true);
 
-      const data = await tripsService.getTrips(searchValue);
+      const data = await tripsService.getTrips(guestUser, searchValue);
       setTrips(data.trips);
     } catch (err) {
       showError(err.message);
