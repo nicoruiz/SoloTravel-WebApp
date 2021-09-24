@@ -15,6 +15,7 @@ function TripList(props) {
             destination={trip.destination}
             price={trip.price}
             isFavorite={trip.isFavorite} // TODO: Add isFavorite property to DTO
+            onFavoriteRemove={props.onFavoriteRemove}
           />
         </Grid>
       ))}

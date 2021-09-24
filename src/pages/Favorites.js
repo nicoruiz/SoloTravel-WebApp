@@ -16,7 +16,7 @@ function Favorites() {
 
   // Initial render
   useEffect(() => {
-    const getTrips = async () => {
+    const getFavorites = async () => {
       try {
         setLoading(true);
 
@@ -28,12 +28,17 @@ function Favorites() {
       setLoading(false);
     };
     // Call fetch function
-    getTrips();
+    getFavorites();
   }, []);
 
   const showError = (message) => {
     setErrorMsg(message);
     setError(true);
+  }
+
+  const handleFavoriteRemove = (tripId) => {
+    const newFavorites = favorites.filter(f => f.id !== tripId);
+    setFavorites(newFavorites);
   }
 
   return (
@@ -56,7 +61,7 @@ function Favorites() {
         {loading ? <Spinner /> :
           <>
             {favorites.length === 0 && <p>Aún no tienes favoritos..</p>}
-            <TripList trips={favorites} />
+            <TripList trips={favorites} onFavoriteRemove={handleFavoriteRemove} />
           </>
         }
       </Container>

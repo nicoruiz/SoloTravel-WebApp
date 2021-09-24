@@ -5,6 +5,7 @@ import * as tripsService from "./../services/tripsService";
 import Spinner from "../components/ui/Spinner";
 import TripList from "../components/TripList";
 import CustomSnackbar from "../components/ui/Snackbar";
+import SearchInput from "../components/ui/SearchInput";
 
 function AllTrips() {
   const [trips, setTrips] = useState([]);
@@ -14,44 +15,49 @@ function AllTrips() {
 
   // Initial render
   useEffect(() => {
-    const getTrips = async () => {
-      try {
-        setLoading(true);
-  
-        const data = await tripsService.getTrips();
-        setTrips(data.trips);
-      } catch (err) {
-        showError(err.message);
-      }
-      setLoading(false);
-    };
-    // Call fetch function
     getTrips();
   }, []);
+
+  const getTrips = async (searchValue = "") => {
+    try {
+      setLoading(true);
+
+      const data = await tripsService.getTrips(searchValue);
+      setTrips(data.trips);
+    } catch (err) {
+      showError(err.message);
+    }
+    setLoading(false);
+  };
 
   const showError = (message) => {
     setErrorMsg(message);
     setError(true);
   }
 
+  const handleOnSearch = (event) => {
+    const searchValue = event.target.value;
+    getTrips(searchValue);
+  }
+
   return (
     <>      
       {error && <CustomSnackbar message={errorMsg} isError={true} /> }
-      <Box sx={{ pt: 8, pb: 6 }}>
+      <Box sx={{ pt: 8 }}>
         <Container maxWidth="sm">
           <Typography
             component="h1"
             variant="h2"
             align="center"
             color="text.primary"
-            gutterBottom
           >
             Viajes disponibles
           </Typography>
         </Container>
       </Box>
       <Container sx={{ pb: 20 }}>
-        {loading ? <Spinner /> : <TripList trips={trips} />}
+        <SearchInput onSearch={handleOnSearch} />
+        {loading ? <Spinner /> : <TripList trips={trips} onFavoriteRemove={() => {}} />}
       </Container>
     </>
   );
