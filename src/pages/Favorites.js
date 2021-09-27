@@ -4,22 +4,20 @@ import { Container, Typography } from "@mui/material";
 import * as usersService from "./../services/usersService";
 import TripList from "../components/TripList";
 import Spinner from "../components/ui/Spinner";
-import CustomSnackbar from "../components/ui/Snackbar";
+import { useSnackbar } from "notistack";
 
 const guestUser = 1;
 
 function Favorites() {
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
+  const { enqueueSnackbar } = useSnackbar();
 
   // Initial render
   useEffect(() => {
     const getFavorites = async () => {
       try {
         setLoading(true);
-
         const data = await usersService.getFavorites(guestUser);
         setFavorites(data.trips);
       } catch (err) {
@@ -32,9 +30,8 @@ function Favorites() {
   }, []);
 
   const showError = (message) => {
-    setErrorMsg(message);
-    setError(true);
-  }
+    enqueueSnackbar(message, { variant: "error" });
+  };
 
   const handleFavoriteRemove = (tripId) => {
     const newFavorites = favorites.filter(f => f.id !== tripId);
@@ -43,7 +40,6 @@ function Favorites() {
 
   return (
     <>
-      {error && <CustomSnackbar message={errorMsg} isError={true} /> }
       <Box sx={{ pt: 8, pb: 6 }}>
         <Container maxWidth="sm">
           <Typography
@@ -57,7 +53,7 @@ function Favorites() {
           </Typography>
         </Container>
       </Box>
-      <Container>        
+      <Container sx={{ pb: 20 }}>        
         {loading ? <Spinner /> :
           <>
             {favorites.length === 0 && <p>Aún no tienes favoritos..</p>}

@@ -1,19 +1,21 @@
 import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
-import { Container, Typography } from "@mui/material";
+import { Container, Grid, Typography } from "@mui/material";
 import * as tripsService from "./../services/tripsService";
 import Spinner from "../components/ui/Spinner";
 import TripList from "../components/TripList";
-import CustomSnackbar from "../components/ui/Snackbar";
 import SearchInput from "../components/ui/SearchInput";
+import { useSnackbar } from "notistack";
+import { PrimaryButton } from "../components/ui/Buttons";
+import { Search } from "@mui/icons-material";
 
 const guestUser = 1;
 
 function AllTrips() {
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const { enqueueSnackbar } = useSnackbar();
 
   // Initial render
   useEffect(() => {
@@ -33,18 +35,21 @@ function AllTrips() {
   };
 
   const showError = (message) => {
-    setErrorMsg(message);
-    setError(true);
-  }
+    enqueueSnackbar(message, {
+      variant: "error",
+    });
+  };
 
-  const handleOnSearch = (event) => {
-    const searchValue = event.target.value;
-    getTrips(searchValue);
-  }
+  const handleOnSearchInputChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleOnSearchBtnClick = () => {
+    getTrips(searchTerm);
+  };
 
   return (
-    <>      
-      {error && <CustomSnackbar message={errorMsg} isError={true} /> }
+    <>
       <Box sx={{ pt: 8 }}>
         <Container maxWidth="sm">
           <Typography
@@ -58,8 +63,23 @@ function AllTrips() {
         </Container>
       </Box>
       <Container sx={{ pb: 20 }}>
-        <SearchInput onSearch={handleOnSearch} />
-        {loading ? <Spinner /> : <TripList trips={trips} onFavoriteRemove={() => {}} />}
+        {/* TODO: Create SearchComponent with all inner components needed */}
+        <Grid container spacing={2} sx={{ display: "flex", alignItems: "center" }}>
+          <Grid item xs={7} md={9}>
+            <SearchInput handleOnChange={handleOnSearchInputChange} />
+          </Grid>
+          <Grid item xs={5} md={3} >
+            <PrimaryButton
+              variant="contained"
+              startIcon={<Search />}
+              onClick={handleOnSearchBtnClick}
+            >
+              Buscar
+            </PrimaryButton>
+          </Grid>
+        </Grid>
+        {loading && <Spinner />}
+        <TripList trips={trips} onFavoriteRemove={() => {}} />
       </Container>
     </>
   );

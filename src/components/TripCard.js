@@ -9,11 +9,11 @@ import classes from "./TripCard.module.css";
 import { AttachMoney, Favorite, LocationOn } from "@mui/icons-material";
 import { CardActionArea, Divider, IconButton } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import CustomSnackbar from "../components/ui/Snackbar";
 // Styled components
 import { PrimaryButton } from "./ui/Buttons";
 // Services
 import * as usersService from "./../services/usersService";
+import { useSnackbar } from "notistack";
 
 const guestUser = 1;
 
@@ -31,39 +31,58 @@ const useStyles = makeStyles({
 function TripCard(props) {
   const [isFavorite, setFavorite] = useState(props.isFavorite);
   const [isRaised, setRaised] = useState(false);
-  const [showAddSnackbar, setShowAddSnackbar] = useState(false);
-  const [showRemoveSnackbar, setShowRemoveSnackbar] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
+
   const styles = useStyles();
 
-  async function handleToggleFavoriteStatus() {
+  const handleToggleFavoriteStatus = async () => {
     if (!isFavorite) {
+      await handleSetFavorite();
+    } else {
+      await handleRemoveFavorite();
+    }
+  };
+
+  const handleSetFavorite = async () => {
+    const message = "Viaje agregado a tus favoritos!";    
+    try {
       await usersService.addFavorite(guestUser, props.id);
       setFavorite(true);
-      setShowAddSnackbar(true);
+      enqueueSnackbar(message, { variant: "success" });
+    } catch (err) {
+      showError(err.message);
     }
-    else {
+  };
+
+  const handleRemoveFavorite = async () => {
+    const message = "Viaje eliminado de tus favoritos";
+    try {
       await usersService.removeFavorite(guestUser, props.id);
       setFavorite(false);
-      setShowRemoveSnackbar(true);
+      enqueueSnackbar(message, { variant: "warning" });
+      
       setTimeout(() => {
         props.onFavoriteRemove(props.id);
-      }, 1000);
-      
+      }, 300);
+    } catch (err) {
+      showError(err.message);
     }
-  }
+  };
 
-  function handleToggleRaised() {
+  const handleToggleRaised = () => {
     setRaised(!isRaised);
-  }
+  };
 
-  function handleTripDetails() {
-    console.log(`Trip: ${props.title}`);
-  }
+  const handleTripDetails = () => {
+    console.log(`Trip: ${props.name}`);
+  };
+
+  const showError = (message) => {
+    enqueueSnackbar(message, { variant: "error" });
+  };
 
   return (
-    <>      
-      {showAddSnackbar && <CustomSnackbar message={"Viaje agregado a favoritos!"} isError={false} /> }
-      {showRemoveSnackbar && <CustomSnackbar message={"Viaje eliminado de favoritos"} isError={true} /> }
+    <>
       <Card
         raised={isRaised}
         onMouseOver={handleToggleRaised}
@@ -110,11 +129,7 @@ function TripCard(props) {
           <Divider variant="middle" />
         </CardActionArea>
         <CardActions sx={{ display: "flex", justifyContent: "space-around" }}>
-          <PrimaryButton
-            className={styles.detailBtn}
-            variant="contained"
-            onClick={handleTripDetails}
-          >
+          <PrimaryButton variant="contained" onClick={handleTripDetails}>
             Ver detalle
           </PrimaryButton>
           <IconButton

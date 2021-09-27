@@ -2,14 +2,14 @@ import { Grid, TextField } from "@mui/material";
 
 export default function SearchInput(props) {
   return (
-    <Grid sx={{ display: "flex", justifyContent: "center", p: 5 }}>
+    <Grid sx={{ display: "flex", justifyContent: "center", pt: 5, pb: 5, pl: 2 }}>
       <TextField
         id="filled-search"
         fullWidth
         label="Buscá un viaje"
         type="search"
         variant="standard"
-        onChange={props.onSearch}
+        onChange={props.handleOnChange}
       />
     </Grid>
   );
