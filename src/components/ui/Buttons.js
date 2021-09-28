@@ -42,7 +42,7 @@ export const GoogleButton = (props) => {
   );
 };
 
-export const RegisterButton = styled(Button)({
+export const LoginButton = styled(Button)({
   backgroundColor: palette.primary,
   "&:hover": {
     backgroundColor: palette.secondary,

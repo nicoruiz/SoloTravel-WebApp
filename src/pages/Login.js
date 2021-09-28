@@ -1,6 +1,6 @@
 import { Container, Divider, Grid, Typography } from "@mui/material";
 import { GoogleLogin } from "react-google-login";
-import { GoogleButton, RegisterButton } from "./../components/ui/Buttons";
+import { GoogleButton, LoginButton } from "./../components/ui/Buttons";
 import { GOOGLE_CLIENT_ID } from "./../config";
 
 function Login() {
@@ -14,9 +14,16 @@ function Login() {
   };
 
   return (
-    <Container sx={{ pt: 10 }}>
-      <Grid sx={{ height: "25rem", width: "80%", m: "inherit", p: 5, backgroundColor: "white", boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;" }}>
-        <Grid sx={{ mb: 7 }}>
+    <Container sx={{ mt: 7 }} maxWidth="sm">
+      <Grid
+        sx={{
+          p: 2,
+          pt: 5,
+          backgroundColor: "white",
+          boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;",
+        }}
+      >
+        <Grid>
           <Typography
             component="h1"
             variant="h4"
@@ -41,8 +48,21 @@ function Login() {
           />
         </Grid>
         <Divider sx={{ mb: 5 }} variant="middle" />
+        <Grid sx={{ mb: 5 }}>
+          <Typography
+            component="h1"
+            variant="h4"
+            align="center"
+            color="text.primary"
+          >
+            Si sos una agencia
+          </Typography>
+        </Grid>
         <Grid sx={{ m: 5 }}>
-          <RegisterButton variant="contained">Registrate</RegisterButton>
+          <LoginButton variant="contained">Inicia sesión</LoginButton>
+        </Grid>
+        <Grid sx={{ m: 5 }}>
+          <LoginButton variant="contained">Registrate</LoginButton>
         </Grid>
       </Grid>
     </Container>
