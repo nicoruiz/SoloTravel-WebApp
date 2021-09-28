@@ -5,7 +5,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import classes from "./Header.module.css";
 import { Link } from "react-router-dom";
-import { Favorite, TravelExplore } from "@mui/icons-material";
+import { AccountCircle, Favorite, TravelExplore } from "@mui/icons-material";
 // Styled components
 import { NavButton } from "./../ui/Buttons";
 
@@ -20,7 +20,6 @@ function Header() {
           <NavButton
             component={Link}
             to="/"
-            className={classes.navigationBtn}
             startIcon={<TravelExplore />}
           >
             Viajes
@@ -28,11 +27,17 @@ function Header() {
           <NavButton
             component={Link}
             to="/favorites"
-            className={classes.navigationBtn}
             startIcon={<Favorite />}
           >
             Favoritos
           </NavButton>
+          <NavButton
+            component={Link}
+            to="/login"
+            startIcon={<AccountCircle />}
+          >
+            Iniciar sesión
+          </NavButton>          
         </Toolbar>
       </AppBar>
     </Box>

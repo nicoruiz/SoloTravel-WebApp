@@ -2,6 +2,7 @@ import Layout from "./components/layout/Layout";
 import { Switch, Route } from "react-router-dom";
 import AllTrips from "./pages/AllTrips";
 import Favorites from "./pages/Favorites";
+import Login from "./pages/Login";
 
 function App() {
   return (
@@ -12,6 +13,9 @@ function App() {
         </Route>
         <Route path="/favorites">
           <Favorites />
+        </Route>
+        <Route path="/login">
+          <Login />
         </Route>
       </Switch>
     </Layout>
