@@ -10,6 +10,11 @@ import { PrimaryButton } from "../components/ui/Buttons";
 import { Search } from "@mui/icons-material";
 
 const guestUser = 1;
+let isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
+let currentSession = localStorage.getItem("currentSession");
+if (currentSession) {
+  currentSession = JSON.parse(currentSession);
+}
 
 function AllTrips() {
   const [trips, setTrips] = useState([]);
@@ -26,7 +31,7 @@ function AllTrips() {
     try {
       setLoading(true);
 
-      const data = await tripsService.getTrips(guestUser, searchValue);
+      const data = await tripsService.getTrips(currentSession.userId, searchValue);
       setTrips(data.trips);
     } catch (err) {
       showError(err.message);
@@ -64,11 +69,15 @@ function AllTrips() {
       </Box>
       <Container sx={{ pb: 20 }}>
         {/* TODO: Create SearchComponent with all inner components needed */}
-        <Grid container spacing={2} sx={{ display: "flex", alignItems: "center" }}>
+        <Grid
+          container
+          spacing={2}
+          sx={{ display: "flex", alignItems: "center" }}
+        >
           <Grid item xs={7} md={9}>
             <SearchInput handleOnChange={handleOnSearchInputChange} />
           </Grid>
-          <Grid item xs={5} md={3} >
+          <Grid item xs={5} md={3}>
             <PrimaryButton
               variant="contained"
               startIcon={<Search />}

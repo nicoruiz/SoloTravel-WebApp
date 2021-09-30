@@ -34,10 +34,10 @@ export const GoogleButton = (props) => {
 
   return (
     <StyledBtn onClick={props.onClick} disabled={props.disabled}>
-      <SvgIcon sx={{ pr: 2 }}>
+      <SvgIcon sx={{ mr: 2 }}>
         <GoogleLogo />
       </SvgIcon>
-      Google
+      Continuar con Google
     </StyledBtn>
   );
 };
