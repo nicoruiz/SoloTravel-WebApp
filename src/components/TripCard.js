@@ -14,8 +14,9 @@ import { PrimaryButton } from "./ui/Buttons";
 // Services
 import * as usersService from "./../services/usersService";
 import { useSnackbar } from "notistack";
-
-const guestUser = 1;
+// Context
+import { useContext } from "react";
+import { SessionContext } from "../store/SessionContext";
 
 const useStyles = makeStyles({
   favoriteBtn: {
@@ -29,6 +30,7 @@ const useStyles = makeStyles({
 });
 
 function TripCard(props) {
+  const { session } = useContext(SessionContext);
   const [isFavorite, setFavorite] = useState(props.isFavorite);
   const [isRaised, setRaised] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
@@ -44,9 +46,9 @@ function TripCard(props) {
   };
 
   const handleSetFavorite = async () => {
-    const message = "Viaje agregado a tus favoritos!";    
+    const message = "Viaje agregado a tus favoritos!";
     try {
-      await usersService.addFavorite(guestUser, props.id);
+      await usersService.addFavorite(session.userId, props.id);
       setFavorite(true);
       enqueueSnackbar(message, { variant: "success" });
     } catch (err) {
@@ -57,10 +59,10 @@ function TripCard(props) {
   const handleRemoveFavorite = async () => {
     const message = "Viaje eliminado de tus favoritos";
     try {
-      await usersService.removeFavorite(guestUser, props.id);
+      await usersService.removeFavorite(session.userId, props.id);
       setFavorite(false);
       enqueueSnackbar(message, { variant: "warning" });
-      
+
       setTimeout(() => {
         props.onFavoriteRemove(props.id);
       }, 300);
@@ -132,14 +134,16 @@ function TripCard(props) {
           <PrimaryButton variant="contained" onClick={handleTripDetails}>
             Ver detalle
           </PrimaryButton>
-          <IconButton
-            aria-label="favorite"
-            size="large"
-            className={isFavorite ? styles.favoriteBtn : styles.notFavoriteBtn}
-            onClick={handleToggleFavoriteStatus}
-          >
-            <Favorite fontSize="inherit" />
-          </IconButton>
+          {session.isAuthenticated && (
+            <IconButton
+              aria-label="favorite"
+              size="large"
+              className={ isFavorite ? styles.favoriteBtn : styles.notFavoriteBtn }
+              onClick={handleToggleFavoriteStatus}
+            >
+              <Favorite fontSize="inherit" />
+            </IconButton>
+          )}
         </CardActions>
       </Card>
     </>

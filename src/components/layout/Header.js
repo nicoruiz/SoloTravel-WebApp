@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useContext } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -9,13 +9,17 @@ import { AccountCircle, Favorite, TravelExplore } from "@mui/icons-material";
 // Styled components
 import { NavButton } from "./../ui/Buttons";
 import { Avatar } from "@mui/material";
+// Context
+import { guestSession, SessionContext } from "./../../store/SessionContext";
 
 function Header() {
-  let isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
-  let currentSession = localStorage.getItem("currentSession");
-  if (currentSession) {
-    currentSession = JSON.parse(currentSession);
-  }
+  const { session, setSession } = useContext(SessionContext);
+
+  const logout = () => {
+    setSession(guestSession);
+    // eslint-disable-next-line no-restricted-globals
+    location.href = "/";
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -27,16 +31,23 @@ function Header() {
           <NavButton component={Link} to="/" startIcon={<TravelExplore />}>
             Viajes
           </NavButton>
-          <NavButton component={Link} to="/favorites" startIcon={<Favorite />}>
-            Favoritos
-          </NavButton>
-          {isAuthenticated ? (            
+          {session.isAuthenticated && (
             <NavButton
               component={Link}
-              to="/myProfile"
+              to="/favorites"
+              startIcon={<Favorite />}
             >
-              <Avatar sx={{ mr: 1 }} alt="avatar" src={currentSession?.picture} />
-              {currentSession?.name}
+              Favoritos
+            </NavButton>
+          )}
+          {session.isAuthenticated ? (
+            <NavButton onClick={logout}>
+              <Avatar
+                sx={{ mr: 1 }}
+                alt="avatar"
+                src={session.profileInfo.picture}
+              />
+              {session.profileInfo.name}
             </NavButton>
           ) : (
             <NavButton

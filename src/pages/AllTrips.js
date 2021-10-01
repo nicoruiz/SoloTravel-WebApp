@@ -8,15 +8,11 @@ import SearchInput from "../components/ui/SearchInput";
 import { useSnackbar } from "notistack";
 import { PrimaryButton } from "../components/ui/Buttons";
 import { Search } from "@mui/icons-material";
-
-const guestUser = 1;
-let isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
-let currentSession = localStorage.getItem("currentSession");
-if (currentSession) {
-  currentSession = JSON.parse(currentSession);
-}
+import { useContext } from "react";
+import { SessionContext } from "../store/SessionContext";
 
 function AllTrips() {
+  const { session } = useContext(SessionContext);
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -31,7 +27,7 @@ function AllTrips() {
     try {
       setLoading(true);
 
-      const data = await tripsService.getTrips(currentSession.userId, searchValue);
+      const data = await tripsService.getTrips(session, searchValue);
       setTrips(data.trips);
     } catch (err) {
       showError(err.message);

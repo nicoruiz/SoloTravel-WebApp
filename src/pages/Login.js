@@ -4,19 +4,20 @@ import { GoogleButton, LoginButton } from "./../components/ui/Buttons";
 import { GOOGLE_CLIENT_ID } from "./../config";
 import * as authService from "./../services/authService";
 import { useSnackbar } from "notistack";
-import { useHistory } from "react-router-dom"
+import { useHistory } from "react-router-dom";
+import { useContext } from "react";
+import { SessionContext } from "../store/SessionContext";
 
 function Login() {
+  const { setSession } = useContext(SessionContext);
   const { enqueueSnackbar } = useSnackbar();
   let history = useHistory();
   
 
   const onSuccessLogin = (response) => {
-    // TODO: get tokenId and send to the backend to validate it
     const profileObj = response.profileObj;
-    console.log("Google data: ", response);
-
     const token = response.tokenId;
+
     const profileInfo = {
       googleId: profileObj.googleId,
       name: profileObj.name,
@@ -35,15 +36,18 @@ function Login() {
   const authenticate = async (profileInfo, token) => {
     try {
       const response = await authService.authenticateByGoogle(profileInfo, token);
-      profileInfo.userId = response.id;
+      const userId = response.id;
 
-      localStorage.setItem("isAuthenticated", true);
-      localStorage.setItem("token", token);
-      localStorage.setItem("currentSession", JSON.stringify(profileInfo));
-      // TODO: Redirect to main page
-      // history.push("/");
-      // eslint-disable-next-line no-restricted-globals
-      location.href = "/";
+      const newSession = {
+        isAuthenticated: true,
+        token: token,
+        profileInfo: profileInfo,
+        userId: userId,
+      };
+
+      setSession(newSession);
+      enqueueSnackbar("You have logged in successfully.", { variant: "success" });
+      history.push("/");
     }
     catch(err) {
       console.log("Authentication error: ", err.message);
