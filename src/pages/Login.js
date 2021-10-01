@@ -4,15 +4,14 @@ import { GoogleButton, LoginButton } from "./../components/ui/Buttons";
 import { GOOGLE_CLIENT_ID } from "./../config";
 import * as authService from "./../services/authService";
 import { useSnackbar } from "notistack";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { useContext } from "react";
 import { SessionContext } from "../store/SessionContext";
 
 function Login() {
   const { setSession } = useContext(SessionContext);
   const { enqueueSnackbar } = useSnackbar();
-  let history = useHistory();
-  
+  let history = useHistory(); 
 
   const onSuccessLogin = (response) => {
     const profileObj = response.profileObj;
@@ -105,7 +104,7 @@ function Login() {
           </Typography>
         </Grid>
         <Grid sx={{ m: 5 }}>
-          <LoginButton variant="contained">Inicia sesión</LoginButton>
+          <LoginButton component={Link} to="/agencyLogin" variant="contained">Inicia sesión</LoginButton>
         </Grid>
         <Grid sx={{ m: 5 }}>
           <LoginButton variant="contained">Registrate</LoginButton>

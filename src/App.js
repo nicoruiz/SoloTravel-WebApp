@@ -5,6 +5,7 @@ import AllTrips from "./pages/AllTrips";
 import Favorites from "./pages/Favorites";
 import Login from "./pages/Login";
 import { guestSession, SessionContext } from "./store/SessionContext";
+import AgencyLogin from "./pages/AgencyLogin";
 
 function App() {
   
@@ -24,6 +25,9 @@ function App() {
           </Route>
           <Route path="/login">
             <Login />
+          </Route>
+          <Route path="/agencyLogin">
+            <AgencyLogin />
           </Route>
         </Switch>
       </Layout>

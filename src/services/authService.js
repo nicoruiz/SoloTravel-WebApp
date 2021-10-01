@@ -12,4 +12,8 @@ const authenticateByGoogle = async (profileInfo, token) => {
   return response.data;
 };
 
-export { authenticateByGoogle };
+const authenticateByAgency = async (email, password) => {
+  console.log("hello from auth agency", {email: email, password: password});
+}
+
+export { authenticateByGoogle, authenticateByAgency };
