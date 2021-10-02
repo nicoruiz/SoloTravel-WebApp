@@ -13,7 +13,18 @@ const authenticateByGoogle = async (profileInfo, token) => {
 };
 
 const authenticateByAgency = async (email, password) => {
-  console.log("hello from auth agency", {email: email, password: password});
+  const url = `${AUTH_URL}/login/internal`;
+  const config = {
+    body: {
+      email: 'guestTravelAgent@gmail.com',
+      password: 'guest'
+    }
+  };
+
+  const response = await API.post(url, config);
+
+  return response.data;
+  //console.log("hello from auth agency", {email: email, password: password});
 }
 
 export { authenticateByGoogle, authenticateByAgency };

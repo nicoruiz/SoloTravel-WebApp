@@ -11,23 +11,23 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { LoginButton } from "../components/ui/Buttons";
+import { useSnackbar } from "notistack";
 import * as authService from "../services/authService";
 
 const theme = createTheme();
 
 function AgencyLogin() {
+  const { enqueueSnackbar } = useSnackbar();
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log("Event", event);
-    // eslint-disable-next-line no-console
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-
-    // Call API
-    authService.authenticateByAgency(data.get("email"), data.get("password"));
+    
+    try{
+      authService.authenticateByAgency(data.get("email"), data.get("password"));
+      enqueueSnackbar("You have logged in successfully.", { variant: "success" });
+    }catch(err){
+      enqueueSnackbar(err.message, { variant: "error" });
+    }
   };
 
   return (
