@@ -8,10 +8,11 @@ import SearchInput from "../components/ui/SearchInput";
 import { useSnackbar } from "notistack";
 import { PrimaryButton } from "../components/ui/Buttons";
 import { Search } from "@mui/icons-material";
-
-const guestUser = 1;
+import { useContext } from "react";
+import { SessionContext } from "../store/SessionContext";
 
 function AllTrips() {
+  const { session } = useContext(SessionContext);
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -26,7 +27,7 @@ function AllTrips() {
     try {
       setLoading(true);
 
-      const data = await tripsService.getTrips(guestUser, searchValue);
+      const data = await tripsService.getTrips(session, searchValue);
       setTrips(data.trips);
     } catch (err) {
       showError(err.message);
@@ -64,11 +65,15 @@ function AllTrips() {
       </Box>
       <Container sx={{ pb: 20 }}>
         {/* TODO: Create SearchComponent with all inner components needed */}
-        <Grid container spacing={2} sx={{ display: "flex", alignItems: "center" }}>
+        <Grid
+          container
+          spacing={2}
+          sx={{ display: "flex", alignItems: "center" }}
+        >
           <Grid item xs={7} md={9}>
             <SearchInput handleOnChange={handleOnSearchInputChange} />
           </Grid>
-          <Grid item xs={5} md={3} >
+          <Grid item xs={5} md={3}>
             <PrimaryButton
               variant="contained"
               startIcon={<Search />}
