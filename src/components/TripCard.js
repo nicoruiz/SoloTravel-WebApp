@@ -125,7 +125,7 @@ function TripCard(props) {
               variant="h4"
             >
               <AttachMoney fontSize="small" />
-              {props.price}
+              {props.price.toLocaleString("es")}
             </Typography>
           </CardContent>
           <Divider variant="middle" />

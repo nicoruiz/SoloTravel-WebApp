@@ -34,7 +34,7 @@ function Login() {
 
   const authenticate = async (profileInfo, token) => {
     try {
-      const response = await authService.authenticateByGoogle(profileInfo, token);
+      const response = await authService.authenticateByGoogle(token);
       const userId = response.id;
 
       const newSession = {
