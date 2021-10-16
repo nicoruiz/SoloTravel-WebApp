@@ -1,23 +1,35 @@
 import API from "./api";
 import { USERS_URL } from "../config";
 
-const getFavorites = async (userId) => {
+const getFavorites = async (session) => {
+  const { userId, token } = session;
   const url = `${USERS_URL}/${userId}/favorites`;
-  const response = await API.get(url);
+  const config = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+  const response = await API.get(url, config);
 
   return response.data;
 };
 
-const addFavorite = async (userId, tripId) => {
+const addFavorite = async (session, tripId) => {
+  const { userId, token } = session;
   const url = `${USERS_URL}/${userId}/favorites/${tripId}`;
-  const response = await API.put(url);
+  const config = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+  const response = await API.put(url, null, config);
 
   return response.data;
 };
 
-const removeFavorite = async (userId, tripId) => {
+const removeFavorite = async (session, tripId) => {
+  const { userId, token } = session;
   const url = `${USERS_URL}/${userId}/favorites/${tripId}`;
-  const response = await API.delete(url);
+  const config = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+  const response = await API.delete(url, config);
 
   return response.data;
 };

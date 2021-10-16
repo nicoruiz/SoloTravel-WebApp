@@ -3,13 +3,18 @@ import { TRIPS_URL } from "../config";
 
 const getTrips = async (session, searchValue) => {
   return session.isAuthenticated
-    ? getTripsByUser(session.userId, searchValue)
+    ? getTripsByUser(session, searchValue)
     : getTripsAsGuest(searchValue);
 };
 
-const getTripsByUser = async (userId, searchValue) => {
+const getTripsByUser = async (session, searchValue) => {
+  const { userId, token } = session;
   const url = `${TRIPS_URL}/${userId}?name=${searchValue}`;
-  const response = await API.get(url);
+  const config = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+  const response = await API.get(url, config);
+  
   return response.data;
 };
 

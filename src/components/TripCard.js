@@ -6,7 +6,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import classes from "./TripCard.module.css";
-import { AttachMoney, Favorite, LocationOn } from "@mui/icons-material";
+import { AttachMoney, Favorite, LocationOn, Schedule } from "@mui/icons-material";
 import { CardActionArea, Divider, IconButton } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 // Styled components
@@ -17,6 +17,8 @@ import { useSnackbar } from "notistack";
 // Context
 import { useContext } from "react";
 import { SessionContext } from "../store/SessionContext";
+// Helpers
+import { formatToMoney } from "../helpers/number";
 
 const useStyles = makeStyles({
   favoriteBtn: {
@@ -48,7 +50,7 @@ function TripCard(props) {
   const handleSetFavorite = async () => {
     const message = "Viaje agregado a tus favoritos!";
     try {
-      await usersService.addFavorite(session.userId, props.id);
+      await usersService.addFavorite(session, props.id);
       setFavorite(true);
       enqueueSnackbar(message, { variant: "success" });
     } catch (err) {
@@ -59,7 +61,7 @@ function TripCard(props) {
   const handleRemoveFavorite = async () => {
     const message = "Viaje eliminado de tus favoritos";
     try {
-      await usersService.removeFavorite(session.userId, props.id);
+      await usersService.removeFavorite(session, props.id);
       setFavorite(false);
       enqueueSnackbar(message, { variant: "warning" });
 
@@ -115,17 +117,22 @@ function TripCard(props) {
             </Typography>
             <Typography
               sx={{ pt: 2, display: "flex", alignItems: "center" }}
-              variant="overline"
             >
               <LocationOn sx={{ pr: 0.5 }} fontSize="small" />
               {props.destination}
             </Typography>
             <Typography
               sx={{ pt: 2, display: "flex", alignItems: "center" }}
+            >
+              <Schedule sx={{ pr: 0.5 }} fontSize="small" />
+              {`${props.duration} Días`}
+            </Typography>
+            <Typography
+              sx={{ pt: 2, display: "flex", alignItems: "center" }}
               variant="h4"
             >
               <AttachMoney fontSize="small" />
-              {props.price.toLocaleString("es")}
+              {formatToMoney(props.price)}
             </Typography>
           </CardContent>
           <Divider variant="middle" />
