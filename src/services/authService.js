@@ -14,17 +14,13 @@ const authenticateByGoogle = async (token) => {
 
 const authenticateByAgency = async (email, password) => {
   const url = `${AUTH_URL}/login/internal`;
-  const config = {
-    body: {
-      email: 'guestTravelAgent@gmail.com',
-      password: 'guest'
-    }
-  };
+  const body = {
+      email: email,
+      password: password
+    };
 
-  const response = await API.post(url, config);
-
-  return response.data;
-  //console.log("hello from auth agency", {email: email, password: password});
+  const response = await API.post(url, body);
+  return response;
 }
 
 export { authenticateByGoogle, authenticateByAgency };

@@ -17,16 +17,28 @@ import * as authService from "../services/authService";
 const theme = createTheme();
 
 function AgencyLogin() {
+  
+  const [emailAddressError, setEmailAddressError] = React.useState(false);
+  const [passwordError, setPasswordError] = React.useState(false);
+  const errorText = "Este campo es obligatorio";
+
   const { enqueueSnackbar } = useSnackbar();
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     
-    try{
-      authService.authenticateByAgency(data.get("email"), data.get("password"));
-      enqueueSnackbar("You have logged in successfully.", { variant: "success" });
-    }catch(err){
-      enqueueSnackbar(err.message, { variant: "error" });
+    const email = data.get("email");
+    const password = data.get("password")
+
+    if(email.length === 0 || password.length === 0){
+      setEmailAddressError(email.length === 0);
+      setPasswordError(password.length === 0);
+    }else{
+      const response = authService.authenticateByAgency(email, password).then( response => {
+        return enqueueSnackbar("You have logged in successfully.", { variant: "success" });
+      }).catch( error => {
+        return enqueueSnackbar(error.response.data.message, { variant: "error" });
+      })
     }
   };
 
@@ -64,7 +76,7 @@ function AgencyLogin() {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Sign in
+              Iniciar Sesión
             </Typography>
             <Box
               component="form"
@@ -73,6 +85,7 @@ function AgencyLogin() {
               sx={{ mt: 1 }}
             >
               <TextField
+                error={emailAddressError}
                 margin="normal"
                 required
                 fullWidth
@@ -81,8 +94,10 @@ function AgencyLogin() {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                helperText= {emailAddressError && errorText}
               />
               <TextField
+                error={passwordError}
                 margin="normal"
                 required
                 fullWidth
@@ -91,6 +106,7 @@ function AgencyLogin() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                helperText= {passwordError && errorText}
               />
               <LoginButton
                 type="submit"
@@ -98,15 +114,8 @@ function AgencyLogin() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Sign In
+                Inicia Sesión
               </LoginButton>
-              <Grid container>
-                <Grid item>
-                  <Link href="#" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
-              </Grid>
             </Box>
           </Box>
         </Grid>
