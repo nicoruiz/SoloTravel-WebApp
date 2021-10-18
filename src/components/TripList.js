@@ -16,6 +16,7 @@ function TripList(props) {
             price={trip.price}
             isFavorite={trip.isFavorite}
             onFavoriteRemove={props.onFavoriteRemove}
+            duration={trip.duration}
           />
         </Grid>
       ))}
