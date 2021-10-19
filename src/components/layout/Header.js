@@ -44,8 +44,8 @@ function Header() {
             <NavButton onClick={logout}>
               <Avatar
                 sx={{ mr: 1 }}
-                alt="avatar"
                 src={session.profileInfo.picture}
+                referrerPolicy="no-referrer"
               />
               {session.profileInfo.name}
             </NavButton>

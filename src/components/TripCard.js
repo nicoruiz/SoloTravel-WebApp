@@ -6,7 +6,12 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import classes from "./TripCard.module.css";
-import { AttachMoney, Favorite, LocationOn, Schedule } from "@mui/icons-material";
+import {
+  AttachMoney,
+  Favorite,
+  LocationOn,
+  Schedule,
+} from "@mui/icons-material";
 import { CardActionArea, Divider, IconButton } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 // Styled components
@@ -25,9 +30,7 @@ const useStyles = makeStyles({
     color: "red",
   },
   notFavoriteBtn: {
-    "&:hover": {
-      color: "red",
-    },
+    color: "gray"
   },
 });
 
@@ -117,12 +120,14 @@ function TripCard(props) {
             </Typography>
             <Typography
               sx={{ pt: 2, display: "flex", alignItems: "center" }}
+              variant="body1"
             >
               <LocationOn sx={{ pr: 0.5 }} fontSize="small" />
               {props.destination}
             </Typography>
             <Typography
               sx={{ pt: 2, display: "flex", alignItems: "center" }}
+              variant="body1"
             >
               <Schedule sx={{ pr: 0.5 }} fontSize="small" />
               {`${props.duration} Días`}
@@ -137,15 +142,16 @@ function TripCard(props) {
           </CardContent>
           <Divider variant="middle" />
         </CardActionArea>
-        <CardActions sx={{ display: "flex", justifyContent: "space-around" }}>
+        <CardActions sx={{ p: 2, display: "flex", justifyContent: "space-around" }}>
           <PrimaryButton variant="contained" onClick={handleTripDetails}>
             Ver detalle
           </PrimaryButton>
           {session.isAuthenticated && (
             <IconButton
               aria-label="favorite"
-              size="large"
-              className={ isFavorite ? styles.favoriteBtn : styles.notFavoriteBtn }
+              className={
+                isFavorite ? styles.favoriteBtn : styles.notFavoriteBtn
+              }
               onClick={handleToggleFavoriteStatus}
             >
               <Favorite fontSize="inherit" />
