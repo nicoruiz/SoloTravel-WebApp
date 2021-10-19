@@ -20,7 +20,9 @@ function AgencyLogin() {
   
   const [emailAddressError, setEmailAddressError] = React.useState(false);
   const [passwordError, setPasswordError] = React.useState(false);
-  const errorText = "Este campo es obligatorio";
+  
+  const [emailAddressErrorText, setEmailAddressErrorText] = React.useState("Este campo es obligatorio");
+  const passwordErrorText = "Este campo es obligatorio";
 
   const { enqueueSnackbar } = useSnackbar();
   const handleSubmit = (event) => {
@@ -29,11 +31,18 @@ function AgencyLogin() {
     
     const email = data.get("email");
     const password = data.get("password")
+    const re = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
 
     if(email.length === 0 || password.length === 0){
       setEmailAddressError(email.length === 0);
       setPasswordError(password.length === 0);
+    } else if(!re.test(email.toLowerCase())){
+      setEmailAddressError(true);
+      setPasswordError(password.length === 0);
+      setEmailAddressErrorText("Este campo debe ser un email valido")
     }else{
+      setEmailAddressError(false);
+      setPasswordError(false);
       const response = authService.authenticateByAgency(email, password).then( response => {
         return enqueueSnackbar("You have logged in successfully.", { variant: "success" });
       }).catch( error => {
@@ -94,7 +103,7 @@ function AgencyLogin() {
                 name="email"
                 autoComplete="email"
                 autoFocus
-                helperText= {emailAddressError && errorText}
+                helperText= {emailAddressError && emailAddressErrorText}
               />
               <TextField
                 error={passwordError}
@@ -106,7 +115,7 @@ function AgencyLogin() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                helperText= {passwordError && errorText}
+                helperText= {passwordError && passwordErrorText}
               />
               <LoginButton
                 type="submit"
