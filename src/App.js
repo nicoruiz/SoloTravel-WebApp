@@ -4,12 +4,13 @@ import { Switch, Route } from "react-router-dom";
 import AllTrips from "./pages/AllTrips";
 import Favorites from "./pages/Favorites";
 import Login from "./pages/Login";
-import { guestSession, SessionContext } from "./store/SessionContext";
+import { defaultSession, SessionContext } from "./store/SessionContext";
 import AgencyLogin from "./pages/AgencyLogin";
+import AgencyTrips from "./pages/AgencyTrips";
 
 function App() {
   
-  const [session, setSession] = useState(guestSession);
+  const [session, setSession] = useState(defaultSession);
 
   const value = useMemo(() => ({session, setSession}), [session, setSession]);
   
@@ -28,6 +29,9 @@ function App() {
           </Route>
           <Route path="/agencyLogin">
             <AgencyLogin />
+          </Route>
+          <Route path="/agencyTrips">
+            <AgencyTrips />
           </Route>
         </Switch>
       </Layout>

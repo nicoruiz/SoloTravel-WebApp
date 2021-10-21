@@ -34,4 +34,15 @@ const removeFavorite = async (session, tripId) => {
   return response.data;
 };
 
-export { getFavorites, addFavorite, removeFavorite };
+const getAgencyTrips = async (session) => {
+  const { userId, token } = session;
+  const url = `${USERS_URL}/${userId}/trips`;
+  const config = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+  const response = await API.get(url, config);
+
+  return response.data;
+};
+
+export { getFavorites, addFavorite, removeFavorite, getAgencyTrips };

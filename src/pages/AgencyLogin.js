@@ -1,9 +1,7 @@
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -13,14 +11,18 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { LoginButton } from "../components/ui/Buttons";
 import { useSnackbar } from "notistack";
 import * as authService from "../services/authService";
+import { useHistory } from "react-router-dom";
+import { useContext } from "react";
+import { SessionContext } from "../store/SessionContext";
 
 const theme = createTheme();
 
 function AgencyLogin() {
-  
+  const { setSession } = useContext(SessionContext);
   const [emailAddressError, setEmailAddressError] = React.useState(false);
   const [passwordError, setPasswordError] = React.useState(false);
   const errorText = "Este campo es obligatorio";
+  let history = useHistory(); 
 
   const { enqueueSnackbar } = useSnackbar();
   const handleSubmit = (event) => {
@@ -35,7 +37,21 @@ function AgencyLogin() {
       setPasswordError(password.length === 0);
     }else{
       const response = authService.authenticateByAgency(email, password).then( response => {
-        return enqueueSnackbar("You have logged in successfully.", { variant: "success" });
+        // TODO: Receive and set real agency data from response to session
+        const newSession = {
+          isAuthenticated: true,
+          isAgency: true,
+          token: response.data.token,
+          profileInfo: {
+            name: "guestTravelAgency",
+            picture: "guestTravelAgency_image",
+          },
+          userId: -1,
+        };
+  
+        setSession(newSession);
+        enqueueSnackbar("You have logged in successfully.", { variant: "success" });
+        history.push("/agencyTrips");
       }).catch( error => {
         return enqueueSnackbar(error.response.data.message, { variant: "error" });
       })
