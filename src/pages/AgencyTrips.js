@@ -45,6 +45,7 @@ function AgencyTrips() {
             variant="h2"
             align="center"
             color="text.primary"
+            gutterBottom
           >
             Mis Viajes
           </Typography>
@@ -54,7 +55,7 @@ function AgencyTrips() {
             align="center"
             color="text.primary"
           >
-            {session.profileInfo.name}
+            Bienvenido {session.profileInfo.name}
           </Typography>
         </Container>
       </Box>

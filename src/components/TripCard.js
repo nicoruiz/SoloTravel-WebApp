@@ -1,80 +1,23 @@
 import * as React from "react";
-import { useState } from "react";
 import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
+import CardActions from "@mui/material/CardActions";
 import Typography from "@mui/material/Typography";
 import classes from "./TripCard.module.css";
-import {
-  AttachMoney,
-  Favorite,
-  LocationOn,
-  Schedule,
-} from "@mui/icons-material";
-import { CardActionArea, Divider, IconButton } from "@mui/material";
-import { makeStyles } from "@mui/styles";
-// Styled components
-import { PrimaryButton } from "./ui/Buttons";
-// Services
-import * as usersService from "./../services/usersService";
-import { useSnackbar } from "notistack";
+import { AttachMoney, LocationOn, Schedule } from "@mui/icons-material";
+import { CardActionArea, Divider } from "@mui/material";
 // Context
 import { useContext } from "react";
 import { SessionContext } from "../store/SessionContext";
 // Helpers
 import { formatToMoney } from "../helpers/number";
-
-const useStyles = makeStyles({
-  favoriteBtn: {
-    color: "red",
-  },
-  notFavoriteBtn: {
-    color: "gray"
-  },
-});
+import TravelerTripCardActions from "./TravelerTripCardActions";
+import AgencyTripCardActions from "./AgencyTripCardActions";
 
 function TripCard(props) {
   const { session } = useContext(SessionContext);
-  const [isFavorite, setFavorite] = useState(props.isFavorite);
-  const [isRaised, setRaised] = useState(false);
-  const { enqueueSnackbar } = useSnackbar();
-
-  const styles = useStyles();
-
-  const handleToggleFavoriteStatus = async () => {
-    if (!isFavorite) {
-      await handleSetFavorite();
-    } else {
-      await handleRemoveFavorite();
-    }
-  };
-
-  const handleSetFavorite = async () => {
-    const message = "Viaje agregado a tus favoritos!";
-    try {
-      await usersService.addFavorite(session, props.id);
-      setFavorite(true);
-      enqueueSnackbar(message, { variant: "success" });
-    } catch (err) {
-      showError(err.message);
-    }
-  };
-
-  const handleRemoveFavorite = async () => {
-    const message = "Viaje eliminado de tus favoritos";
-    try {
-      await usersService.removeFavorite(session, props.id);
-      setFavorite(false);
-      enqueueSnackbar(message, { variant: "warning" });
-
-      setTimeout(() => {
-        props.onFavoriteRemove(props.id);
-      }, 300);
-    } catch (err) {
-      showError(err.message);
-    }
-  };
+  const [isRaised, setRaised] = React.useState(false);
 
   const handleToggleRaised = () => {
     setRaised(!isRaised);
@@ -82,10 +25,6 @@ function TripCard(props) {
 
   const handleTripDetails = () => {
     console.log(`Trip: ${props.name}`);
-  };
-
-  const showError = (message) => {
-    enqueueSnackbar(message, { variant: "error" });
   };
 
   return (
@@ -143,19 +82,15 @@ function TripCard(props) {
           <Divider variant="middle" />
         </CardActionArea>
         <CardActions sx={{ p: 2, display: "flex", justifyContent: "space-around" }}>
-          <PrimaryButton variant="contained" onClick={handleTripDetails}>
-            Ver detalle
-          </PrimaryButton>
-          {session.isAuthenticated && (
-            <IconButton
-              aria-label="favorite"
-              className={
-                isFavorite ? styles.favoriteBtn : styles.notFavoriteBtn
-              }
-              onClick={handleToggleFavoriteStatus}
-            >
-              <Favorite fontSize="inherit" />
-            </IconButton>
+          {session.isAgency ? (
+            <AgencyTripCardActions tripId={props.id} />
+          ) : (
+            <TravelerTripCardActions
+              tripId={props.id}
+              handleTripDetails={handleTripDetails}
+              isFavorite={props.isFavorite}
+              onFavoriteRemove={props.onFavoriteRemove}
+            />
           )}
         </CardActions>
       </Card>
