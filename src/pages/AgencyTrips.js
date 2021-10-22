@@ -1,18 +1,22 @@
 import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
-import { Container, Grid, Typography } from "@mui/material";
+import { Container, Typography } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
 import * as usersService from "./../services/usersService";
 import Spinner from "../components/ui/Spinner";
 import TripList from "../components/TripList";
 import { useSnackbar } from "notistack";
 import { useContext } from "react";
 import { SessionContext } from "../store/SessionContext";
+import { FloatActionButton } from "../components/ui/Buttons";
+import { useHistory } from "react-router-dom";
 
 function AgencyTrips() {
   const { session } = useContext(SessionContext);
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
+  const history = useHistory(); 
 
   // Initial render
   useEffect(() => {
@@ -39,7 +43,7 @@ function AgencyTrips() {
   return (
     <>
       <Box sx={{ pt: 8 }}>
-        <Container maxWidth="sm" sx={{ p: 5 }}>
+        <Container maxWidth="sm" sx={{ pb: 5 }}>
           <Typography
             component="h1"
             variant="h2"
@@ -47,7 +51,7 @@ function AgencyTrips() {
             color="text.primary"
             gutterBottom
           >
-            Mis Viajes
+            Mis viajes
           </Typography>
           <Typography
             component="h4"
@@ -63,6 +67,9 @@ function AgencyTrips() {
         {loading && <Spinner />}
         <TripList trips={trips} onFavoriteRemove={() => {}} />
       </Container>
+      <FloatActionButton color="primary" aria-label="add" onClick={() => history.push("/createTrip")}>
+        <AddIcon />
+      </FloatActionButton>
     </>
   );
 }
