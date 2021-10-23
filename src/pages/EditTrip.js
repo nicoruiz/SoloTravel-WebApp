@@ -1,11 +1,11 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Container, Grid, Typography } from "@mui/material";
 import { SessionContext } from "../store/SessionContext";
 import * as tripsService from "./../services/tripsService";
 import { useHistory } from "react-router-dom";
 import TripForm from "../components/TripForm";
 
-function CreateTrip() {
+function EditTrip() {
   const { session } = useContext(SessionContext);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
@@ -59,7 +59,7 @@ function CreateTrip() {
             align="center"
             color="text.primary"
           >
-            Nuevo viaje
+            Modificar viaje
           </Typography>
         </Grid>
         <TripForm
@@ -75,4 +75,4 @@ function CreateTrip() {
   );
 }
 
-export default CreateTrip;
+export default EditTrip;

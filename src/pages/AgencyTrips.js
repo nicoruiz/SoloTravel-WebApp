@@ -16,7 +16,7 @@ function AgencyTrips() {
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
-  const history = useHistory(); 
+  const history = useHistory();
 
   // Initial render
   useEffect(() => {
