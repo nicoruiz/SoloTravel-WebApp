@@ -6,6 +6,7 @@ import Favorites from "./pages/Favorites";
 import Login from "./pages/Login";
 import { defaultSession, SessionContext } from "./store/SessionContext";
 import AgencyLogin from "./pages/AgencyLogin";
+import AgencyRegister from "./pages/AgencyRegister"
 import AgencyTrips from "./pages/AgencyTrips";
 import CreateTrip from "./pages/CreateTrip";
 
@@ -30,6 +31,9 @@ function App() {
           </Route>
           <Route path="/agencyLogin">
             <AgencyLogin />
+          </Route>
+          <Route path="/agencyRegister">
+            <AgencyRegister />
           </Route>
           <Route path="/agencyTrips">
             <AgencyTrips />

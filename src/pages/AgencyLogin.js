@@ -45,16 +45,16 @@ function AgencyLogin() {
       setEmailAddressError(false);
       setPasswordError(false);
       const response = authService.authenticateByAgency(email, password).then( response => {
-        // TODO: Receive and set real agency data from response to session
+      
         const newSession = {
           isAuthenticated: true,
           isAgency: true,
           token: response.data.token,
           profileInfo: {
-            name: "guestTravelAgency",
+            name: response.data.agencyName,
             picture: "guestTravelAgency_image",
           },
-          userId: -1,
+          userId: response.data.agencyId,
         };
   
         setSession(newSession);

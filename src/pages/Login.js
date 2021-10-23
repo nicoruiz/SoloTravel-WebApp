@@ -107,7 +107,7 @@ function Login() {
           <LoginButton component={Link} to="/agencyLogin" variant="contained">Inicia sesión</LoginButton>
         </Grid>
         <Grid sx={{ m: 5 }}>
-          <LoginButton variant="contained">Registrate</LoginButton>
+          <LoginButton component={Link} to="/agencyRegister" variant="contained">Registrate</LoginButton>
         </Grid>
       </Grid>
     </Container>
