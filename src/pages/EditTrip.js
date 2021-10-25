@@ -4,25 +4,49 @@ import { SessionContext } from "../store/SessionContext";
 import * as tripsService from "./../services/tripsService";
 import { useHistory } from "react-router-dom";
 import TripForm from "../components/TripForm";
+import { useParams } from "react-router-dom";
+import Spinner from "../components/ui/Spinner";
 
 function EditTrip() {
   const { session } = useContext(SessionContext);
+  const { id } = useParams();
+  const [trip, setTrip] = useState();
+  const [loading, setLoading] = useState(false);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const history = useHistory();
 
+  useEffect(() => {
+    console.log("Trip id: ", id);
+    getTripData();
+  }, []);
+
+  const getTripData = async () => {
+    try {
+      setLoading(true);
+
+      const tripData = await tripsService.getTripById(session, id);
+      setTrip(tripData);
+      setStartDate(trip.startDate);
+      setEndDate(trip.endDate);
+    } catch (err) {
+      console.log(err);
+    }
+    setLoading(false);
+  };
+
   const onStartDateChange = (newValue) => {
     setStartDate(newValue);
-  }
+  };
   const onEndDateChange = (newValue) => {
     setEndDate(newValue);
-  }
+  };
 
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();
       const data = new FormData(event.currentTarget);
-      
+
       const createTripDto = {
         name: data.get("name"),
         destination: data.get("destination"),
@@ -31,13 +55,12 @@ function EditTrip() {
         price: data.get("price"),
         startDate: startDate,
         endDate: endDate,
-      }
+      };
       console.log("Form submitted: ", createTripDto);
-  
+
       await tripsService.createTrip(session, createTripDto);
       history.push("/agencyTrips");
-    }
-    catch (err) {
+    } catch (err) {
       console.log(err);
     }
   };
@@ -62,14 +85,18 @@ function EditTrip() {
             Modificar viaje
           </Typography>
         </Grid>
-        <TripForm
-          formData={null}
-          startDate={startDate}
-          onStartDateChange={onStartDateChange}
-          endDate={endDate}
-          onEndDateChange={onEndDateChange}
-          handleSubmit={handleSubmit}
-        />
+        {loading ? (
+          <Spinner />
+        ) : (
+          <TripForm
+            trip={trip}
+            startDate={startDate}
+            onStartDateChange={onStartDateChange}
+            endDate={endDate}
+            onEndDateChange={onEndDateChange}
+            handleSubmit={handleSubmit}
+          />
+        )}
       </Grid>
     </Container>
   );

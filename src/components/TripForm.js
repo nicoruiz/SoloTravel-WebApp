@@ -24,7 +24,7 @@ function TripForm(props) {
             onSubmit={props.handleSubmit}
           >
             <TextField
-              value={props.formData.name}
+              defaultValue={props.trip?.name}
               error={false}
               margin="normal"
               required
@@ -37,7 +37,7 @@ function TripForm(props) {
               helperText
             />
             <TextField
-              value={props.formData.destination}
+              defaultValue={props.trip?.destination}
               error={false}
               margin="normal"
               required
@@ -49,7 +49,7 @@ function TripForm(props) {
               helperText
             />
             <TextField
-              value={props.formData.image}
+              defaultValue={props.trip?.image}
               error={false}
               margin="normal"
               required
@@ -61,7 +61,7 @@ function TripForm(props) {
               helperText
             />
             <TextField
-              value={props.formData.description}
+              defaultValue={props.trip?.description}
               error={false}
               margin="normal"
               required
@@ -75,7 +75,7 @@ function TripForm(props) {
               helperText
             />
             <TextField
-              value={props.formData.price}
+              defaultValue={props.trip?.price}
               error={false}
               margin="normal"
               required

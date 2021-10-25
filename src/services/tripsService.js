@@ -18,7 +18,7 @@ const createTrip = async (session, createTripDto) => {
 
 const getTripsByUser = async (session, searchValue) => {
   const { userId, token } = session;
-  const url = `${TRIPS_URL}/${userId}?name=${searchValue}`;
+  const url = `${TRIPS_URL}/user/${userId}?name=${searchValue}`;
   const config = {
     headers: { Authorization: `Bearer ${token}` },
   };
@@ -33,4 +33,15 @@ const getTripsAsGuest = async (searchValue) => {
   return response.data;
 };
 
-export { getTrips, createTrip };
+const getTripById = async (session, tripId) => {
+  const { token } = session;
+  const url = `${TRIPS_URL}/${tripId}`;
+  const config = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+  const response = await API.get(url, config);
+  
+  return response.data;
+};
+
+export { getTrips, createTrip, getTripById };

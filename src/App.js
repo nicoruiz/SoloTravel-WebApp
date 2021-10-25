@@ -8,6 +8,7 @@ import { defaultSession, SessionContext } from "./store/SessionContext";
 import AgencyLogin from "./pages/AgencyLogin";
 import AgencyTrips from "./pages/AgencyTrips";
 import CreateTrip from "./pages/CreateTrip";
+import EditTrip from "./pages/EditTrip";
 
 function App() {
   
@@ -36,6 +37,9 @@ function App() {
           </Route>
           <Route path="/createTrip">
             <CreateTrip />
+          </Route>
+          <Route path="/editTrip/:id">
+            <EditTrip />
           </Route>
         </Switch>
       </Layout>

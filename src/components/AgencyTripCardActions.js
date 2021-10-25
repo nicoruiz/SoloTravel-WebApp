@@ -2,11 +2,13 @@ import * as React from "react";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from "@mui/icons-material/Edit";
 import { IconButton } from "@mui/material";
+import { useHistory } from "react-router";
 
 function AgencyTripCardActions(props) {
+  const history = useHistory();
 
   const editTrip = () => {
-    console.log("Edit trip: ", props.tripId);
+    history.push(`/editTrip/${props.tripId}`);
   };
 
   const deleteTrip = () => {
