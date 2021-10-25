@@ -32,7 +32,6 @@ function CreateTrip() {
         startDate: startDate,
         endDate: endDate,
       }
-      console.log("Form submitted: ", createTripDto);
   
       await tripsService.createTrip(session, createTripDto);
       history.push("/agencyTrips");
