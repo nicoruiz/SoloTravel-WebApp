@@ -22,7 +22,7 @@ function CreateTrip() {
     try {
       event.preventDefault();
       const data = new FormData(event.currentTarget);
-      
+
       const createTripDto = {
         name: data.get("name"),
         destination: data.get("destination"),
@@ -32,7 +32,7 @@ function CreateTrip() {
         startDate: startDate,
         endDate: endDate,
       }
-  
+
       await tripsService.createTrip(session, createTripDto);
       history.push("/agencyTrips");
     }
@@ -62,7 +62,6 @@ function CreateTrip() {
           </Typography>
         </Grid>
         <TripForm
-          formData={null}
           startDate={startDate}
           onStartDateChange={onStartDateChange}
           endDate={endDate}

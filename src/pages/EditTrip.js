@@ -27,8 +27,8 @@ function EditTrip() {
 
       const tripData = await tripsService.getTripById(session, id);
       setTrip(tripData);
-      setStartDate(trip.startDate);
-      setEndDate(trip.endDate);
+      setStartDate(tripData.startDate);
+      setEndDate(tripData.endDate);
     } catch (err) {
       console.log(err);
     }
@@ -47,7 +47,8 @@ function EditTrip() {
       event.preventDefault();
       const data = new FormData(event.currentTarget);
 
-      const createTripDto = {
+      const updateTripDto = {
+        id: id,
         name: data.get("name"),
         destination: data.get("destination"),
         image: data.get("image"),
@@ -56,9 +57,9 @@ function EditTrip() {
         startDate: startDate,
         endDate: endDate,
       };
-      console.log("Form submitted: ", createTripDto);
+      console.log("Form submitted: ", updateTripDto);
 
-      await tripsService.createTrip(session, createTripDto);
+      await tripsService.updateTrip(session, id, updateTripDto);
       history.push("/agencyTrips");
     } catch (err) {
       console.log(err);

@@ -16,6 +16,15 @@ const createTrip = async (session, createTripDto) => {
   return API.post(url, createTripDto, config);
 }
 
+const updateTrip = async (session, tripId, updateTripDto) => {
+  const { userId, token } = session;
+  const url = `${TRIPS_URL}/${userId}/edition/${tripId}`;
+  const config = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+  return API.put(url, updateTripDto, config);
+}
+
 const getTripsByUser = async (session, searchValue) => {
   const { userId, token } = session;
   const url = `${TRIPS_URL}/user/${userId}?name=${searchValue}`;
@@ -44,4 +53,4 @@ const getTripById = async (session, tripId) => {
   return response.data;
 };
 
-export { getTrips, createTrip, getTripById };
+export { getTrips, createTrip, updateTrip, getTripById };

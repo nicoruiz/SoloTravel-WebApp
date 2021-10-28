@@ -118,7 +118,7 @@ function TripForm(props) {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Crear
+              Confirmar
             </LoginButton>
           </Box>
         </Box>
