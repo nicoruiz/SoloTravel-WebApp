@@ -46,15 +46,11 @@ function TravelerTripCardActions(props) {
   };
 
   const handleRemoveFavorite = async () => {
-    const message = "Viaje eliminado de tus favoritos";
     try {
       await usersService.removeFavorite(session, props.tripId);
       setFavorite(false);
-      enqueueSnackbar(message, { variant: "warning" });
-
-      setTimeout(() => {
-        props.onFavoriteRemove(props.tripId);
-      }, 300);
+      enqueueSnackbar("Viaje eliminado de tus favoritos");
+      props.onFavoriteRemove(props.tripId);
     } catch (err) {
       showError(err.message);
     }

@@ -58,10 +58,13 @@ function AgencyLogin() {
         };
   
         setSession(newSession);
-        enqueueSnackbar("You have logged in successfully.", { variant: "success" });
+        enqueueSnackbar("Sesión iniciada exitosamente.", { variant: "success" });
         history.push("/agencyTrips");
       }).catch( error => {
-        return enqueueSnackbar(error.response.data.message, { variant: "error" });
+        const errorMessage = error.response 
+          ? error.response.data.message 
+          : "Error inesperado. Intente nuevamente.";
+        return enqueueSnackbar(errorMessage, { variant: "error" });
       })
     }
   };

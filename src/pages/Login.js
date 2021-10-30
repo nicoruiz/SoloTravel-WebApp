@@ -45,7 +45,7 @@ function Login() {
       };
 
       setSession(newSession);
-      enqueueSnackbar("You have logged in successfully.", { variant: "success" });
+      enqueueSnackbar("Sesión iniciada exitosamente.", { variant: "success" });
       history.push("/");
     }
     catch(err) {

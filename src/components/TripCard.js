@@ -83,7 +83,10 @@ function TripCard(props) {
         </CardActionArea>
         <CardActions sx={{ p: 2, display: "flex", justifyContent: "space-around" }}>
           {session.isAgency ? (
-            <AgencyTripCardActions tripId={props.id} />
+            <AgencyTripCardActions 
+              tripId={props.id} 
+              onTripDelete={props.onTripDelete}
+            />
           ) : (
             <TravelerTripCardActions
               tripId={props.id}

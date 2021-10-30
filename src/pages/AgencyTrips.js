@@ -34,6 +34,11 @@ function AgencyTrips() {
     getAgencyTrips();
   }, []);
 
+  const onTripDelete = (tripId) => {
+    const tripsWithoutDeletedOne = trips.filter(t => t.id !== tripId);
+    setTrips(tripsWithoutDeletedOne);
+  }
+
   const showError = (message) => {
     enqueueSnackbar(message, {
       variant: "error",
@@ -65,7 +70,7 @@ function AgencyTrips() {
       </Box>
       <Container sx={{ pb: 20 }}>
         {loading && <Spinner />}
-        <TripList trips={trips} onFavoriteRemove={() => {}} />
+        <TripList trips={trips} onTripDelete={onTripDelete} />
       </Container>
       <FloatActionButton color="primary" aria-label="add" onClick={() => history.push("/createTrip")}>
         <AddIcon />
