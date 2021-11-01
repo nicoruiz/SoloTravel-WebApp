@@ -85,6 +85,7 @@ function TripCard(props) {
           {session.isAgency ? (
             <AgencyTripCardActions 
               tripId={props.id} 
+              tripName={props.name}
               onTripDelete={props.onTripDelete}
             />
           ) : (

@@ -5,61 +5,48 @@ import AllTrips from "./pages/AllTrips";
 import Favorites from "./pages/Favorites";
 import Login from "./pages/Login";
 import { defaultSession, SessionContext } from "./store/SessionContext";
-import { DialogContext } from "./store/DialogContext";
 import AgencyLogin from "./pages/AgencyLogin";
 import AgencyRegister from "./pages/AgencyRegister"
 import AgencyTrips from "./pages/AgencyTrips";
 import CreateTrip from "./pages/CreateTrip";
 import EditTrip from "./pages/EditTrip";
-import AlertDialog from "./components/ui/AlertDialog";
 
 function App() {
 
   const [session, setSession] = useState(defaultSession);
-  const [showDialog, setShowDialog] = useState(false);
-  const [onConfirmFn, setOnConfirmFn] = useState();
-  let dialogValue = {
-    showDialog: showDialog,
-    setShowDialog: setShowDialog,
-    onConfirmFn: onConfirmFn,
-    setOnConfirmFn: setOnConfirmFn,
-  }
 
   const value = useMemo(() => ({ session, setSession }), [session, setSession]);
 
   return (
     <SessionContext.Provider value={value}>
-      <DialogContext.Provider value={dialogValue}>
-        <AlertDialog />
-        <Layout>
-          <Switch>
-            <Route path="/" exact>
-              <AllTrips />
-            </Route>
-            <Route path="/favorites">
-              <Favorites />
-            </Route>
-            <Route path="/login">
-              <Login />
-            </Route>
-            <Route path="/agencyLogin">
-              <AgencyLogin />
-            </Route>
-            <Route path="/agencyRegister">
-              <AgencyRegister />
-            </Route>
-            <Route path="/agencyTrips">
-              <AgencyTrips />
-            </Route>
-            <Route path="/createTrip">
-              <CreateTrip />
-            </Route>
-            <Route path="/editTrip/:id">
-              <EditTrip />
-            </Route>
-          </Switch>
-        </Layout>
-      </DialogContext.Provider>
+      <Layout>
+        <Switch>
+          <Route path="/" exact>
+            <AllTrips />
+          </Route>
+          <Route path="/favorites">
+            <Favorites />
+          </Route>
+          <Route path="/login">
+            <Login />
+          </Route>
+          <Route path="/agencyLogin">
+            <AgencyLogin />
+          </Route>
+          <Route path="/agencyRegister">
+            <AgencyRegister />
+          </Route>
+          <Route path="/agencyTrips">
+            <AgencyTrips />
+          </Route>
+          <Route path="/createTrip">
+            <CreateTrip />
+          </Route>
+          <Route path="/editTrip/:id">
+            <EditTrip />
+          </Route>
+        </Switch>
+      </Layout>
     </SessionContext.Provider>
   );
 }

@@ -65,3 +65,12 @@ export const FloatActionButton = styled(Fab)({
     backgroundColor: palette.secondary,
   },
 });
+
+export const CancelButton = styled(Button)({
+  color: "black",
+  backgroundColor: palette.lightGray,
+  "&:hover": {
+    backgroundColor: palette.darkGray,
+  },
+  borderRadius: 40,
+});
