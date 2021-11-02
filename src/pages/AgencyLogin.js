@@ -1,9 +1,7 @@
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -13,20 +11,61 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { LoginButton } from "../components/ui/Buttons";
 import { useSnackbar } from "notistack";
 import * as authService from "../services/authService";
+import { useHistory } from "react-router-dom";
+import { useContext } from "react";
+import { SessionContext } from "../store/SessionContext";
 
 const theme = createTheme();
 
 function AgencyLogin() {
+  const { setSession } = useContext(SessionContext);
+  const [emailAddressError, setEmailAddressError] = React.useState(false);
+  const [passwordError, setPasswordError] = React.useState(false);
+  const [emailAddressErrorText, setEmailAddressErrorText] = React.useState("Este campo es obligatorio");
+  const passwordErrorText = "Este campo es obligatorio";
+  let history = useHistory(); 
+
   const { enqueueSnackbar } = useSnackbar();
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     
-    try{
-      authService.authenticateByAgency(data.get("email"), data.get("password"));
-      enqueueSnackbar("You have logged in successfully.", { variant: "success" });
-    }catch(err){
-      enqueueSnackbar(err.message, { variant: "error" });
+    const email = data.get("email");
+    const password = data.get("password")
+    const re = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
+
+    if(email.length === 0 || password.length === 0){
+      setEmailAddressError(email.length === 0);
+      setPasswordError(password.length === 0);
+    } else if(!re.test(email.toLowerCase())){
+      setEmailAddressError(true);
+      setPasswordError(password.length === 0);
+      setEmailAddressErrorText("Este campo debe ser un email valido")
+    }else{
+      setEmailAddressError(false);
+      setPasswordError(false);
+      const response = authService.authenticateByAgency(email, password).then( response => {
+      
+        const newSession = {
+          isAuthenticated: true,
+          isAgency: true,
+          token: response.data.token,
+          profileInfo: {
+            name: response.data.agencyName,
+            picture: "guestTravelAgency_image",
+          },
+          userId: response.data.agencyId,
+        };
+  
+        setSession(newSession);
+        enqueueSnackbar("Sesión iniciada exitosamente.", { variant: "success" });
+        history.push("/agencyTrips");
+      }).catch( error => {
+        const errorMessage = error.response 
+          ? error.response.data.message 
+          : "Error inesperado. Intente nuevamente.";
+        return enqueueSnackbar(errorMessage, { variant: "error" });
+      })
     }
   };
 
@@ -64,7 +103,7 @@ function AgencyLogin() {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Sign in
+              Iniciar Sesión
             </Typography>
             <Box
               component="form"
@@ -73,6 +112,7 @@ function AgencyLogin() {
               sx={{ mt: 1 }}
             >
               <TextField
+                error={emailAddressError}
                 margin="normal"
                 required
                 fullWidth
@@ -81,8 +121,10 @@ function AgencyLogin() {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                helperText= {emailAddressError && emailAddressErrorText}
               />
               <TextField
+                error={passwordError}
                 margin="normal"
                 required
                 fullWidth
@@ -91,6 +133,7 @@ function AgencyLogin() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                helperText= {passwordError && passwordErrorText}
               />
               <LoginButton
                 type="submit"
@@ -98,15 +141,8 @@ function AgencyLogin() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Sign In
+                Inicia Sesión
               </LoginButton>
-              <Grid container>
-                <Grid item>
-                  <Link href="#" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
-              </Grid>
             </Box>
           </Box>
         </Grid>

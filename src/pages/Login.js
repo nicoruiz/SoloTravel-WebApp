@@ -34,7 +34,7 @@ function Login() {
 
   const authenticate = async (profileInfo, token) => {
     try {
-      const response = await authService.authenticateByGoogle(profileInfo, token);
+      const response = await authService.authenticateByGoogle(token);
       const userId = response.id;
 
       const newSession = {
@@ -45,7 +45,7 @@ function Login() {
       };
 
       setSession(newSession);
-      enqueueSnackbar("You have logged in successfully.", { variant: "success" });
+      enqueueSnackbar("Sesión iniciada exitosamente.", { variant: "success" });
       history.push("/");
     }
     catch(err) {
@@ -107,7 +107,7 @@ function Login() {
           <LoginButton component={Link} to="/agencyLogin" variant="contained">Inicia sesión</LoginButton>
         </Grid>
         <Grid sx={{ m: 5 }}>
-          <LoginButton variant="contained">Registrate</LoginButton>
+          <LoginButton component={Link} to="/agencyRegister" variant="contained">Registrate</LoginButton>
         </Grid>
       </Grid>
     </Container>

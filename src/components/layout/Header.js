@@ -10,13 +10,13 @@ import { AccountCircle, Favorite, TravelExplore } from "@mui/icons-material";
 import { NavButton } from "./../ui/Buttons";
 import { Avatar } from "@mui/material";
 // Context
-import { guestSession, SessionContext } from "./../../store/SessionContext";
+import { defaultSession, SessionContext } from "./../../store/SessionContext";
 
 function Header() {
   const { session, setSession } = useContext(SessionContext);
 
   const logout = () => {
-    setSession(guestSession);
+    setSession(defaultSession);
     // eslint-disable-next-line no-restricted-globals
     location.href = "/";
   };
@@ -28,10 +28,21 @@ function Header() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Solo Travel
           </Typography>
-          <NavButton component={Link} to="/" startIcon={<TravelExplore />}>
-            Viajes
-          </NavButton>
-          {session.isAuthenticated && (
+          {!session.isAgency && (
+            <NavButton component={Link} to="/" startIcon={<TravelExplore />}>
+              Viajes
+            </NavButton>
+          )}
+          {session.isAuthenticated && session.isAgency && (
+            <NavButton
+              component={Link}
+              to="/agencyTrips"
+              startIcon={<TravelExplore />}
+            >
+              Mis Viajes
+            </NavButton>
+          )}
+          {session.isAuthenticated && !session.isAgency && (
             <NavButton
               component={Link}
               to="/favorites"
@@ -44,8 +55,8 @@ function Header() {
             <NavButton onClick={logout}>
               <Avatar
                 sx={{ mr: 1 }}
-                alt="avatar"
                 src={session.profileInfo.picture}
+                referrerPolicy="no-referrer"
               />
               {session.profileInfo.name}
             </NavButton>

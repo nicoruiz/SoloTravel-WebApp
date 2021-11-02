@@ -1,11 +1,12 @@
 import { createContext } from "react";
 
-const guestSession = {
+const defaultSession = {
   isAuthenticated: false,
+  isAgency: false,
   token: "",
   profileInfo: {},
 };
 
 const SessionContext = createContext(null);
 
-export { guestSession, SessionContext };
+export { defaultSession, SessionContext };

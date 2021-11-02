@@ -19,7 +19,7 @@ function Favorites() {
     const getFavorites = async () => {
       try {
         setLoading(true);
-        const data = await usersService.getFavorites(session.userId);
+        const data = await usersService.getFavorites(session);
         setFavorites(data.trips);
       } catch (err) {
         showError(err.message);
