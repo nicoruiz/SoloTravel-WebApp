@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -11,9 +11,20 @@ import { NavButton } from "./../ui/Buttons";
 import { Avatar } from "@mui/material";
 // Context
 import { defaultSession, SessionContext } from "./../../store/SessionContext";
+import ProfileMenu from "./ProfileMenu";
 
 function Header() {
   const { session, setSession } = useContext(SessionContext);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const openProfileMenu = Boolean(anchorEl);
+
+  const handleProfileClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleProfileClose = () => {
+    setAnchorEl(null);
+  };
 
   const logout = () => {
     setSession(defaultSession);
@@ -52,7 +63,7 @@ function Header() {
             </NavButton>
           )}
           {session.isAuthenticated ? (
-            <NavButton onClick={logout}>
+            <NavButton onClick={handleProfileClick}>
               <Avatar
                 sx={{ mr: 1 }}
                 src={session.profileInfo.picture}
@@ -71,6 +82,13 @@ function Header() {
           )}
         </Toolbar>
       </AppBar>
+      {/* Menu desplegable */}
+      <ProfileMenu
+        anchorEl={anchorEl}
+        open={openProfileMenu}
+        handleClose={handleProfileClose}
+        onLogout={logout}
+      />
     </Box>
   );
 }
