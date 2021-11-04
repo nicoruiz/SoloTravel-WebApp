@@ -6,17 +6,20 @@ import Typography from "@mui/material/Typography";
 import classes from "./Header.module.css";
 import { Link } from "react-router-dom";
 import { AccountCircle, Favorite, TravelExplore } from "@mui/icons-material";
+import { useHistory } from "react-router-dom";
 // Styled components
 import { NavButton } from "./../ui/Buttons";
 import { Avatar } from "@mui/material";
 // Context
 import { defaultSession, SessionContext } from "./../../store/SessionContext";
 import ProfileMenu from "./ProfileMenu";
+import * as sessionService from "../../services/sessionService";
 
 function Header() {
   const { session, setSession } = useContext(SessionContext);
   const [anchorEl, setAnchorEl] = useState(null);
   const openProfileMenu = Boolean(anchorEl);
+  const history = useHistory();
 
   const handleProfileClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -26,10 +29,14 @@ function Header() {
     setAnchorEl(null);
   };
 
+  const goToMyProfile = () => {
+    history.push("/myProfile");
+  }
+
   const logout = () => {
     setSession(defaultSession);
-    // eslint-disable-next-line no-restricted-globals
-    location.href = "/";
+    sessionService.removeSessionFromLocalStorage();
+    history.push('/');
   };
 
   return (
@@ -87,7 +94,8 @@ function Header() {
         anchorEl={anchorEl}
         open={openProfileMenu}
         handleClose={handleProfileClose}
-        onLogout={logout}
+        onMyProfileClick={goToMyProfile}
+        onLogout={logout}        
       />
     </Box>
   );

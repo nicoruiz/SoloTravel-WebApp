@@ -1,4 +1,7 @@
 import { createContext } from "react";
+import * as sessionService from "../services/sessionService";
+
+const localStorageSession = sessionService.getSessionFromLocalStorage();
 
 const defaultSession = {
   isAuthenticated: false,
@@ -7,6 +10,10 @@ const defaultSession = {
   profileInfo: {},
 };
 
+const currentSession = localStorageSession === null 
+  ? defaultSession
+  : localStorageSession;
+
 const SessionContext = createContext(null);
 
-export { defaultSession, SessionContext };
+export { defaultSession, currentSession, SessionContext };

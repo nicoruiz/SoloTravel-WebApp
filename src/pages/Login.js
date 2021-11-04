@@ -2,16 +2,17 @@ import { Container, Divider, Grid, Typography } from "@mui/material";
 import { GoogleLogin } from "react-google-login";
 import { GoogleButton, LoginButton } from "./../components/ui/Buttons";
 import { GOOGLE_CLIENT_ID } from "./../config";
-import * as authService from "./../services/authService";
+import * as authService from "../services/authService";
 import { useSnackbar } from "notistack";
 import { useHistory, Link } from "react-router-dom";
 import { useContext } from "react";
 import { SessionContext } from "../store/SessionContext";
+import * as sessionService from "../services/sessionService";
 
 function Login() {
   const { setSession } = useContext(SessionContext);
   const { enqueueSnackbar } = useSnackbar();
-  let history = useHistory(); 
+  let history = useHistory();
 
   const onSuccessLogin = (response) => {
     const profileObj = response.profileObj;
@@ -45,6 +46,7 @@ function Login() {
       };
 
       setSession(newSession);
+      sessionService.setSessionInLocalStorage(newSession);
       enqueueSnackbar("Sesión iniciada exitosamente.", { variant: "success" });
       history.push("/");
     }

@@ -4,7 +4,7 @@ import { Switch, Route } from "react-router-dom";
 import AllTrips from "./pages/AllTrips";
 import Favorites from "./pages/Favorites";
 import Login from "./pages/Login";
-import { defaultSession, SessionContext } from "./store/SessionContext";
+import { currentSession, SessionContext } from "./store/SessionContext";
 import AgencyLogin from "./pages/AgencyLogin";
 import AgencyRegister from "./pages/AgencyRegister"
 import AgencyTrips from "./pages/AgencyTrips";
@@ -13,12 +13,11 @@ import EditTrip from "./pages/EditTrip";
 
 function App() {
 
-  const [session, setSession] = useState(defaultSession);
-
-  const value = useMemo(() => ({ session, setSession }), [session, setSession]);
+  const [session, setSession] = useState(currentSession);
+  const sessionProviderValue = useMemo(() => ({ session, setSession }), [session, setSession]);
 
   return (
-    <SessionContext.Provider value={value}>
+    <SessionContext.Provider value={sessionProviderValue}>
       <Layout>
         <Switch>
           <Route path="/" exact>
