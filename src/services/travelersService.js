@@ -1,9 +1,9 @@
 import API from "./api";
-import { USERS_URL } from "../config";
+import { TRAVELERS_URL, AGENCIES_URL } from "../config";
 
 const getFavorites = async (session) => {
   const { userId, token } = session;
-  const url = `${USERS_URL}/${userId}/favorites`;
+  const url = `${TRAVELERS_URL}/${userId}/favorites`;
   const config = {
     headers: { Authorization: `Bearer ${token}` },
   };
@@ -14,7 +14,7 @@ const getFavorites = async (session) => {
 
 const addFavorite = async (session, tripId) => {
   const { userId, token } = session;
-  const url = `${USERS_URL}/${userId}/favorites/${tripId}`;
+  const url = `${TRAVELERS_URL}/${userId}/favorites/${tripId}`;
   const config = {
     headers: { Authorization: `Bearer ${token}` },
   };
@@ -25,7 +25,7 @@ const addFavorite = async (session, tripId) => {
 
 const removeFavorite = async (session, tripId) => {
   const { userId, token } = session;
-  const url = `${USERS_URL}/${userId}/favorites/${tripId}`;
+  const url = `${TRAVELERS_URL}/${userId}/favorites/${tripId}`;
   const config = {
     headers: { Authorization: `Bearer ${token}` },
   };
@@ -34,15 +34,15 @@ const removeFavorite = async (session, tripId) => {
   return response.data;
 };
 
-const getAgencyTrips = async (session) => {
+const getTripsByUser = async (session, searchValue) => {
   const { userId, token } = session;
-  const url = `${USERS_URL}/${userId}/trips`;
+  const url = `${TRAVELERS_URL}/${userId}?name=${searchValue}`;
   const config = {
     headers: { Authorization: `Bearer ${token}` },
   };
   const response = await API.get(url, config);
-
+  
   return response.data;
 };
 
-export { getFavorites, addFavorite, removeFavorite, getAgencyTrips };
+export { getFavorites, addFavorite, removeFavorite, getTripsByUser };

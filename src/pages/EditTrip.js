@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import { Container, Grid, Typography } from "@mui/material";
 import { SessionContext } from "../store/SessionContext";
-import * as tripsService from "./../services/tripsService";
+import * as travelAgencyService from "./../services/travelAgencyService";
 import { useHistory } from "react-router-dom";
 import TripForm from "../components/TripForm";
 import { useParams } from "react-router-dom";
@@ -59,7 +59,7 @@ function EditTrip() {
       };
       console.log("Form submitted: ", updateTripDto);
 
-      await tripsService.updateTrip(session, id, updateTripDto);
+      await travelAgencyService.updateTrip(session, id, updateTripDto);
       history.push("/agencyTrips");
     } catch (err) {
       console.log(err);

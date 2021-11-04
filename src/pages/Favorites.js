@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import { Container, Typography } from "@mui/material";
-import * as usersService from "./../services/usersService";
+import * as travelersService from "./../services/travelersService";
 import TripList from "../components/TripList";
 import Spinner from "../components/ui/Spinner";
 import { useSnackbar } from "notistack";
@@ -19,7 +19,7 @@ function Favorites() {
     const getFavorites = async () => {
       try {
         setLoading(true);
-        const data = await usersService.getFavorites(session);
+        const data = await travelersService.getFavorites(session);
         setFavorites(data.trips);
       } catch (err) {
         showError(err.message);
