@@ -1,6 +1,6 @@
 import API from "./api";
-import { TRIPS_URL, TRAVELERS_URL, AGENCIES_URL } from "../config";
-import { getTripsByUser } from "./TravelersService";
+import { TRIPS_URL } from "../config";
+import { getTripsByUser } from "./travelersService";
 
 const getTrips = async (session, searchValue) => {
   return session.isAuthenticated

@@ -1,5 +1,5 @@
 import API from "./api";
-import { TRAVELERS_URL, AGENCIES_URL } from "../config";
+import { TRAVELERS_URL } from "../config";
 
 const getFavorites = async (session) => {
   const { userId, token } = session;

@@ -6,6 +6,7 @@ import { useHistory } from "react-router-dom";
 import TripForm from "../components/TripForm";
 import { useParams } from "react-router-dom";
 import Spinner from "../components/ui/Spinner";
+import * as tripsService from "./../services/tripsService";
 
 function EditTrip() {
   const { session } = useContext(SessionContext);
