@@ -14,6 +14,7 @@ import * as authService from "../services/authService";
 import { useHistory } from "react-router-dom";
 import { useContext } from "react";
 import { SessionContext } from "../store/SessionContext";
+import * as sessionService from "../services/sessionService";
 
 const theme = createTheme();
 
@@ -24,8 +25,8 @@ function AgencyLogin() {
   const [emailAddressErrorText, setEmailAddressErrorText] = React.useState("Este campo es obligatorio");
   const passwordErrorText = "Este campo es obligatorio";
   let history = useHistory(); 
-
   const { enqueueSnackbar } = useSnackbar();
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -58,6 +59,7 @@ function AgencyLogin() {
         };
   
         setSession(newSession);
+        sessionService.setSessionInLocalStorage(newSession);
         enqueueSnackbar("Sesión iniciada exitosamente.", { variant: "success" });
         history.push("/agencyTrips");
       }).catch( error => {

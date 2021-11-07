@@ -4,7 +4,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Divider from '@mui/material/Divider';
 import Logout from '@mui/icons-material/Logout';
 
-function ProfileMenu({ anchorEl, open, handleClose, onLogout }) {
+function ProfileMenu({ anchorEl, open, handleClose, onMyProfileClick, onLogout }) {
 	return (
 		<Menu
 			anchorEl={anchorEl}
@@ -40,7 +40,7 @@ function ProfileMenu({ anchorEl, open, handleClose, onLogout }) {
 			transformOrigin={{ horizontal: 'right', vertical: 'top' }}
 			anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
 		>
-			<MenuItem sx={{ justifyContent:"space-between" }}>
+			<MenuItem onClick={onMyProfileClick} sx={{ justifyContent:"space-between" }}>
 				<Avatar /> Profile
 			</MenuItem>
 			<Divider />
