@@ -2,14 +2,17 @@ import { useState, useContext } from "react";
 import { Container, Grid, Typography } from "@mui/material";
 import { SessionContext } from "../store/SessionContext";
 import * as tripsService from "./../services/tripsService";
+import * as imagesService from "./../services/imagesService";
 import { useHistory } from "react-router-dom";
 import TripForm from "../components/TripForm";
+import { useSnackbar } from "notistack";
 
 function CreateTrip() {
   const { session } = useContext(SessionContext);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const history = useHistory();
+  const { enqueueSnackbar } = useSnackbar();
 
   const onStartDateChange = (newValue) => {
     setStartDate(newValue);
@@ -22,11 +25,13 @@ function CreateTrip() {
     try {
       event.preventDefault();
       const data = new FormData(event.currentTarget);
+      // Upload image to storage
+      const uploadedImageRes = await uploadImage(data.get("image"));
 
       const createTripDto = {
         name: data.get("name"),
         destination: data.get("destination"),
-        image: data.get("image"),
+        image: uploadedImageRes.data,
         description: data.get("description"),
         price: data.get("price"),
         startDate: startDate,
@@ -36,10 +41,20 @@ function CreateTrip() {
       await tripsService.createTrip(session, createTripDto);
       history.push("/agencyTrips");
     }
-    catch (err) {
-      console.log(err);
+    catch (error) {
+      const errorMessage = error.response
+          ? error.response.data.message 
+          : "Error inesperado. Intente nuevamente.";
+      enqueueSnackbar(errorMessage, { variant: "error" });
     }
   };
+
+  const uploadImage = async (image) => {
+    const imageFormData = new FormData();
+    imageFormData.append("image", image);
+
+    return imagesService.uploadImage(session, imageFormData);
+  }
 
   return (
     <Container sx={{ mt: 7, pb: 5 }} maxWidth="md">

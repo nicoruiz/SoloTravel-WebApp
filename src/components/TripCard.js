@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography";
 import classes from "./TripCard.module.css";
 import { AttachMoney, LocationOn, Schedule } from "@mui/icons-material";
 import { CardActionArea, Divider } from "@mui/material";
+import { IMAGES_BUCKET_URL } from "./../config";
 // Context
 import { useContext } from "react";
 import { SessionContext } from "../store/SessionContext";
@@ -18,6 +19,8 @@ import AgencyTripCardActions from "./AgencyTripCardActions";
 function TripCard(props) {
   const { session } = useContext(SessionContext);
   const [isRaised, setRaised] = React.useState(false);
+
+  const imageUrl = `${IMAGES_BUCKET_URL}${props.image}`;
 
   const handleToggleRaised = () => {
     setRaised(!isRaised);
@@ -44,7 +47,7 @@ function TripCard(props) {
             component="img"
             alt={props.name}
             height="140"
-            image={props.image}
+            image={imageUrl}
           />
           <CardContent sx={{ flexGrow: 1 }}>
             <Typography className={classes.title} gutterBottom variant="h5">

@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import { Container, Grid, Typography } from "@mui/material";
 import { SessionContext } from "../store/SessionContext";
 import * as tripsService from "./../services/tripsService";
+import * as imagesService from "./../services/imagesService";
 import { useHistory } from "react-router-dom";
 import TripForm from "../components/TripForm";
 import { useParams } from "react-router-dom";
@@ -46,12 +47,19 @@ function EditTrip() {
     try {
       event.preventDefault();
       const data = new FormData(event.currentTarget);
+      // Upload image to storage
+      let imageName = data.get("image")?.name;
+      if (imageName !== trip.image) {
+        // If image is new, upload it
+        const uploadedImageRes = await uploadImage(data.get("image"));
+        imageName = uploadedImageRes.data;
+      }
 
       const updateTripDto = {
         id: id,
         name: data.get("name"),
         destination: data.get("destination"),
-        image: data.get("image"),
+        image: imageName,
         description: data.get("description"),
         price: data.get("price"),
         startDate: startDate,
@@ -65,6 +73,13 @@ function EditTrip() {
       console.log(err);
     }
   };
+
+  const uploadImage = async (image) => {
+    const imageFormData = new FormData();
+    imageFormData.append("image", image);
+
+    return imagesService.uploadImage(session, imageFormData);
+  }
 
   return (
     <Container sx={{ mt: 7, pb: 5 }} maxWidth="md">

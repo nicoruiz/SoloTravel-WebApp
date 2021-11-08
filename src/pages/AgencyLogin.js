@@ -45,7 +45,7 @@ function AgencyLogin() {
     }else{
       setEmailAddressError(false);
       setPasswordError(false);
-      const response = authService.authenticateByAgency(email, password).then( response => {
+      authService.authenticateByAgency(email, password).then(response => {
       
         const newSession = {
           isAuthenticated: true,
@@ -62,7 +62,7 @@ function AgencyLogin() {
         sessionService.setSessionInLocalStorage(newSession);
         enqueueSnackbar("Sesión iniciada exitosamente.", { variant: "success" });
         history.push("/agencyTrips");
-      }).catch( error => {
+      }).catch(error => {
         const errorMessage = error.response 
           ? error.response.data.message 
           : "Error inesperado. Intente nuevamente.";

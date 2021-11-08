@@ -1,12 +1,15 @@
 import Box from "@mui/material/Box";
 import { LoginButton } from "../components/ui/Buttons";
-import { TextField } from "@mui/material";
+import { TextField, Input, InputLabel } from "@mui/material";
 // Dates
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
+import { display } from "@mui/system";
 
 function TripForm(props) {
+    const { trip, startDate, onStartDateChange, endDate, onEndDateChange, handleSubmit } = props;
+
     return (
         <Box
           sx={{
@@ -21,10 +24,10 @@ function TripForm(props) {
             component="form"
             noValidate
             width={"85%"}
-            onSubmit={props.handleSubmit}
+            onSubmit={handleSubmit}
           >
             <TextField
-              defaultValue={props.trip?.name}
+              defaultValue={trip?.name}
               error={false}
               margin="normal"
               required
@@ -37,7 +40,7 @@ function TripForm(props) {
               helperText
             />
             <TextField
-              defaultValue={props.trip?.destination}
+              defaultValue={trip?.destination}
               error={false}
               margin="normal"
               required
@@ -48,20 +51,26 @@ function TripForm(props) {
               id="destination"
               helperText
             />
-            <TextField
-              defaultValue={props.trip?.image}
+            <InputLabel 
+              sx={{ mt: 3 }}
+              required
+              variant="standard"
+            >
+              Imagen
+            </InputLabel>
+            <Input
               error={false}
+              type="file"
               margin="normal"
               required
               fullWidth
               variant="standard"
               name="image"
-              label="Imagen"
               id="image"
               helperText
             />
             <TextField
-              defaultValue={props.trip?.description}
+              defaultValue={trip?.description}
               error={false}
               margin="normal"
               required
@@ -75,7 +84,7 @@ function TripForm(props) {
               helperText
             />
             <TextField
-              defaultValue={props.trip?.price}
+              defaultValue={trip?.price}
               error={false}
               margin="normal"
               required
@@ -99,15 +108,15 @@ function TripForm(props) {
                 <DesktopDatePicker
                   label="Desde"
                   inputFormat="dd/MM/yyyy"
-                  value={props.startDate}
-                  onChange={props.onStartDateChange}
+                  value={startDate}
+                  onChange={onStartDateChange}
                   renderInput={(params) => <TextField {...params} />}
                 />
                 <DesktopDatePicker
                   label="Hasta"
                   inputFormat="dd/MM/yyyy"
-                  value={props.endDate}
-                  onChange={props.onEndDateChange}
+                  value={endDate}
+                  onChange={onEndDateChange}
                   renderInput={(params) => <TextField {...params} />}
                 />
               </Box>
