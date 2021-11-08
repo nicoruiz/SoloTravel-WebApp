@@ -49,6 +49,9 @@ function EditTrip() {
       const data = new FormData(event.currentTarget);
       // Upload image to storage
       let imageName = data.get("image")?.name;
+      if (imageName === "") {
+        imageName = trip.image;
+      }
       if (imageName !== trip.image) {
         // If image is new, upload it
         const uploadedImageRes = await uploadImage(data.get("image"));
