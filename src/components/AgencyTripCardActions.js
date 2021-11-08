@@ -6,7 +6,7 @@ import { useHistory } from "react-router";
 import ConfirmationDialog from "./ui/ConfirmationDialog";
 import { PrimaryIconButton, RedIconButton } from "./ui/Buttons";
 // Services
-import * as tripsService from "./../services/tripsService";
+import * as travelAgencyService from "./../services/travelAgencyService";
 import { useSnackbar } from "notistack";
 // Context
 import { useContext } from "react";
@@ -27,7 +27,7 @@ function AgencyTripCardActions({ tripId, tripName, onTripDelete }) {
 
   const onDeleteConfirm = async () => {
     try {
-      await tripsService.deleteTrip(session, tripId);
+      await travelAgencyService.deleteTrip(session, tripId);
       enqueueSnackbar("Viaje eliminado de su lista");
       onTripDelete(tripId);
     } catch (err) {

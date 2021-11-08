@@ -3,6 +3,7 @@ import { Container, Grid, Typography } from "@mui/material";
 import { SessionContext } from "../store/SessionContext";
 import * as tripsService from "./../services/tripsService";
 import * as imagesService from "./../services/imagesService";
+import * as travelAgencyService from "./../services/travelAgencyService";
 import { useHistory } from "react-router-dom";
 import TripForm from "../components/TripForm";
 import { useParams } from "react-router-dom";
@@ -18,7 +19,6 @@ function EditTrip() {
   const history = useHistory();
 
   useEffect(() => {
-    console.log("Trip id: ", id);
     getTripData();
   }, []);
 
@@ -67,7 +67,7 @@ function EditTrip() {
       };
       console.log("Form submitted: ", updateTripDto);
 
-      await tripsService.updateTrip(session, id, updateTripDto);
+      await travelAgencyService.updateTrip(session, id, updateTripDto);
       history.push("/agencyTrips");
     } catch (err) {
       console.log(err);

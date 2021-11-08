@@ -5,7 +5,7 @@ import { IconButton } from "@mui/material";
 import { PrimaryButton } from "./ui/Buttons";
 import { makeStyles } from "@mui/styles";
 // Services
-import * as usersService from "./../services/usersService";
+import * as travelerService from "./../services/travelersService";
 import { useSnackbar } from "notistack";
 // Context
 import { useContext } from "react";
@@ -37,7 +37,7 @@ function TravelerTripCardActions(props) {
   const handleSetFavorite = async () => {
     const message = "Viaje agregado a tus favoritos!";
     try {
-      await usersService.addFavorite(session, props.tripId);
+      await travelerService.addFavorite(session, props.tripId);
       setFavorite(true);
       enqueueSnackbar(message, { variant: "success" });
     } catch (err) {
@@ -47,7 +47,7 @@ function TravelerTripCardActions(props) {
 
   const handleRemoveFavorite = async () => {
     try {
-      await usersService.removeFavorite(session, props.tripId);
+      await travelerService.removeFavorite(session, props.tripId);
       setFavorite(false);
       enqueueSnackbar("Viaje eliminado de tus favoritos");
       props.onFavoriteRemove(props.tripId);

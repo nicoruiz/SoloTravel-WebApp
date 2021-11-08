@@ -1,8 +1,8 @@
 import { useState, useContext } from "react";
 import { Container, Grid, Typography } from "@mui/material";
 import { SessionContext } from "../store/SessionContext";
-import * as tripsService from "./../services/tripsService";
 import * as imagesService from "./../services/imagesService";
+import * as travelAgencyService from "./../services/travelAgencyService";
 import { useHistory } from "react-router-dom";
 import TripForm from "../components/TripForm";
 import { useSnackbar } from "notistack";
@@ -38,7 +38,7 @@ function CreateTrip() {
         endDate: endDate,
       }
 
-      await tripsService.createTrip(session, createTripDto);
+      await travelAgencyService.createTrip(session, createTripDto);
       history.push("/agencyTrips");
     }
     catch (error) {
