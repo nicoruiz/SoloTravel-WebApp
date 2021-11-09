@@ -7,6 +7,7 @@ import * as travelAgencyService from "./../services/travelAgencyService";
 import { useHistory } from "react-router-dom";
 import TripForm from "../components/TripForm";
 import { useParams } from "react-router-dom";
+import { useSnackbar } from "notistack";
 import Spinner from "../components/ui/Spinner";
 
 function EditTrip() {
@@ -17,6 +18,17 @@ function EditTrip() {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const history = useHistory();
+  const { enqueueSnackbar } = useSnackbar();
+  // Form state
+  const [showNameError, setShowNameError] = useState(false);
+  const [showDestinationError, setShowDestinationError] = useState(false);
+  const [showImageError, setShowImageError] = useState(false);
+  const [showDescriptionError, setShowDescriptionError] = useState(false);
+  const [showPriceError, setShowPriceError] = useState(false);
+  const [showStartDateError, setShowStartDateError] = useState(false);
+  const [showEndDateError, setShowEndDateError] = useState(false);
+  const [startDateErrorText, setStartDateErrorText] = useState("");
+  const [endDateErrorText, setEndDateErrorText] = useState("");
 
   useEffect(() => {
     getTripData();
@@ -28,10 +40,13 @@ function EditTrip() {
 
       const tripData = await tripsService.getTripById(session, id);
       setTrip(tripData);
-      setStartDate(tripData.startDate);
-      setEndDate(tripData.endDate);
-    } catch (err) {
-      console.log(err);
+      setStartDate(new Date(tripData.startDate));
+      setEndDate(new Date(tripData.endDate));
+    } catch (error) {
+      const errorMessage = error.response
+        ? error.response.data.message
+        : "Error inesperado. Intente nuevamente.";
+      enqueueSnackbar(errorMessage, { variant: "error" });
     }
     setLoading(false);
   };
@@ -47,17 +62,13 @@ function EditTrip() {
     try {
       event.preventDefault();
       const data = new FormData(event.currentTarget);
-      // Upload image to storage
+      // Set image name
       let imageName = data.get("image")?.name;
       if (imageName === "") {
         imageName = trip.image;
       }
-      if (imageName !== trip.image) {
-        // If image is new, upload it
-        const uploadedImageRes = await uploadImage(data.get("image"));
-        imageName = uploadedImageRes.data;
-      }
 
+      // Form dto
       const updateTripDto = {
         id: id,
         name: data.get("name"),
@@ -68,7 +79,18 @@ function EditTrip() {
         startDate: startDate,
         endDate: endDate,
       };
-      console.log("Form submitted: ", updateTripDto);
+
+      // Validate dto data
+      if (!isValidForm(updateTripDto))
+        return;
+
+      // Upload image to storage      
+      if (imageName !== trip.image) {
+        // If image is new, upload it
+        const uploadedImageRes = await uploadImage(data.get("image"));
+        // Set new image name
+        updateTripDto.image = uploadedImageRes.data;
+      }
 
       await travelAgencyService.updateTrip(session, id, updateTripDto);
       history.push("/agencyTrips");
@@ -76,6 +98,57 @@ function EditTrip() {
       console.log(err);
     }
   };
+
+  const isValidForm = (updateTripDto) => {
+    // Name
+    const isValidName = updateTripDto.name !== "";
+    setShowNameError(!isValidName);
+    // Destination
+    const isValidDestination = updateTripDto.destination !== "";
+    setShowDestinationError(!isValidDestination);
+    // Image
+    const isValidImage = updateTripDto.image.name !== "";
+    setShowImageError(!isValidImage);
+    // Description
+    const isValidDescription = updateTripDto.description !== "";
+    setShowDescriptionError(!isValidDescription);
+    // Price
+    const isValidPrice = updateTripDto.price !== "" && updateTripDto.price < 999999 && updateTripDto.price > 0;
+    setShowPriceError(!isValidPrice);
+    // Dates
+    const areValidDates = checkValidDates();
+
+    return isValidName && isValidDestination && isValidImage && isValidDescription && isValidPrice && areValidDates;
+  }
+
+  const checkValidDates = () => {
+    // Using toDateString to avoid time comparison
+    const today = new Date(new Date().toDateString());
+    const _startDate = new Date(startDate?.toDateString());
+    const _endDate = new Date(endDate?.toDateString());
+
+    const isValidStartDate = _startDate >= today;
+    const isValidEndDate = _endDate >= today;
+    const endDateHigherThanStartDate = _endDate > _startDate;
+
+    setShowStartDateError(!isValidStartDate);
+    if (!isValidStartDate) {
+      setStartDateErrorText("La fecha desde es inválida");
+    }
+    setShowEndDateError(!isValidEndDate);
+    if (!isValidEndDate) {
+      setEndDateErrorText("La fecha hasta es inválida");
+    }
+    // Si la fecha desde es valida, hay que chequear que no sea mayor que la fecha hasta
+    if (isValidStartDate) {
+      setShowStartDateError(!endDateHigherThanStartDate);
+      if (!endDateHigherThanStartDate) {
+        setStartDateErrorText("La fecha desde no puede ser mayor a la fecha hasta");
+      }
+    }
+
+    return isValidStartDate && isValidEndDate && endDateHigherThanStartDate;
+  }
 
   const uploadImage = async (image) => {
     const imageFormData = new FormData();
@@ -108,12 +181,22 @@ function EditTrip() {
           <Spinner />
         ) : (
           <TripForm
+            isEdition={true}
             trip={trip}
             startDate={startDate}
             onStartDateChange={onStartDateChange}
             endDate={endDate}
             onEndDateChange={onEndDateChange}
             handleSubmit={handleSubmit}
+            showNameError={showNameError}
+            showDestinationError={showDestinationError}
+            showImageError={showImageError}
+            showDescriptionError={showDescriptionError}
+            showPriceError={showPriceError}
+            showStartDateError={showStartDateError}
+            showEndDateError={showEndDateError}
+            startDateErrorText={startDateErrorText}
+            endDateErrorText={endDateErrorText}
           />
         )}
       </Grid>

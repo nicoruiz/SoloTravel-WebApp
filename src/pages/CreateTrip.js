@@ -13,6 +13,16 @@ function CreateTrip() {
   const [endDate, setEndDate] = useState(null);
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
+  // Form state
+  const [showNameError, setShowNameError] = useState(false);
+  const [showDestinationError, setShowDestinationError] = useState(false);
+  const [showImageError, setShowImageError] = useState(false);
+  const [showDescriptionError, setShowDescriptionError] = useState(false);
+  const [showPriceError, setShowPriceError] = useState(false);
+  const [showStartDateError, setShowStartDateError] = useState(false);
+  const [showEndDateError, setShowEndDateError] = useState(false);
+  const [startDateErrorText, setStartDateErrorText] = useState("");
+  const [endDateErrorText, setEndDateErrorText] = useState("");
 
   const onStartDateChange = (newValue) => {
     setStartDate(newValue);
@@ -25,29 +35,86 @@ function CreateTrip() {
     try {
       event.preventDefault();
       const data = new FormData(event.currentTarget);
-      // Upload image to storage
-      const uploadedImageRes = await uploadImage(data.get("image"));
-
+      // Form dto
       const createTripDto = {
         name: data.get("name"),
         destination: data.get("destination"),
-        image: uploadedImageRes.data,
+        image: data.get("image"),
         description: data.get("description"),
         price: data.get("price"),
         startDate: startDate,
         endDate: endDate,
       }
 
+      // Validate dto data
+      if (!isValidForm(createTripDto))
+        return;
+
+      // Upload image to storage
+      const uploadedImageRes = await uploadImage(createTripDto.image);
+      createTripDto.image = uploadedImageRes.data;
+
       await travelAgencyService.createTrip(session, createTripDto);
       history.push("/agencyTrips");
     }
     catch (error) {
       const errorMessage = error.response
-          ? error.response.data.message 
-          : "Error inesperado. Intente nuevamente.";
+        ? error.response.data.message
+        : "Error inesperado. Intente nuevamente.";
       enqueueSnackbar(errorMessage, { variant: "error" });
     }
   };
+
+  const isValidForm = (createTripDto) => {
+    // Name
+    const isValidName = createTripDto.name !== "";
+    setShowNameError(!isValidName);
+    // Destination
+    const isValidDestination = createTripDto.destination !== "";
+    setShowDestinationError(!isValidDestination);
+    // Image
+    const isValidImage = createTripDto.image.name !== "";
+    setShowImageError(!isValidImage);
+    // Description
+    const isValidDescription = createTripDto.description !== "";
+    setShowDescriptionError(!isValidDescription);
+    // Price
+    const isValidPrice = createTripDto.price !== "" && createTripDto.price < 999999 && createTripDto.price > 0;
+    setShowPriceError(!isValidPrice);
+    // Dates
+    const areValidDates = checkValidDates();
+
+    return isValidName && isValidDestination && isValidImage && isValidDescription && isValidPrice && areValidDates;
+  }
+
+  const checkValidDates = () => {
+    // Using toDateString to avoid time comparison
+    const today = new Date(new Date().toDateString());
+    const _startDate = new Date(startDate?.toDateString());
+    const _endDate = new Date(endDate?.toDateString());
+
+    const isValidStartDate = _startDate >= today;
+    const isValidEndDate = _endDate >= today;
+    const endDateHigherThanStartDate = _endDate > _startDate;
+
+    setShowStartDateError(!isValidStartDate);
+    if (!isValidStartDate) {
+      setStartDateErrorText("La fecha desde es inválida");
+    }
+    setShowEndDateError(!isValidEndDate);
+    if (!isValidEndDate) {
+      setEndDateErrorText("La fecha hasta es inválida");
+    }
+    // Si la fecha desde es valida, hay que chequear que no sea mayor que la fecha hasta
+    if (isValidStartDate) {
+      setShowStartDateError(!endDateHigherThanStartDate);
+      if (!endDateHigherThanStartDate) {
+        setStartDateErrorText("La fecha desde no puede ser mayor a la fecha hasta");
+      }
+    }
+
+    return isValidStartDate && isValidEndDate && endDateHigherThanStartDate;
+  }
 
   const uploadImage = async (image) => {
     const imageFormData = new FormData();
@@ -77,11 +144,21 @@ function CreateTrip() {
           </Typography>
         </Grid>
         <TripForm
+          isEdition={false}
           startDate={startDate}
           onStartDateChange={onStartDateChange}
           endDate={endDate}
           onEndDateChange={onEndDateChange}
           handleSubmit={handleSubmit}
+          showNameError={showNameError}
+          showDestinationError={showDestinationError}
+          showImageError={showImageError}
+          showDescriptionError={showDescriptionError}
+          showPriceError={showPriceError}
+          showStartDateError={showStartDateError}
+          showEndDateError={showEndDateError}
+          startDateErrorText={startDateErrorText}
+          endDateErrorText={endDateErrorText}
         />
       </Grid>
     </Container>
