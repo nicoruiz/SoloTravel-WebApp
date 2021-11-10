@@ -9,6 +9,7 @@ import { useSnackbar } from "notistack";
 
 function CreateTrip() {
   const { session } = useContext(SessionContext);
+  const [loading, setLoading] = useState(false);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const history = useHistory();
@@ -33,6 +34,7 @@ function CreateTrip() {
 
   const handleSubmit = async (event) => {
     try {
+      setLoading(true);
       event.preventDefault();
       const data = new FormData(event.currentTarget);
       // Form dto
@@ -47,8 +49,10 @@ function CreateTrip() {
       }
 
       // Validate dto data
-      if (!isValidForm(createTripDto))
+      if (!isValidForm(createTripDto)) {
+        setLoading(false);
         return;
+      }
 
       // Upload image to storage
       const uploadedImageRes = await uploadImage(createTripDto.image);
@@ -58,11 +62,15 @@ function CreateTrip() {
       history.push("/agencyTrips");
     }
     catch (error) {
-      const errorMessage = error.response
+      let errorMessage = error.response
         ? error.response.data.message
         : "Error inesperado. Intente nuevamente.";
+      errorMessage = typeof errorMessage === "object" 
+        ? Object.values(errorMessage).map(e => e.concat(', '))
+        : errorMessage;
       enqueueSnackbar(errorMessage, { variant: "error" });
     }
+    setLoading(false);
   };
 
   const isValidForm = (createTripDto) => {
@@ -144,7 +152,7 @@ function CreateTrip() {
           </Typography>
         </Grid>
         <TripForm
-          isEdition={false}
+          loading={loading}
           startDate={startDate}
           onStartDateChange={onStartDateChange}
           endDate={endDate}

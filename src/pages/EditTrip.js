@@ -60,6 +60,7 @@ function EditTrip() {
 
   const handleSubmit = async (event) => {
     try {
+      setLoading(true);
       event.preventDefault();
       const data = new FormData(event.currentTarget);
       // Set image name
@@ -81,8 +82,10 @@ function EditTrip() {
       };
 
       // Validate dto data
-      if (!isValidForm(updateTripDto))
+      if (!isValidForm(updateTripDto)) {
+        setLoading(false);
         return;
+      }
 
       // Upload image to storage      
       if (imageName !== trip.image) {
@@ -94,9 +97,16 @@ function EditTrip() {
 
       await travelAgencyService.updateTrip(session, id, updateTripDto);
       history.push("/agencyTrips");
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      let errorMessage = error.response
+        ? error.response.data.message
+        : "Error inesperado. Intente nuevamente.";
+      errorMessage = typeof errorMessage === "object" 
+        ? Object.values(errorMessage).map(e => e.concat(', '))
+        : errorMessage;
+      enqueueSnackbar(errorMessage, { variant: "error" });
     }
+    setLoading(false);
   };
 
   const isValidForm = (updateTripDto) => {
@@ -181,7 +191,7 @@ function EditTrip() {
           <Spinner />
         ) : (
           <TripForm
-            isEdition={true}
+            loading={loading}
             trip={trip}
             startDate={startDate}
             onStartDateChange={onStartDateChange}
