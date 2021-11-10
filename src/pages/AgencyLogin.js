@@ -15,6 +15,7 @@ import { useHistory } from "react-router-dom";
 import { useContext } from "react";
 import { SessionContext } from "../store/SessionContext";
 import * as sessionService from "../services/sessionService";
+import pictureSrc from "../assets/travelAgencyLoginImages/travel-agency-login-pic-1.jpg";
 
 const theme = createTheme();
 
@@ -45,7 +46,7 @@ function AgencyLogin() {
     }else{
       setEmailAddressError(false);
       setPasswordError(false);
-      authService.authenticateByAgency(email, password).then(response => {
+      const response = authService.authenticateByAgency(email, password).then( response => {
       
         const newSession = {
           isAuthenticated: true,
@@ -62,7 +63,7 @@ function AgencyLogin() {
         sessionService.setSessionInLocalStorage(newSession);
         enqueueSnackbar("Sesión iniciada exitosamente.", { variant: "success" });
         history.push("/agencyTrips");
-      }).catch(error => {
+      }).catch( error => {
         const errorMessage = error.response 
           ? error.response.data.message 
           : "Error inesperado. Intente nuevamente.";
@@ -81,7 +82,7 @@ function AgencyLogin() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: "url(https://source.unsplash.com/random)",
+            backgroundImage: `url(${pictureSrc})`,
             backgroundRepeat: "no-repeat",
             backgroundColor: (t) =>
               t.palette.mode === "light"
