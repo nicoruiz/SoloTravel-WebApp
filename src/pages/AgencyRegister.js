@@ -228,7 +228,6 @@ function AgencyRegister(props) {
               required
               fullWidth
               variant="standard"
-              type="number"
               name="managerDni"
               label="dni"
               id="managerDni"
