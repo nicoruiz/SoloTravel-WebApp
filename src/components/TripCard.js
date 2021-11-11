@@ -15,10 +15,12 @@ import { SessionContext } from "../store/SessionContext";
 import { formatToMoney } from "../helpers/number";
 import TravelerTripCardActions from "./TravelerTripCardActions";
 import AgencyTripCardActions from "./AgencyTripCardActions";
+import { useHistory } from "react-router";
 
 function TripCard(props) {
   const { session } = useContext(SessionContext);
   const [isRaised, setRaised] = React.useState(false);
+  const history = useHistory();
 
   const imageUrl = `${IMAGES_BUCKET_URL}${props.image}`;
 
@@ -27,7 +29,7 @@ function TripCard(props) {
   };
 
   const handleTripDetails = () => {
-    console.log(`Trip: ${props.name}`);
+    history.push(`/tripDetails/${props.id}`);
   };
 
   return (

@@ -10,6 +10,7 @@ import AgencyRegister from "./pages/AgencyRegister"
 import AgencyTrips from "./pages/AgencyTrips";
 import CreateTrip from "./pages/CreateTrip";
 import EditTrip from "./pages/EditTrip";
+import TripDetails from "./pages/TripDetails";
 
 function App() {
 
@@ -43,6 +44,9 @@ function App() {
           </Route>
           <Route path="/editTrip/:id">
             <EditTrip />
+          </Route>
+          <Route path="/tripDetails/:id">
+            <TripDetails />
           </Route>
         </Switch>
       </Layout>

@@ -25,4 +25,10 @@ const getTripById = async (session, tripId) => {
   return response.data;
 };
 
-export { getTrips, getTripById };
+const getTripDetails = async (tripId) => {
+  const url = `${TRIPS_URL}/${tripId}/details`;
+  const response = await API.get(url);
+  return response.data;
+};
+
+export { getTrips, getTripById, getTripDetails };
