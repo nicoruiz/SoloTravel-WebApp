@@ -4,9 +4,9 @@ import TripCard from "./TripCard";
 
 function TripList(props) {
   return (
-    <Grid container spacing={4}>
+    <Grid className="trip-list" container spacing={4}>
       {props.trips.map((trip) => (
-        <Grid item key={trip.id} xs={12} sm={6} md={4}>
+        <Grid className="trip-card" item key={trip.id} xs={12} sm={6} md={4}>
           <TripCard
             id={trip.id}
             name={trip.name}

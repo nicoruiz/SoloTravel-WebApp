@@ -75,6 +75,7 @@ function AllTrips() {
           </Grid>
           <Grid item xs={5} md={3}>
             <PrimaryButton
+              id="search-btn"
               variant="contained"
               startIcon={<Search />}
               onClick={handleOnSearchBtnClick}
