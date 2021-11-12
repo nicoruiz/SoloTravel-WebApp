@@ -2,7 +2,6 @@ import { useContext, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import classes from "./Header.module.css";
 import { Link } from "react-router-dom";
 import { AccountCircle, Favorite, TravelExplore } from "@mui/icons-material";
@@ -14,6 +13,8 @@ import { Avatar } from "@mui/material";
 import { defaultSession, SessionContext } from "./../../store/SessionContext";
 import ProfileMenu from "./ProfileMenu";
 import * as sessionService from "../../services/sessionService";
+//logo
+import logo from "../../assets/logo.png";
 
 function Header() {
   const { session, setSession } = useContext(SessionContext);
@@ -43,9 +44,7 @@ function Header() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar className={classes.header}>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Solo Travel
-          </Typography>
+          <img src={logo} />
           {!session.isAgency && (
             <NavButton component={Link} to="/" startIcon={<TravelExplore />}>
               Viajes
