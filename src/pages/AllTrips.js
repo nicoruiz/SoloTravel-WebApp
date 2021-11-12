@@ -58,6 +58,7 @@ function AllTrips() {
             variant="h2"
             align="center"
             color="text.primary"
+            className="page-title"
           >
             Viajes disponibles
           </Typography>

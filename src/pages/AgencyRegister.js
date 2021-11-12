@@ -266,7 +266,7 @@ function AgencyRegister(props) {
               type="number"
               variant="standard"
               name="agencyCuit"
-              label="cuit"
+              label="Cuit"
               id="agencyCuit"
               helperText= {agencyCuitError && agencyCuitErrorMsg}
             />
@@ -364,7 +364,7 @@ function AgencyRegister(props) {
               fullWidth
               variant="standard"
               name="managerDni"
-              label="dni"
+              label="Dni"
               id="managerDni"
               helperText= {managerDniError && managerDniErrorMsg}
             />
@@ -376,7 +376,7 @@ function AgencyRegister(props) {
               variant="standard"
               type="number"
               name="managerCuit"
-              label="cuit"
+              label="Cuit"
               id="managerCuit"
               helperText= {managerCuitError && managerCuitErrorMsg}
             />

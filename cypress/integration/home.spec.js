@@ -8,10 +8,9 @@ describe('visit home page', () => {
         cy.visit('http://localhost:3000/');
     })
 
-    it('finds header app name', () => {
-        cy.get('.MuiToolbar-root div')
-          .first()
-          .should('have.text', 'Solo Travel');
+    it('finds page title', () => {
+        cy.get('.page-title')
+          .should('have.text', 'Viajes disponibles');
     })
 
     it('displays 11 trip cards by default', () => {
@@ -20,7 +19,7 @@ describe('visit home page', () => {
           .should('have.length', 11);
     })
 
-    it('search for bariloche and shows one result', () => {
+    it('searchs for bariloche trip', () => {
         cy.get('#search-trip-input')
           .type('bariloche')
           .should('have.value', 'bariloche');

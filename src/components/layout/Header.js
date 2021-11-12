@@ -8,7 +8,7 @@ import { AccountCircle, Favorite, TravelExplore } from "@mui/icons-material";
 import { useHistory } from "react-router-dom";
 // Styled components
 import { NavButton } from "./../ui/Buttons";
-import { Avatar } from "@mui/material";
+import { Avatar, Typography } from "@mui/material";
 // Context
 import { defaultSession, SessionContext } from "./../../store/SessionContext";
 import ProfileMenu from "./ProfileMenu";
@@ -40,11 +40,20 @@ function Header() {
     history.push('/');
   };
 
+  const goToHome = () => {
+    const redirectUrl = session.isAgency 
+      ? "/agencyTrips"
+      : "/"; 
+    history.push(redirectUrl);
+  }
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar className={classes.header}>
-          <img src={logo} />
+          <Typography component="div" sx={{ flexGrow: 1 }}>
+            <img className={classes.logo} src={logo} onClick={goToHome} />
+          </Typography>
           {!session.isAgency && (
             <NavButton component={Link} to="/" startIcon={<TravelExplore />}>
               Viajes
@@ -94,7 +103,7 @@ function Header() {
         open={openProfileMenu}
         handleClose={handleProfileClose}
         onMyProfileClick={goToMyProfile}
-        onLogout={logout}        
+        onLogout={logout}
       />
     </Box>
   );
