@@ -9,6 +9,7 @@ import TripForm from "../components/TripForm";
 import { useParams } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import Spinner from "../components/ui/Spinner";
+import * as validatorHelper from "./../helpers/validators";
 
 function EditTrip() {
   const { session } = useContext(SessionContext);
@@ -52,9 +53,11 @@ function EditTrip() {
   };
 
   const onStartDateChange = (newValue) => {
+    checkValidDates(newValue, endDate);
     setStartDate(newValue);
   };
   const onEndDateChange = (newValue) => {
+    checkValidDates(startDate, newValue);
     setEndDate(newValue);
   };
 
@@ -101,7 +104,7 @@ function EditTrip() {
       let errorMessage = error.response
         ? error.response.data.message
         : "Error inesperado. Intente nuevamente.";
-      errorMessage = typeof errorMessage === "object" 
+      errorMessage = typeof errorMessage === "object"
         ? Object.values(errorMessage).map(e => e.concat(', '))
         : errorMessage;
       enqueueSnackbar(errorMessage, { variant: "error" });
@@ -111,27 +114,22 @@ function EditTrip() {
 
   const isValidForm = (updateTripDto) => {
     // Name
-    const isValidName = updateTripDto.name !== "";
-    setShowNameError(!isValidName);
+    const isValidName = validatorHelper.checkValidAttr(updateTripDto.name, setShowNameError);
     // Destination
-    const isValidDestination = updateTripDto.destination !== "";
-    setShowDestinationError(!isValidDestination);
+    const isValidDestination = validatorHelper.checkValidAttr(updateTripDto.destination, setShowDestinationError);
     // Image
-    const isValidImage = updateTripDto.image.name !== "";
-    setShowImageError(!isValidImage);
+    const isValidImage = validatorHelper.checkValidAttr(updateTripDto.image.name, setShowImageError);
     // Description
-    const isValidDescription = updateTripDto.description !== "";
-    setShowDescriptionError(!isValidDescription);
+    const isValidDescription = validatorHelper.checkValidAttr(updateTripDto.description, setShowDescriptionError);
     // Price
-    const isValidPrice = updateTripDto.price !== "" && updateTripDto.price < 999999 && updateTripDto.price > 0;
-    setShowPriceError(!isValidPrice);
+    const isValidPrice = validatorHelper.checkValidPrice(updateTripDto.price, setShowPriceError);
     // Dates
-    const areValidDates = checkValidDates();
+    const areValidDates = checkValidDates(startDate, endDate);
 
     return isValidName && isValidDestination && isValidImage && isValidDescription && isValidPrice && areValidDates;
   }
 
-  const checkValidDates = () => {
+  const checkValidDates = (startDate, endDate) => {
     // Using toDateString to avoid time comparison
     const today = new Date(new Date().toDateString());
     const _startDate = new Date(startDate?.toDateString());
@@ -153,7 +151,7 @@ function EditTrip() {
     if (isValidStartDate) {
       setShowStartDateError(!endDateHigherThanStartDate);
       if (!endDateHigherThanStartDate) {
-        setStartDateErrorText("La fecha desde no puede ser mayor a la fecha hasta");
+        setStartDateErrorText("La fecha desde debe ser menor");
       }
     }
 
@@ -193,6 +191,11 @@ function EditTrip() {
           <TripForm
             loading={loading}
             trip={trip}
+            onNameChange={(e) => validatorHelper.checkValidAttr(e.target.value, setShowNameError)}
+            onDestinationChange={(e) => validatorHelper.checkValidAttr(e.target.value, setShowDestinationError)}
+            onImageChange={(e) => validatorHelper.checkValidAttr(e.target.value, setShowImageError)}
+            onDescriptionChange={(e) => validatorHelper.checkValidAttr(e.target.value, setShowDescriptionError)}
+            onPriceChange={(e) => validatorHelper.checkValidPrice(e.target.value, setShowPriceError)}
             startDate={startDate}
             onStartDateChange={onStartDateChange}
             endDate={endDate}

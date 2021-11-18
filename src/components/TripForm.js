@@ -15,6 +15,11 @@ function TripForm(props) {
   const {
     loading,
     trip,
+    onNameChange,
+    onDestinationChange,
+    onImageChange,
+    onDescriptionChange,
+    onPriceChange,
     startDate,
     onStartDateChange,
     endDate,
@@ -60,6 +65,7 @@ function TripForm(props) {
       >
         <TextField
           defaultValue={trip?.name}
+          onChange={onNameChange}
           error={showNameError}
           margin="normal"
           required
@@ -73,6 +79,7 @@ function TripForm(props) {
         />
         <TextField
           defaultValue={trip?.destination}
+          onChange={onDestinationChange}
           error={showDestinationError}
           margin="normal"
           required
@@ -92,6 +99,7 @@ function TripForm(props) {
           Imagen
         </InputLabel>
         <Input
+          onChange={onImageChange}
           error={showImageError}
           type="file"
           margin="normal"
@@ -104,6 +112,7 @@ function TripForm(props) {
         />
         <TextField
           defaultValue={trip?.description}
+          onChange={onDescriptionChange}
           error={showDescriptionError}
           margin="normal"
           required
@@ -118,6 +127,7 @@ function TripForm(props) {
         />
         <TextField
           defaultValue={trip?.price}
+          onChange={onPriceChange}
           error={showPriceError}
           type="number"
           margin="normal"
