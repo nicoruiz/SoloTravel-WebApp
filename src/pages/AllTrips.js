@@ -58,6 +58,7 @@ function AllTrips() {
             variant="h2"
             align="center"
             color="text.primary"
+            className="page-title"
           >
             Viajes disponibles
           </Typography>
@@ -75,6 +76,7 @@ function AllTrips() {
           </Grid>
           <Grid item xs={5} md={3}>
             <PrimaryButton
+              id="search-btn"
               variant="contained"
               startIcon={<Search />}
               onClick={handleOnSearchBtnClick}

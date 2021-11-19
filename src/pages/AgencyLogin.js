@@ -14,6 +14,8 @@ import * as authService from "../services/authService";
 import { useHistory } from "react-router-dom";
 import { useContext } from "react";
 import { SessionContext } from "../store/SessionContext";
+import * as sessionService from "../services/sessionService";
+import pictureSrc from "../assets/travelAgencyLoginImages/travel-agency-login-pic-1.jpg";
 
 const theme = createTheme();
 
@@ -24,8 +26,8 @@ function AgencyLogin() {
   const [emailAddressErrorText, setEmailAddressErrorText] = React.useState("Este campo es obligatorio");
   const passwordErrorText = "Este campo es obligatorio";
   let history = useHistory(); 
-
   const { enqueueSnackbar } = useSnackbar();
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -58,6 +60,7 @@ function AgencyLogin() {
         };
   
         setSession(newSession);
+        sessionService.setSessionInLocalStorage(newSession);
         enqueueSnackbar("Sesión iniciada exitosamente.", { variant: "success" });
         history.push("/agencyTrips");
       }).catch( error => {
@@ -79,7 +82,7 @@ function AgencyLogin() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: "url(https://source.unsplash.com/random)",
+            backgroundImage: `url(${pictureSrc})`,
             backgroundRepeat: "no-repeat",
             backgroundColor: (t) =>
               t.palette.mode === "light"
@@ -117,7 +120,7 @@ function AgencyLogin() {
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
+                label="Email"
                 name="email"
                 autoComplete="email"
                 autoFocus
@@ -129,7 +132,7 @@ function AgencyLogin() {
                 required
                 fullWidth
                 name="password"
-                label="Password"
+                label="Contraseña"
                 type="password"
                 id="password"
                 autoComplete="current-password"

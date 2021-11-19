@@ -1,4 +1,4 @@
-import { Fab, SvgIcon } from "@mui/material";
+import { Fab, SvgIcon, IconButton } from "@mui/material";
 import { ReactComponent as GoogleLogo } from "./../../assets/google.svg";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/system";
@@ -73,4 +73,34 @@ export const CancelButton = styled(Button)({
     backgroundColor: palette.darkGray,
   },
   borderRadius: 40,
+});
+
+export const BackButton = styled(Button)({
+  color: "black",
+  backgroundColor: "whitesmoke",
+  "&:hover": {
+    backgroundColor: palette.lightGray,
+  },
+  border: "3px solid",
+  borderColor: palette.primary,
+  fontWeight: "bold",
+  width: "100%",
+  borderRadius: 40,
+  padding: 10,
+});
+
+export const PrimaryIconButton = styled(IconButton)({
+  color: "white",
+  backgroundColor: palette.primary,
+  "&:hover": {
+    backgroundColor: palette.secondary,
+  }
+});
+
+export const RedIconButton = styled(IconButton)({
+  color: "white",
+  backgroundColor: palette.red,
+  "&:hover": {
+    backgroundColor: palette.redSecondary,
+  }
 });

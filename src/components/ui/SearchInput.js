@@ -4,7 +4,7 @@ export default function SearchInput(props) {
   return (
     <Grid sx={{ display: "flex", justifyContent: "center", pt: 5, pb: 5, pl: 2 }}>
       <TextField
-        id="filled-search"
+        id="search-trip-input"
         fullWidth
         label="Buscá un viaje"
         type="search"

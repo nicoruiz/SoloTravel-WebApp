@@ -1,32 +1,58 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import classes from "./Header.module.css";
 import { Link } from "react-router-dom";
 import { AccountCircle, Favorite, TravelExplore } from "@mui/icons-material";
+import { useHistory } from "react-router-dom";
 // Styled components
 import { NavButton } from "./../ui/Buttons";
-import { Avatar } from "@mui/material";
+import { Avatar, Typography } from "@mui/material";
 // Context
 import { defaultSession, SessionContext } from "./../../store/SessionContext";
+import ProfileMenu from "./ProfileMenu";
+import * as sessionService from "../../services/sessionService";
+//logo
+import logo from "../../assets/logo.png";
 
 function Header() {
   const { session, setSession } = useContext(SessionContext);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const openProfileMenu = Boolean(anchorEl);
+  const history = useHistory();
+
+  const handleProfileClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleProfileClose = () => {
+    setAnchorEl(null);
+  };
+
+  const goToMyProfile = () => {
+    history.push("/myProfile");
+  }
 
   const logout = () => {
     setSession(defaultSession);
-    // eslint-disable-next-line no-restricted-globals
-    location.href = "/";
+    sessionService.removeSessionFromLocalStorage();
+    history.push('/');
   };
+
+  const goToHome = () => {
+    const redirectUrl = session.isAgency 
+      ? "/agencyTrips"
+      : "/"; 
+    history.push(redirectUrl);
+  }
 
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar className={classes.header}>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Solo Travel
+          <Typography component="div" sx={{ flexGrow: 1 }}>
+            <img className={classes.logo} src={logo} onClick={goToHome} />
           </Typography>
           {!session.isAgency && (
             <NavButton component={Link} to="/" startIcon={<TravelExplore />}>
@@ -52,7 +78,7 @@ function Header() {
             </NavButton>
           )}
           {session.isAuthenticated ? (
-            <NavButton onClick={logout}>
+            <NavButton onClick={handleProfileClick}>
               <Avatar
                 sx={{ mr: 1 }}
                 src={session.profileInfo.picture}
@@ -71,6 +97,14 @@ function Header() {
           )}
         </Toolbar>
       </AppBar>
+      {/* Menu desplegable */}
+      <ProfileMenu
+        anchorEl={anchorEl}
+        open={openProfileMenu}
+        handleClose={handleProfileClose}
+        onMyProfileClick={goToMyProfile}
+        onLogout={logout}
+      />
     </Box>
   );
 }

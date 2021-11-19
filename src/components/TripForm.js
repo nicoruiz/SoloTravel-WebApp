@@ -1,128 +1,188 @@
 import Box from "@mui/material/Box";
-import { LoginButton } from "../components/ui/Buttons";
-import { TextField } from "@mui/material";
+import { BackButton, LoginButton } from "../components/ui/Buttons";
+import { TextField, Input, InputLabel } from "@mui/material";
+import Spinner from "./ui/Spinner";
+import { useHistory } from "react-router-dom";
+
 // Dates
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 
 function TripForm(props) {
-    return (
-        <Box
-          sx={{
-            my: 4,
-            mx: 2,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
+  const history = useHistory(); 
+
+  const {
+    loading,
+    trip,
+    onNameChange,
+    onDestinationChange,
+    onImageChange,
+    onDescriptionChange,
+    onPriceChange,
+    startDate,
+    onStartDateChange,
+    endDate,
+    onEndDateChange,
+    handleSubmit,
+    showNameError,
+    showDestinationError,
+    showImageError,
+    showDescriptionError,
+    showPriceError,
+    showStartDateError,
+    showEndDateError,
+    startDateErrorText,
+    endDateErrorText,
+  } = props;
+
+  // Errors text
+  const nameErrorText = "El nombre del viaje es requerido";
+  const destinationErrorText = "El destino del viaje es requerido";
+  const imageErrorText = "La imagen del viaje es inválida";
+  const descriptionErrorText = "La descripción del viaje es requerida";
+  const priceErrorText = "El precio del viaje es inválido";
+
+  const goBack = () => {
+    history.push("/agencyTrips");
+  }
+
+  return (
+    <Box
+      sx={{
+        my: 4,
+        mx: 2,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <Box
+        component="form"
+        noValidate
+        width={"85%"}
+        onSubmit={handleSubmit}
+      >
+        <TextField
+          defaultValue={trip?.name}
+          onChange={onNameChange}
+          error={showNameError}
+          margin="normal"
+          required
+          fullWidth
+          variant="standard"
+          id="name"
+          label="Nombre"
+          name="name"
+          autoFocus
+          helperText={showNameError && nameErrorText}
+        />
+        <TextField
+          defaultValue={trip?.destination}
+          onChange={onDestinationChange}
+          error={showDestinationError}
+          margin="normal"
+          required
+          fullWidth
+          variant="standard"
+          name="destination"
+          label="Destino"
+          id="destination"
+          helperText={showDestinationError && destinationErrorText}
+        />
+        <InputLabel
+          sx={{ mt: 3 }}
+          required
+          error={showImageError}
+          variant="standard"
         >
+          Imagen
+        </InputLabel>
+        <Input
+          onChange={onImageChange}
+          error={showImageError}
+          type="file"
+          margin="normal"
+          required
+          fullWidth
+          variant="standard"
+          name="image"
+          id="image"
+          helperText={showImageError && imageErrorText}
+        />
+        <TextField
+          defaultValue={trip?.description}
+          onChange={onDescriptionChange}
+          error={showDescriptionError}
+          margin="normal"
+          required
+          fullWidth
+          multiline
+          rows={3}
+          variant="standard"
+          name="description"
+          label="Descripción"
+          id="description"
+          helperText={showDescriptionError && descriptionErrorText}
+        />
+        <TextField
+          defaultValue={trip?.price}
+          onChange={onPriceChange}
+          error={showPriceError}
+          type="number"
+          margin="normal"
+          required
+          fullWidth
+          variant="standard"
+          name="price"
+          label="Precio"
+          id="price"
+          helperText={showPriceError && priceErrorText}
+        />
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
           <Box
-            component="form"
-            noValidate
-            width={"85%"}
-            onSubmit={props.handleSubmit}
+            sx={{
+              my: 5,
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between"
+            }}
           >
-            <TextField
-              defaultValue={props.trip?.name}
-              error={false}
-              margin="normal"
-              required
-              fullWidth
-              variant="standard"
-              id="name"
-              label="Nombre"
-              name="name"
-              autoFocus
-              helperText
+            <DesktopDatePicker
+              label="Desde"
+              inputFormat="dd/MM/yyyy"
+              value={startDate}
+              onChange={onStartDateChange}
+              renderInput={(params) => <TextField {...params} error={showStartDateError} helperText={showStartDateError && startDateErrorText} />}
             />
-            <TextField
-              defaultValue={props.trip?.destination}
-              error={false}
-              margin="normal"
-              required
-              fullWidth
-              variant="standard"
-              name="destination"
-              label="Destino"
-              id="destination"
-              helperText
+            <DesktopDatePicker
+              label="Hasta"
+              inputFormat="dd/MM/yyyy"
+              value={endDate}
+              onChange={onEndDateChange}
+              renderInput={(params) => <TextField {...params} error={showEndDateError} helperText={showEndDateError && endDateErrorText} />}
             />
-            <TextField
-              defaultValue={props.trip?.image}
-              error={false}
-              margin="normal"
-              required
-              fullWidth
-              variant="standard"
-              name="image"
-              label="Imagen"
-              id="image"
-              helperText
-            />
-            <TextField
-              defaultValue={props.trip?.description}
-              error={false}
-              margin="normal"
-              required
-              fullWidth
-              multiline
-              rows={3}
-              variant="standard"
-              name="description"
-              label="Descripción"
-              id="description"
-              helperText
-            />
-            <TextField
-              defaultValue={props.trip?.price}
-              error={false}
-              margin="normal"
-              required
-              fullWidth
-              variant="standard"
-              name="price"
-              label="Precio"
-              id="price"
-              helperText
-            />
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <Box
-                sx={{
-                  my: 5,
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between"
-                }}
-              >
-                <DesktopDatePicker
-                  label="Desde"
-                  inputFormat="dd/MM/yyyy"
-                  value={props.startDate}
-                  onChange={props.onStartDateChange}
-                  renderInput={(params) => <TextField {...params} />}
-                />
-                <DesktopDatePicker
-                  label="Hasta"
-                  inputFormat="dd/MM/yyyy"
-                  value={props.endDate}
-                  onChange={props.onEndDateChange}
-                  renderInput={(params) => <TextField {...params} />}
-                />
-              </Box>
-            </LocalizationProvider>
-            <LoginButton
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Confirmar
-            </LoginButton>
           </Box>
-        </Box>
-    );
+        </LocalizationProvider>
+        <BackButton 
+          onClick={goBack}
+          fullWidth
+          variant="contained"
+          sx={{ mt: 3, mb: 1 }}>
+            Volver
+        </BackButton>
+        {loading ? <Spinner /> : <LoginButton
+          type="submit"
+          fullWidth
+          variant="contained"
+          sx={{ mt: 3, mb: 2 }}
+        >
+          Confirmar
+        </LoginButton>}
+      </Box>
+    </Box>
+  );
 }
 
 export default TripForm;

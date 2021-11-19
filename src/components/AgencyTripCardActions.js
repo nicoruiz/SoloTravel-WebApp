@@ -1,11 +1,12 @@
 import { useState } from "react";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from "@mui/icons-material/Edit";
-import { IconButton } from "@mui/material";
+import { Tooltip } from "@mui/material";
 import { useHistory } from "react-router";
 import ConfirmationDialog from "./ui/ConfirmationDialog";
+import { PrimaryIconButton, RedIconButton } from "./ui/Buttons";
 // Services
-import * as tripsService from "./../services/tripsService";
+import * as travelAgencyService from "./../services/travelAgencyService";
 import { useSnackbar } from "notistack";
 // Context
 import { useContext } from "react";
@@ -26,7 +27,7 @@ function AgencyTripCardActions({ tripId, tripName, onTripDelete }) {
 
   const onDeleteConfirm = async () => {
     try {
-      await tripsService.deleteTrip(session, tripId);      
+      await travelAgencyService.deleteTrip(session, tripId);
       enqueueSnackbar("Viaje eliminado de su lista");
       onTripDelete(tripId);
     } catch (err) {
@@ -36,14 +37,18 @@ function AgencyTripCardActions({ tripId, tripName, onTripDelete }) {
 
   return (
     <>
-      <IconButton aria-label="edit" variant="contained" onClick={editTrip}>
-        <EditIcon />
-      </IconButton>
-      <IconButton aria-label="delete" variant="contained" onClick={openConfirmationDialog}>
-        <DeleteIcon />
-      </IconButton>
-      
-      <ConfirmationDialog 
+      <Tooltip title="Modificar" placement="top">
+        <PrimaryIconButton aria-label="edit" variant="contained" onClick={editTrip}>
+          <EditIcon />
+        </PrimaryIconButton>
+      </Tooltip>
+      <Tooltip title="Eliminar" placement="top">
+        <RedIconButton aria-label="delete" variant="contained" onClick={openConfirmationDialog}>
+          <DeleteIcon />
+        </RedIconButton>
+      </Tooltip>
+
+      <ConfirmationDialog
         title="Eliminar viaje"
         message={`¿Está seguro que desea eliminar el viaje '${tripName}'?`}
         isOpened={isOpened}

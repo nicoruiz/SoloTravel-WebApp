@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import { Container, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import * as usersService from "./../services/usersService";
+import * as travelAgencyService from "./../services/travelAgencyService";
 import Spinner from "../components/ui/Spinner";
 import TripList from "../components/TripList";
 import { useSnackbar } from "notistack";
@@ -20,19 +20,19 @@ function AgencyTrips() {
 
   // Initial render
   useEffect(() => {
-    const getAgencyTrips = async () => {
-      try {
-        setLoading(true);
-        const data = await usersService.getAgencyTrips(session);
-        setTrips(data.trips);
-      } catch (err) {
-        showError(err.message);
-      }
-      setLoading(false);
-    };
-    // Call fetch function
     getAgencyTrips();
   }, []);
+
+  const getAgencyTrips = async () => {
+    try {
+      setLoading(true);
+      const data = await travelAgencyService.getAgencyTrips(session);
+      setTrips(data.trips);
+    } catch (err) {
+      showError(err.message);
+    }
+    setLoading(false);
+  };
 
   const onTripDelete = (tripId) => {
     const tripsWithoutDeletedOne = trips.filter(t => t.id !== tripId);
