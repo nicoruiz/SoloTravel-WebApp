@@ -26,6 +26,7 @@ function EditTrip() {
   const [showImageError, setShowImageError] = useState(false);
   const [showDescriptionError, setShowDescriptionError] = useState(false);
   const [showPriceError, setShowPriceError] = useState(false);
+  const [showSlotsError, setShowSlotsError] = useState(false);
   const [showStartDateError, setShowStartDateError] = useState(false);
   const [showEndDateError, setShowEndDateError] = useState(false);
   const [startDateErrorText, setStartDateErrorText] = useState("");
@@ -80,6 +81,7 @@ function EditTrip() {
         image: imageName,
         description: data.get("description"),
         price: data.get("price"),
+        totalSlots: data.get("totalSlots"),
         startDate: startDate,
         endDate: endDate,
       };
@@ -122,11 +124,13 @@ function EditTrip() {
     // Description
     const isValidDescription = validatorHelper.checkValidAttr(updateTripDto.description, setShowDescriptionError);
     // Price
-    const isValidPrice = validatorHelper.checkValidPrice(updateTripDto.price, setShowPriceError);
+    const isValidPrice = validatorHelper.checkValidNumber(updateTripDto.price, 999999, setShowPriceError);
+    // Slots
+    const isValidSlotsValue = validatorHelper.checkValidNumber(updateTripDto.totalSlots, 99, setShowSlotsError);
     // Dates
     const areValidDates = checkValidDates(startDate, endDate);
 
-    return isValidName && isValidDestination && isValidImage && isValidDescription && isValidPrice && areValidDates;
+    return isValidName && isValidDestination && isValidImage && isValidDescription && isValidPrice && isValidSlotsValue && areValidDates;
   }
 
   const checkValidDates = (startDate, endDate) => {
@@ -195,7 +199,8 @@ function EditTrip() {
             onDestinationChange={(e) => validatorHelper.checkValidAttr(e.target.value, setShowDestinationError)}
             onImageChange={(e) => validatorHelper.checkValidAttr(e.target.value, setShowImageError)}
             onDescriptionChange={(e) => validatorHelper.checkValidAttr(e.target.value, setShowDescriptionError)}
-            onPriceChange={(e) => validatorHelper.checkValidPrice(e.target.value, setShowPriceError)}
+            onPriceChange={(e) => validatorHelper.checkValidNumber(e.target.value, 999999, setShowPriceError)}
+            onSlotsChange={(e) => validatorHelper.checkValidNumber(e.target.value, 99, setShowSlotsError)}
             startDate={startDate}
             onStartDateChange={onStartDateChange}
             endDate={endDate}
@@ -206,6 +211,7 @@ function EditTrip() {
             showImageError={showImageError}
             showDescriptionError={showDescriptionError}
             showPriceError={showPriceError}
+            showSlotsError={showSlotsError}
             showStartDateError={showStartDateError}
             showEndDateError={showEndDateError}
             startDateErrorText={startDateErrorText}

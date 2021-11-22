@@ -5,7 +5,7 @@ import CardMedia from "@mui/material/CardMedia";
 import CardActions from "@mui/material/CardActions";
 import Typography from "@mui/material/Typography";
 import classes from "./TripCard.module.css";
-import { AttachMoney, LocationOn, Schedule } from "@mui/icons-material";
+import { AirplaneTicket, AttachMoney, LocationOn, Schedule } from "@mui/icons-material";
 import { CardActionArea, Divider } from "@mui/material";
 import { IMAGES_BUCKET_URL } from "./../config";
 // Context
@@ -32,6 +32,10 @@ function TripCard(props) {
     history.push(`/tripDetails/${props.id}`);
   };
 
+  const availableSlotsText = props.availableSlots > 0 
+    ? `${props.availableSlots} Lugares disponibles`
+    : "Sin disponibilidad";
+
   return (
     <>
       <Card
@@ -42,6 +46,7 @@ function TripCard(props) {
           height: "100%",
           display: "flex",
           flexDirection: "column",
+          opacity: props.availableSlots > 0 ? 1 : 0.2,
         }}
       >
         <CardActionArea onClick={handleTripDetails}>
@@ -77,6 +82,13 @@ function TripCard(props) {
               {`${props.duration} Días`}
             </Typography>
             <Typography
+              sx={{ pt: 2, display: "flex", alignItems: "center", color: props.availableSlots > 0 ? "black" : "red" }}
+              variant="body1"
+            >
+              <AirplaneTicket sx={{ pr: 0.5 }} fontSize="small" />
+              {availableSlotsText}
+            </Typography>
+            <Typography
               sx={{ pt: 2, display: "flex", alignItems: "center" }}
               variant="h4"
             >
@@ -88,8 +100,8 @@ function TripCard(props) {
         </CardActionArea>
         <CardActions sx={{ p: 2, display: "flex", justifyContent: "space-around" }}>
           {session.isAgency ? (
-            <AgencyTripCardActions 
-              tripId={props.id} 
+            <AgencyTripCardActions
+              tripId={props.id}
               tripName={props.name}
               onTripDelete={props.onTripDelete}
             />

@@ -10,7 +10,7 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 
 function TripForm(props) {
-  const history = useHistory(); 
+  const history = useHistory();
 
   const {
     loading,
@@ -20,6 +20,7 @@ function TripForm(props) {
     onImageChange,
     onDescriptionChange,
     onPriceChange,
+    onSlotsChange,
     startDate,
     onStartDateChange,
     endDate,
@@ -30,6 +31,7 @@ function TripForm(props) {
     showImageError,
     showDescriptionError,
     showPriceError,
+    showSlotsError,
     showStartDateError,
     showEndDateError,
     startDateErrorText,
@@ -42,6 +44,7 @@ function TripForm(props) {
   const imageErrorText = "La imagen del viaje es inválida";
   const descriptionErrorText = "La descripción del viaje es requerida";
   const priceErrorText = "El precio del viaje es inválido";
+  const slotsErrorText = "La cantidad de lugares indicada inválida";
 
   const goBack = () => {
     history.push("/agencyTrips");
@@ -125,20 +128,45 @@ function TripForm(props) {
           id="description"
           helperText={showDescriptionError && descriptionErrorText}
         />
-        <TextField
-          defaultValue={trip?.price}
-          onChange={onPriceChange}
-          error={showPriceError}
-          type="number"
-          margin="normal"
-          required
-          fullWidth
-          variant="standard"
-          name="price"
-          label="Precio"
-          id="price"
-          helperText={showPriceError && priceErrorText}
-        />
+        <Box
+          sx={{
+            my: 2,
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-evenly"
+          }}
+        >
+          <TextField            
+            defaultValue={trip?.price}
+            onChange={onPriceChange}
+            error={showPriceError}
+            type="number"
+            margin="normal"
+            required
+            fullWidth
+            variant="standard"
+            name="price"
+            label="Precio"
+            id="price"
+            helperText={showPriceError && priceErrorText}
+          />
+          <TextField
+            sx={{ ml: 10 }}
+            defaultValue={trip?.totalSlots}
+            onChange={onSlotsChange}
+            error={showSlotsError}
+            type="number"
+            margin="normal"
+            required
+            fullWidth
+            variant="standard"
+            name="totalSlots"
+            label="Lugares diponibles totales"
+            id="totalSlots"
+            helperText={showSlotsError && slotsErrorText}
+          />
+        </Box>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <Box
             sx={{
@@ -165,12 +193,12 @@ function TripForm(props) {
             />
           </Box>
         </LocalizationProvider>
-        <BackButton 
+        <BackButton
           onClick={goBack}
           fullWidth
           variant="contained"
           sx={{ mt: 3, mb: 1 }}>
-            Volver
+          Volver
         </BackButton>
         {loading ? <Spinner /> : <LoginButton
           type="submit"

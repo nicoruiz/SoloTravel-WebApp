@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Box } from "@mui/system";
-import { Container, Grid, Typography } from "@mui/material";
+import { Alert, Container, Grid, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import * as tripsService from "./../services/tripsService";
 import Spinner from "../components/ui/Spinner";
@@ -21,8 +21,7 @@ const useStyles = makeStyles({
 
 function TripDetails() {
   const [loading, setLoading] = useState(true);
-  const [loadingReserva, setLoadingReserva] = useState(false);
-  const [tripDetails, setTripDetails] = useState();
+  const [tripDetails, setTripDetails] = useState({});
   const { id } = useParams();
   const styles = useStyles();
   const history = useHistory();
@@ -48,10 +47,8 @@ function TripDetails() {
   }
 
   const reservar = () => {
-    setLoadingReserva(true);
-    setTimeout(() => {
-      setLoadingReserva(false);
-    }, 3000);
+    // Chequear si esta logueado
+    alert(`Click reserva de viaje: ${tripDetails.name}`);
   }
 
   return (
@@ -149,16 +146,19 @@ function TripDetails() {
               >
                 Lugares disponibles
               </Typography>
-              <Typography
-                sx={{ display: "flex", alignItems: "center" }}
-                variant="h6"
-                color="GrayText"
-                marginBottom="1.5rem"
-              >
-                <AirplaneTicket sx={{ pr: 0.5 }} />
-                10
-              </Typography>
-              
+              <Box sx={{ mb: "1.5rem" }}>
+                {tripDetails.availableSlots > 0
+                  ? <Typography
+                    sx={{ display: "flex", alignItems: "center" }}
+                    variant="h6"
+                    color="GrayText"
+                    >
+                      <AirplaneTicket sx={{ pr: 0.5 }} />
+                      {tripDetails.availableSlots}
+                    </Typography>
+                  : <Alert severity="error">En este momento no hay disponibilidad para este viaje.</Alert>}
+              </Box>
+
               {/* Precio final */}
               <Typography
                 variant="h5"
@@ -168,24 +168,12 @@ function TripDetails() {
                 Precio final
               </Typography>
               <Typography
-              sx={{ display: "flex", alignItems: "center" }}
-              variant="h4"
-            >
-              <AttachMoney fontSize="small" />
-              {formatToMoney(tripDetails.price)}
-            </Typography>
-
-              {/* <span>Agency Id: {tripDetails.agencyId}</span>
-              <span>Agency Name: {tripDetails.agencyName}</span>
-              <span>Id: {tripDetails.tripId}</span>
-              <span>Name: {tripDetails.name}</span>
-              <span>Destination: {tripDetails.destination}</span>
-
-              <span>Description: {tripDetails.description}</span>
-              <span>Price: {tripDetails.price}</span>
-              <span>Start date: {tripDetails.startDate}</span>
-              <span>End date: {tripDetails.endDate}</span>
-              <span>Category: {tripDetails.category}</span> */}
+                sx={{ display: "flex", alignItems: "center" }}
+                variant="h4"
+              >
+                <AttachMoney fontSize="small" />
+                {formatToMoney(tripDetails.price)}
+              </Typography>
             </Box>
           </>}
         <Box sx={{ mx: 10, mb: 3 }}>
@@ -196,14 +184,15 @@ function TripDetails() {
             sx={{ mt: 3, mb: 1 }}>
             Volver
           </BackButton>
-          {loadingReserva ? <Spinner /> : <LoginButton
+          <LoginButton
+            disabled={tripDetails.availableSlots === 0}
             onClick={reservar}
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
             Reservar
-          </LoginButton>}
+          </LoginButton>
         </Box>
       </Grid>
     </Container>
