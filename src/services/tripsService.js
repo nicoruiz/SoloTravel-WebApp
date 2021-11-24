@@ -2,14 +2,14 @@ import API from "./api";
 import { TRIPS_URL } from "../config";
 import { getTripsByUser } from "./travelersService";
 
-const getTrips = async (session, searchValue) => {
+const getTrips = async (session, searchValue, searchDate) => {
   return session.isAuthenticated
-    ? getTripsByUser(session, searchValue)
-    : getTripsAsGuest(searchValue);
+    ? getTripsByUser(session, searchValue, searchDate)
+    : getTripsAsGuest(searchValue, searchDate);
 };
 
-const getTripsAsGuest = async (searchValue) => {
-  const url = `${TRIPS_URL}?name=${searchValue}`;
+const getTripsAsGuest = async (searchValue, searchDate) => {
+  const url = `${TRIPS_URL}?destination=${searchValue}&date=${searchDate}`;
   const response = await API.get(url);
   return response.data;
 };

@@ -34,9 +34,9 @@ const removeFavorite = async (session, tripId) => {
   return response.data;
 };
 
-const getTripsByUser = async (session, searchValue) => {
+const getTripsByUser = async (session, searchValue, searchDate) => {
   const { userId, token } = session;
-  const url = `${TRAVELERS_URL}/${userId}?name=${searchValue}`;
+  const url = `${TRAVELERS_URL}/${userId}?destination=${searchValue}&date=${searchDate}`;
   const config = {
     headers: { Authorization: `Bearer ${token}` },
   };

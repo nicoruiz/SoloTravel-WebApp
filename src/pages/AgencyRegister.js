@@ -3,7 +3,7 @@ import { useContext } from "react";
 import Box from "@mui/material/Box";
 import { Container, Grid, TextField, Typography } from "@mui/material";
 import { Divider } from '@mui/material';
-import { LoginButton } from "../components/ui/Buttons";
+import { BackButton, LoginButton } from "../components/ui/Buttons";
 import * as registrationService from "./../services/registrationService";
 import { useHistory } from "react-router-dom";
 import { SessionContext } from "../store/SessionContext";
@@ -184,7 +184,7 @@ function AgencyRegister(props) {
           p: 2,
           pt: 5,
           backgroundColor: "white",
-          boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;",
+          boxShadow: "rgba(24, 154, 180, 0.4) 5px 5px, rgba(24, 154, 180, 0.3) 10px 10px, rgba(24, 154, 180, 0.2) 15px 15px, rgba(24, 154, 180, 0.1) 20px 20px, rgba(24, 154, 180, 0.05) 25px 25px;",
         }}
       >
         <Grid>
@@ -380,6 +380,13 @@ function AgencyRegister(props) {
               id="managerCuit"
               helperText= {managerCuitError && managerCuitErrorMsg}
             />
+            <BackButton
+              onClick={() => history.goBack()}
+              fullWidth
+              variant="contained"
+              sx={{ mt: 8, mb: 1 }}>
+              Volver
+            </BackButton>
             <LoginButton
               type="submit"
               fullWidth
