@@ -1,17 +1,14 @@
 import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
-import { Container, Grid, TextField, Typography } from "@mui/material";
+import { Container, Grid, Typography } from "@mui/material";
 import * as tripsService from "./../services/tripsService";
 import Spinner from "../components/ui/Spinner";
 import TripList from "../components/TripList";
-import SearchInput from "../components/ui/SearchInput";
 import { useSnackbar } from "notistack";
-import { PrimaryButton } from "../components/ui/Buttons";
-import { Search } from "@mui/icons-material";
 import { useContext } from "react";
 import { SessionContext } from "../store/SessionContext";
-import { DesktopDatePicker, LocalizationProvider } from "@mui/lab";
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import SearchTripComponent from "../components/SearchTripComponent";
+import { NoResults, Searching } from "../components/ui/SvgIcons";
 
 function AllTrips() {
   const { session } = useContext(SessionContext);
@@ -73,49 +70,27 @@ function AllTrips() {
         </Container>
       </Box>
       <Container sx={{ pb: 20 }}>
-        {/* TODO: Create SearchComponent with all inner components needed */}
-        <Grid
-          container
-          sx={{
-            padding: 5,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-evenly",
-            mb: 10,
-            mt: 5,
-            backgroundColor: "white",
-            boxShadow: "rgba(24, 154, 180, 0.4) 5px 5px, rgba(24, 154, 180, 0.3) 10px 10px, rgba(24, 154, 180, 0.2) 15px 15px, rgba(24, 154, 180, 0.1) 20px 20px, rgba(24, 154, 180, 0.05) 25px 25px;",
-          }}
-        >
-          <Grid item xs={12} md={5}>
-            <SearchInput handleOnChange={handleOnSearchInputChange} />
-          </Grid>
-          <Grid item xs={5} md={3}>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DesktopDatePicker
-                label="Fecha"
-                inputFormat="dd/MM/yyyy"
-                value={searchDate}
-                onChange={handleOnSearchDateChange}
-                renderInput={(params) => <TextField {...params} error={false} helperText={""} />}
-              />
-            </LocalizationProvider>
-          </Grid>
-          <Grid item xs={5} md={2}>
-            <PrimaryButton
-              id="search-btn"
-              variant="contained"
-              startIcon={<Search />}
-              onClick={handleOnSearchBtnClick}
-            >
-              Buscar
-            </PrimaryButton>
-          </Grid>
-        </Grid>
+        <SearchTripComponent 
+          handleOnSearchInputChange={handleOnSearchInputChange} 
+          searchDate={searchDate}
+          handleOnSearchDateChange={handleOnSearchDateChange} 
+          handleOnSearchBtnClick={handleOnSearchBtnClick}
+        />
         {loading
-          ? <Spinner />
+          ? <div><Searching /> <Spinner /></div>
           : <TripList trips={trips} onFavoriteRemove={() => { }} />
         }
+        {trips.length === 0 && 
+          <Grid sx={{ m: 3, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
+            <NoResults />
+            <Typography
+                variant="h5"
+                color="text.primary"
+                marginTop={3}
+              >
+                Sin resultados para su búsqueda
+              </Typography>
+          </Grid>}
       </Container>
     </>
   );
