@@ -65,7 +65,7 @@ function AllTrips() {
             color="text.primary"
             className="page-title"
           >
-            Viajes disponibles
+            Viajes
           </Typography>
         </Container>
       </Box>
