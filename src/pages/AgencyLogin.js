@@ -8,7 +8,7 @@ import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { LoginButton } from "../components/ui/Buttons";
+import { BackButton, LoginButton } from "../components/ui/Buttons";
 import { useSnackbar } from "notistack";
 import * as authService from "../services/authService";
 import { useHistory } from "react-router-dom";
@@ -25,29 +25,29 @@ function AgencyLogin() {
   const [passwordError, setPasswordError] = React.useState(false);
   const [emailAddressErrorText, setEmailAddressErrorText] = React.useState("Este campo es obligatorio");
   const passwordErrorText = "Este campo es obligatorio";
-  let history = useHistory(); 
+  let history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    
+
     const email = data.get("email");
     const password = data.get("password")
     const re = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
 
-    if(email.length === 0 || password.length === 0){
+    if (email.length === 0 || password.length === 0) {
       setEmailAddressError(email.length === 0);
       setPasswordError(password.length === 0);
-    } else if(!re.test(email.toLowerCase())){
+    } else if (!re.test(email.toLowerCase())) {
       setEmailAddressError(true);
       setPasswordError(password.length === 0);
       setEmailAddressErrorText("Este campo debe ser un email valido")
-    }else{
+    } else {
       setEmailAddressError(false);
       setPasswordError(false);
-      const response = authService.authenticateByAgency(email, password).then( response => {
-      
+      const response = authService.authenticateByAgency(email, password).then(response => {
+
         const newSession = {
           isAuthenticated: true,
           isAgency: true,
@@ -58,14 +58,14 @@ function AgencyLogin() {
           },
           userId: response.data.agencyId,
         };
-  
+
         setSession(newSession);
         sessionService.setSessionInLocalStorage(newSession);
         enqueueSnackbar("Sesión iniciada exitosamente.", { variant: "success" });
         history.push("/agencyTrips");
-      }).catch( error => {
-        const errorMessage = error.response 
-          ? error.response.data.message 
+      }).catch(error => {
+        const errorMessage = error.response
+          ? error.response.data.message
           : "Error inesperado. Intente nuevamente.";
         return enqueueSnackbar(errorMessage, { variant: "error" });
       })
@@ -124,7 +124,7 @@ function AgencyLogin() {
                 name="email"
                 autoComplete="email"
                 autoFocus
-                helperText= {emailAddressError && emailAddressErrorText}
+                helperText={emailAddressError && emailAddressErrorText}
               />
               <TextField
                 error={passwordError}
@@ -136,8 +136,15 @@ function AgencyLogin() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                helperText= {passwordError && passwordErrorText}
+                helperText={passwordError && passwordErrorText}
               />
+              <BackButton
+                onClick={() => history.goBack()}
+                fullWidth
+                variant="contained"
+                sx={{ mt: 5, mb: 1 }}>
+                Volver
+              </BackButton>
               <LoginButton
                 type="submit"
                 fullWidth

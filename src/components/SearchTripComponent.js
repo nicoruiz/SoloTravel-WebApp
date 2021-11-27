@@ -29,6 +29,7 @@ function SearchTripComponent({ handleOnSearchInputChange, searchDate, handleOnSe
                         label="Fecha"
                         inputFormat="dd/MM/yyyy"
                         value={searchDate}
+                        minDate={new Date()}
                         onChange={handleOnSearchDateChange}
                         renderInput={(params) => <TextField {...params} error={false} helperText={""} />}
                     />

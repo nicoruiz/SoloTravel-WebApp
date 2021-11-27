@@ -12,7 +12,7 @@ import { useSnackbar } from "notistack";
 import { useContext } from "react";
 import { SessionContext } from "../store/SessionContext";
 
-function AgencyTripCardActions({ tripId, tripName, onTripDelete }) {
+function AgencyTripCardActions({ tripId, tripName, onTripDelete, canEditOrDelete }) {
   const { session } = useContext(SessionContext);
   const [isOpened, setOpened] = useState(false);
   const history = useHistory();
@@ -38,12 +38,12 @@ function AgencyTripCardActions({ tripId, tripName, onTripDelete }) {
   return (
     <>
       <Tooltip title="Modificar" placement="top">
-        <PrimaryIconButton aria-label="edit" variant="contained" onClick={editTrip}>
+        <PrimaryIconButton aria-label="edit" variant="contained" onClick={editTrip} disabled={!canEditOrDelete}>
           <EditIcon />
         </PrimaryIconButton>
       </Tooltip>
       <Tooltip title="Eliminar" placement="top">
-        <RedIconButton aria-label="delete" variant="contained" onClick={openConfirmationDialog}>
+        <RedIconButton aria-label="delete" variant="contained" onClick={openConfirmationDialog} disabled={!canEditOrDelete}>
           <DeleteIcon />
         </RedIconButton>
       </Tooltip>

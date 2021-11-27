@@ -181,6 +181,7 @@ function TripForm(props) {
               label="Desde"
               inputFormat="dd/MM/yyyy"
               value={startDate}
+              minDate={new Date()}
               onChange={onStartDateChange}
               renderInput={(params) => <TextField {...params} error={showStartDateError} helperText={showStartDateError && startDateErrorText} />}
             />
@@ -188,6 +189,7 @@ function TripForm(props) {
               label="Hasta"
               inputFormat="dd/MM/yyyy"
               value={endDate}
+              minDate={new Date().setDate(new Date().getDate() + 1)}
               onChange={onEndDateChange}
               renderInput={(params) => <TextField {...params} error={showEndDateError} helperText={showEndDateError && endDateErrorText} />}
             />

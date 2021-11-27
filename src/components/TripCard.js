@@ -33,8 +33,10 @@ function TripCard(props) {
   };
 
   const availableSlotsText = props.availableSlots > 0 
-    ? `${props.availableSlots} Lugares disponibles`
+    ? `${props.availableSlots}/${props.totalSlots} Lugares disponibles`
     : "Sin disponibilidad";
+
+  const canEditOrDelete = props.totalSlots === props.availableSlots;
 
   return (
     <>
@@ -104,6 +106,7 @@ function TripCard(props) {
               tripId={props.id}
               tripName={props.name}
               onTripDelete={props.onTripDelete}
+              canEditOrDelete={canEditOrDelete}
             />
           ) : (
             <TravelerTripCardActions
