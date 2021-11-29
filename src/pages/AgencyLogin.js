@@ -23,7 +23,7 @@ function AgencyLogin() {
   const { setSession } = useContext(SessionContext);
   const [emailAddressError, setEmailAddressError] = React.useState(false);
   const [passwordError, setPasswordError] = React.useState(false);
-  const [emailAddressErrorText, setEmailAddressErrorText] = React.useState("Este campo es obligatorio");
+  const [emailAddressErrorText, setEmailAddressErrorText] = React.useState("Este campo es obligatorio y debe tener un formato de mail valido");
   const passwordErrorText = "Este campo es obligatorio";
   let history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
@@ -34,18 +34,8 @@ function AgencyLogin() {
 
     const email = data.get("email");
     const password = data.get("password")
-    const re = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
 
-    if (email.length === 0 || password.length === 0) {
-      setEmailAddressError(email.length === 0);
-      setPasswordError(password.length === 0);
-    } else if (!re.test(email.toLowerCase())) {
-      setEmailAddressError(true);
-      setPasswordError(password.length === 0);
-      setEmailAddressErrorText("Este campo debe ser un email valido")
-    } else {
-      setEmailAddressError(false);
-      setPasswordError(false);
+    if(!(emailAddressError || passwordError)){
       const response = authService.authenticateByAgency(email, password).then(response => {
 
         const newSession = {
@@ -58,7 +48,7 @@ function AgencyLogin() {
           },
           userId: response.data.agencyId,
         };
-
+  
         setSession(newSession);
         sessionService.setSessionInLocalStorage(newSession);
         enqueueSnackbar("Sesión iniciada exitosamente.", { variant: "success" });
@@ -70,7 +60,28 @@ function AgencyLogin() {
         return enqueueSnackbar(errorMessage, { variant: "error" });
       })
     }
-  };
+  }
+
+  const verifyEmail = (event) => {
+    const email = event.target.value
+    const re = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
+    
+    if(email === "" || !re.test(email.toLowerCase())){
+      setEmailAddressError(true);
+    }else{
+      setEmailAddressError(false);
+    }
+  }
+
+  const verifyPass = (event) => {
+    const pass = event.target.value
+    
+    if(pass === ""){
+      setPasswordError(true);
+    }else{
+      setPasswordError(false);
+    }
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -124,6 +135,7 @@ function AgencyLogin() {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                onChange={verifyEmail}
                 helperText={emailAddressError && emailAddressErrorText}
               />
               <TextField
@@ -136,6 +148,7 @@ function AgencyLogin() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                onChange={verifyPass}
                 helperText={passwordError && passwordErrorText}
               />
               <BackButton

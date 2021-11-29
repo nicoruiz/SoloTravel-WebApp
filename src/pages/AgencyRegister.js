@@ -143,8 +143,8 @@ function AgencyRegister(props) {
     }
 
     if(!locationStreetLengthIsOk){
-      setLocationProvinceError(true)
-      setLocationProvinceErrorMsg("Este campo debe tener entre 3 y 20 casacteres y cumplir con un formato de mail valido")
+      setLocationNumberError(true)
+      setLocationNumberErrorMsg("Este campo debe tener entre 3 y 20 casacteres y cumplir con un formato de mail valido")
     }
 
     if(!locationNumberIsOk){
@@ -175,6 +175,152 @@ function AgencyRegister(props) {
     return nameLengthIsOk && emailFormatIsOk && emailLengthIsOk && passwordLengthIsOk && fiscalNameLengthIsOk && agencyCuitIsOk && 
     locationProvinceLengthIsOk && locationCityLengthIsOk && locationStreetLengthIsOk && locationNumberIsOk && managerFirstNameLengthIsOk && 
     managerSurnameLengthIsOk && managerDniLengthIsOk && managerCuitIsOk;
+  }
+
+
+  const validateAgencyName = (event) => {
+    const name = event.target.value
+    const nameLengthIsOk = name.length > 3 && name.length < 20;
+    if(!nameLengthIsOk){
+      setAgencyNameError(true)
+      setAgencyNameErrorMsg("Este campo debe tener entre 3 y 20 caracteres")
+    }else{
+      setAgencyNameError(false)
+    }
+  }
+
+  const validateAgencyEmail = (event) => {
+    const email = event.target.value
+    const pattern = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
+    const emailFormatIsOk = pattern.test(email);
+    const emailLengthIsOk = email > 3 && email < 40;
+    if(!emailFormatIsOk || emailLengthIsOk){
+      setAgencyEmailError(true)
+      setAgencyEmailErrorMsg("Este campo debe tener entre 3 y 20 casacteres y cumplir con un formato de mail valido")
+    }else{
+      setAgencyEmailError(false)
+    }
+  }
+
+  const validateAgencyPass = (event) => {
+    const pass = event.target.value
+    const passwordLengthIsOk = pass > 3 && pass < 20;
+    if(!passwordLengthIsOk){
+      setAgencyPasswordError(true)
+      setAgencyPasswordErrorMsg("Este campo debe tener entre 3 y 20 casacteres y cumplir con un formato de mail valido")
+    }else{
+      setAgencyPasswordError(false)
+    }
+  }
+
+  const validateAgencyFiscalName = (event) => {
+    const fiscalName = event.target.value
+    const fiscalNameLengthIsOk = fiscalName > 3 && fiscalName < 20;
+    if(!fiscalNameLengthIsOk){
+      setAgencyFiscalNameError(true)
+      setAgencyFiscalNameErrorMsg("Este campo debe tener entre 3 y 20 casacteres y cumplir con un formato de mail valido")
+    }else{
+      setAgencyFiscalNameError(true)
+    }
+  }
+
+  const validateAgencyCuit = (event) => {
+    const cuit = event.target.value
+    const agencyCuitIsOk = cuit > 11111111111 && cuit < 99999999999;
+    if(!agencyCuitIsOk){
+      setAgencyCuitError(true)
+      setAgencyCuitErrorMsg("Valor invalido para dicho campo")
+    }else{
+      setAgencyCuitError(false)
+    }
+  }
+
+  const validateLocationProvince = (event) => {
+    const locationProvinceLengthIsOk = province > 3 && province < 20;
+    const province = event.target.value
+    if(!locationProvinceLengthIsOk){
+      setLocationProvinceError(true)
+      setLocationProvinceErrorMsg("Este campo debe tener entre 3 y 20 casacteres y cumplir con un formato de mail valido")
+    }else{
+      setLocationProvinceError(false)
+    }
+  }
+
+  const validateLocationCity = (event) => {
+    const city = event.target.value
+    const locationCityLengthIsOk = city > 3 && city < 20;
+    if(!locationCityLengthIsOk){
+      setLocationCityError(true)
+      setLocationCityErrorMsg("Este campo debe tener entre 3 y 20 casacteres y cumplir con un formato de mail valido")
+    }else{
+      setLocationCityError(false)
+    }
+  }
+
+  const validateLocationStreet = (event) => {
+    const number = event.target.value
+    const locationStreetLengthIsOk = number > 3 && number < 20;
+    if(!locationStreetLengthIsOk){
+      setLocationStreetError(true)
+      setLocationStreetErrorMsg("Este campo debe tener entre 3 y 20 casacteres y cumplir con un formato de mail valido")
+    }else{
+      setLocationStreetError(false)
+    }
+  }
+
+  const validateLocationStreetNumber = (event) => {
+    const number = event.target.value
+    const locationNumberIsOk = number > 1;
+    if(!locationNumberIsOk){
+      setLocationNumberError(true);
+      setLocationNumberErrorMsg("Valor invalido para dicho campo")
+    }else{
+      setLocationNumberError(false);
+    }
+  }
+
+  const validateManagerName = (event) => {
+    const name = event.target.value
+    const managerFirstNameLengthIsOk = name > 3 && name < 20;
+    if(!managerFirstNameLengthIsOk){
+      setManagerFirstNameError(true)
+      setManagerFirstNameErrorMsg("Este campo debe tener entre 3 y 20 casacteres y cumplir con un formato de mail valido")
+    }else{
+      setManagerFirstNameError(false)
+    }
+  }
+
+  const validateManagerSurname = (event) => {
+    const surname = event.target.value
+    const managerSurnameLengthIsOk = surname > 3 && surname < 20;
+    if(!managerSurnameLengthIsOk){
+      setManagerSurnameError(true)
+      setManagerSurnameErrorMsg("Este campo debe tener entre 3 y 20 casacteres y cumplir con un formato de mail valido")
+    }else{
+      setManagerSurnameError(false)
+    }
+  }
+
+  const validateManagerCuit = (event) => {
+    const cuit = event.target.value
+    const managerCuitIsOk = cuit > 11111111111 && cuit < 99999999999;
+    if(!managerCuitIsOk){
+      setManagerCuitError(true)
+      setManagerCuitErrorMsg("Valor invalido para dicho campo")
+    }else{
+      setManagerCuitError(false)
+    }
+  }
+
+  const validateManagerDni = (event) => {
+    const dni = event.target.value
+    const managerDniLengthIsOk = dni > 3 && dni < 20;
+    if(!managerDniLengthIsOk){
+      setManagerDniError(true)
+      setManagerDniErrorMsg("Este campo debe tener entre 3 y 20 casacteres y cumplir con un formato de mail valido")
+    }else{
+      setManagerDniError(false)
+    }
   }
 
   return (
@@ -222,6 +368,7 @@ function AgencyRegister(props) {
               label="Nombre de la agencia"
               name="agencyName"
               autoFocus
+              onChange={validateAgencyName}
               helperText= {agencyNameError && agencyNameErrorMsg}
             />
             <TextField
@@ -233,6 +380,7 @@ function AgencyRegister(props) {
               name="agencyEmail"
               label="Email de la agencia"
               id="agencyEmail"
+              onChange={validateAgencyEmail}
               helperText= {agencyEmailError && agencyEmailErrorMsg}
             />
             <TextField
@@ -245,6 +393,7 @@ function AgencyRegister(props) {
               type="password"
               label="Contraseña"
               id="agencyPass"
+              onChange={validateAgencyPass}
               helperText= {agencyPasswordError && agencyPasswordErrorMsg}
             />
             <TextField
@@ -256,6 +405,7 @@ function AgencyRegister(props) {
               name="agencyFiscalName"
               label="Nombre fiscal"
               id="agencyFiscalName"
+              onChange={validateAgencyFiscalName}
               helperText= {agencyFiscalNammeError && agencyFiscalNammeErrorMsg}
             />
             <TextField
@@ -268,6 +418,7 @@ function AgencyRegister(props) {
               name="agencyCuit"
               label="Cuit"
               id="agencyCuit"
+              onChange={validateAgencyCuit}
               helperText= {agencyCuitError && agencyCuitErrorMsg}
             />
             <Divider>
@@ -289,6 +440,7 @@ function AgencyRegister(props) {
               name="locationProvince"
               label="Provincia"
               id="locationProvince"
+              onChange={validateLocationProvince}
               helperText= {locationProvinceError && locationProvinceErrorMsg}
             />
             <TextField
@@ -300,6 +452,7 @@ function AgencyRegister(props) {
               name="locationCity"
               label="Ciudad"
               id="locationCity"
+              onChange={validateLocationCity}
               helperText= {locationCityError && locationCityErrorMsg}
             />
             <TextField
@@ -311,6 +464,7 @@ function AgencyRegister(props) {
               name="locationStreet"
               label="Calle"
               id="locationStreet"
+              onChange={validateLocationStreet}
               helperText= {locationStreetError && locationStreetErrorMsg}
             />
             <TextField
@@ -323,6 +477,7 @@ function AgencyRegister(props) {
               name="locationStreetNumber"
               label="Altura"
               id="locationStreetNumber"
+              onChange={validateLocationStreetNumber}
               helperText= {locationNumberError && locationNumberErrorMsg}
             />
              <Divider>
@@ -344,6 +499,7 @@ function AgencyRegister(props) {
               name="managerName"
               label="Nombre"
               id="managerName"
+              onChange={validateManagerName}
               helperText= {managerFirstNameError && managerFirstNameErrorMsg}
             />
             <TextField
@@ -355,6 +511,7 @@ function AgencyRegister(props) {
               name="managerSurname"
               label="Apellido"
               id="managerSurname"
+              onChange={validateManagerSurname}
               helperText= {managerSurnameError && managerSurnameErrorMsg}
             />
             <TextField
@@ -366,6 +523,7 @@ function AgencyRegister(props) {
               name="managerDni"
               label="Dni"
               id="managerDni"
+              onChange={validateManagerDni}
               helperText= {managerDniError && managerDniErrorMsg}
             />
             <TextField
@@ -378,6 +536,7 @@ function AgencyRegister(props) {
               name="managerCuit"
               label="Cuit"
               id="managerCuit"
+              onChange={validateManagerCuit}
               helperText= {managerCuitError && managerCuitErrorMsg}
             />
             <BackButton
