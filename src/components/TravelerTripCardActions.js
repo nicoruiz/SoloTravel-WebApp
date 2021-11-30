@@ -4,12 +4,14 @@ import { IconButton } from "@mui/material";
 // Styled components
 import { PrimaryButton } from "./ui/Buttons";
 import { makeStyles } from "@mui/styles";
+import ConfirmationDialog from "./ui/ConfirmationDialog";
 // Services
 import * as travelerService from "./../services/travelersService";
 import { useSnackbar } from "notistack";
 // Context
 import { useContext } from "react";
 import { SessionContext } from "../store/SessionContext";
+import { useHistory } from "react-router";
 
 const useStyles = makeStyles({
   favoriteBtn: {
@@ -23,14 +25,23 @@ const useStyles = makeStyles({
 function TravelerTripCardActions(props) {
   const { session } = useContext(SessionContext);
   const [isFavorite, setFavorite] = React.useState(props.isFavorite);
+  const [isOpened, setOpened] = React.useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const styles = useStyles();
 
+  const openConfirmationDialog = () => setOpened(true);
+  const closeConfirmationDialog = () => setOpened(false);
+  const history = useHistory();
+
   const handleToggleFavoriteStatus = async () => {
-    if (!isFavorite) {
-      await handleSetFavorite();
-    } else {
-      await handleRemoveFavorite();
+    if (session.isAuthenticated){
+      if (!isFavorite) {
+        await handleSetFavorite();
+      } else {
+        await handleRemoveFavorite();
+      }
+    }else{
+      openConfirmationDialog()
     }
   };
 
@@ -60,12 +71,15 @@ function TravelerTripCardActions(props) {
     enqueueSnackbar(message, { variant: "error" });
   };
 
+  const onLogConfirm = () => {
+    history.push(`/login`);
+  }
+  
   return (
     <>
       <PrimaryButton variant="contained" onClick={props.handleTripDetails}>
         Ver detalle
       </PrimaryButton>
-      {session.isAuthenticated && (
         <IconButton
           aria-label="favorite"
           className={
@@ -75,7 +89,14 @@ function TravelerTripCardActions(props) {
         >
           <Favorite fontSize="inherit" />
         </IconButton>
-      )}
+
+        <ConfirmationDialog
+        title="Para realizar dicha accion se necesita estar logeado"
+        message="desea logearse?"
+        isOpened={isOpened}
+        onConfirm={onLogConfirm}
+        onClose={closeConfirmationDialog}
+      />
     </>
   );
 }
