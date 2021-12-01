@@ -96,7 +96,7 @@ function TravelerTripCardActions(props) {
         isOpened={isOpened}
         onConfirm={onLogConfirm}
         onClose={closeConfirmationDialog}
-      />
+        />
     </>
   );
 }

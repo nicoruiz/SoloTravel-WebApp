@@ -7,9 +7,14 @@ import Spinner from "../components/ui/Spinner";
 import { IMAGES_BUCKET_URL } from "./../config";
 import { makeStyles } from "@mui/styles";
 import { AirplaneTicket, ArrowBack, AttachMoney, CardTravel, DateRange, LocationOn } from "@mui/icons-material";
+import ConfirmationDialog from "./../components/ui/ConfirmationDialog";
 import { BackButton, LoginButton } from "../components/ui/Buttons";
 import { useHistory } from "react-router";
 import { formatToMoney } from "../helpers/number";
+import { useContext } from "react";
+import { SessionContext } from "../store/SessionContext";
+import { useSnackbar } from "notistack";
+import * as travelerService from "./../services/travelersService";
 
 const useStyles = makeStyles({
   image: {
@@ -20,11 +25,17 @@ const useStyles = makeStyles({
 });
 
 function TripDetails() {
+  const { enqueueSnackbar } = useSnackbar();
+  const { session } = useContext(SessionContext);
   const [loading, setLoading] = useState(true);
+  const [isOpened, setOpened] = useState(false);
   const [tripDetails, setTripDetails] = useState({});
   const { id } = useParams();
   const styles = useStyles();
   const history = useHistory();
+
+  const openConfirmationDialog = () => setOpened(true);
+  const closeConfirmationDialog = () => setOpened(false);
 
   useEffect(() => {
     getTripDetails();
@@ -42,9 +53,26 @@ function TripDetails() {
     setLoading(false);
   }
 
-  const reservar = () => {
-    // Chequear si esta logueado
-    alert(`Click reserva de viaje: ${tripDetails.name}`);
+  const onLogConfirm = () => {
+    history.push(`/login`);
+  }
+
+  const bookTrip = async () => {
+    const message = "Reserva realizada: te estará llegando un mail indicando como continuar!";
+    try{
+      await travelerService.bookTrip(session, id);
+      enqueueSnackbar(message, { variant: "success" });
+    }catch (err) {
+      enqueueSnackbar(err.message, { variant: "error" });
+    }
+  } 
+
+  const book = async () => {
+    if(session.isAuthenticated){
+      await bookTrip();
+    }else{
+      openConfirmationDialog();
+    }
   }
 
   return (
@@ -179,7 +207,7 @@ function TripDetails() {
         <Box sx={{ mx: 10, mb: 3 }}>
           <LoginButton
             disabled={tripDetails.availableSlots === 0}
-            onClick={reservar}
+            onClick={book}
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
@@ -188,6 +216,13 @@ function TripDetails() {
           </LoginButton>
         </Box>
       </Grid>
+      <ConfirmationDialog
+        title="Para realizar dicha accion se necesita estar logeado"
+        message="desea logearse?"
+        isOpened={isOpened}
+        onConfirm={onLogConfirm}
+        onClose={closeConfirmationDialog}
+      />
     </Container>
   );
 }
