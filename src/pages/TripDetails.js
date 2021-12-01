@@ -6,7 +6,7 @@ import * as tripsService from "./../services/tripsService";
 import Spinner from "../components/ui/Spinner";
 import { IMAGES_BUCKET_URL } from "./../config";
 import { makeStyles } from "@mui/styles";
-import { AirplaneTicket, AttachMoney, CardTravel, DateRange, LocationOn } from "@mui/icons-material";
+import { AirplaneTicket, ArrowBack, AttachMoney, CardTravel, DateRange, LocationOn } from "@mui/icons-material";
 import { BackButton, LoginButton } from "../components/ui/Buttons";
 import { useHistory } from "react-router";
 import { formatToMoney } from "../helpers/number";
@@ -58,6 +58,9 @@ function TripDetails() {
           boxShadow: "rgba(24, 154, 180, 0.4) 5px 5px, rgba(24, 154, 180, 0.3) 10px 10px, rgba(24, 154, 180, 0.2) 15px 15px, rgba(24, 154, 180, 0.1) 20px 20px, rgba(24, 154, 180, 0.05) 25px 25px;",
         }}
       >
+        <BackButton startIcon={<ArrowBack />} onClick={() => history.goBack()}>
+          Volver
+        </BackButton>
         {loading ? <Spinner /> :
           <>
             <Typography
@@ -99,10 +102,10 @@ function TripDetails() {
                 sx={{ display: "flex", alignItems: "center" }}
                 variant="h6"
                 color="GrayText"
-                marginBottom="2rem"
+                marginBottom="1.5rem"
               >
                 <DateRange sx={{ pr: 0.5 }} />
-                Desde el {new Date(tripDetails.startDate).toLocaleDateString()} al {new Date(tripDetails.endDate).toLocaleDateString()}
+                Desde {new Date(tripDetails.startDate).toLocaleDateString()} al {new Date(tripDetails.endDate).toLocaleDateString()}
               </Typography>
 
               {/* Image */}
@@ -112,7 +115,7 @@ function TripDetails() {
               <Typography
                 variant="h6"
                 color="text.primary"
-                padding="3rem"
+                padding="2rem"
               >
                 {tripDetails.description}
               </Typography>
@@ -149,10 +152,10 @@ function TripDetails() {
                     sx={{ display: "flex", alignItems: "center" }}
                     variant="h6"
                     color="GrayText"
-                    >
-                      <AirplaneTicket sx={{ pr: 0.5 }} />
-                      {tripDetails.availableSlots}
-                    </Typography>
+                  >
+                    <AirplaneTicket sx={{ pr: 0.5 }} />
+                    {tripDetails.availableSlots}
+                  </Typography>
                   : <Alert severity="error">En este momento no hay disponibilidad para este viaje.</Alert>}
               </Box>
 
@@ -174,13 +177,6 @@ function TripDetails() {
             </Box>
           </>}
         <Box sx={{ mx: 10, mb: 3 }}>
-          <BackButton
-            onClick={() => history.goBack()}
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 1 }}>
-            Volver
-          </BackButton>
           <LoginButton
             disabled={tripDetails.availableSlots === 0}
             onClick={reservar}

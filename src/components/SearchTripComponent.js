@@ -20,10 +20,10 @@ function SearchTripComponent({ handleOnSearchInputChange, searchDate, handleOnSe
             boxShadow: "rgba(24, 154, 180, 0.4) 5px 5px, rgba(24, 154, 180, 0.3) 10px 10px, rgba(24, 154, 180, 0.2) 15px 15px, rgba(24, 154, 180, 0.1) 20px 20px, rgba(24, 154, 180, 0.05) 25px 25px;",
           }}
         >
-            <Grid item xs={12} md={5}>
+            <Grid item xs={12} md={5} sx={{ mb: "2rem" }}>
                 <SearchInput handleOnChange={handleOnSearchInputChange} />
             </Grid>
-            <Grid item xs={5} md={3}>
+            <Grid item xs={7} md={3} sx={{ mr: "1rem" }}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DesktopDatePicker
                         label="Fecha"
@@ -35,7 +35,7 @@ function SearchTripComponent({ handleOnSearchInputChange, searchDate, handleOnSe
                     />
                 </LocalizationProvider>
             </Grid>
-            <Grid item xs={5} md={2}>
+            <Grid item xs={4} md={2}>
                 <PrimaryButton
                     id="search-btn"
                     variant="contained"

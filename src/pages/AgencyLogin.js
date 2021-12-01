@@ -16,6 +16,7 @@ import { useContext } from "react";
 import { SessionContext } from "../store/SessionContext";
 import * as sessionService from "../services/sessionService";
 import pictureSrc from "../assets/travelAgencyLoginImages/travel-agency-login-pic-1.jpg";
+import { ArrowBack } from "@mui/icons-material";
 
 const theme = createTheme();
 
@@ -35,7 +36,7 @@ function AgencyLogin() {
     const email = data.get("email");
     const password = data.get("password")
 
-    if(!(emailAddressError || passwordError)){
+    if (!(emailAddressError || passwordError)) {
       const response = authService.authenticateByAgency(email, password).then(response => {
 
         const newSession = {
@@ -48,7 +49,7 @@ function AgencyLogin() {
           },
           userId: response.data.agencyId,
         };
-  
+
         setSession(newSession);
         sessionService.setSessionInLocalStorage(newSession);
         enqueueSnackbar("Sesión iniciada exitosamente.", { variant: "success" });
@@ -65,20 +66,20 @@ function AgencyLogin() {
   const verifyEmail = (event) => {
     const email = event.target.value
     const re = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
-    
-    if(email === "" || !re.test(email.toLowerCase())){
+
+    if (email === "" || !re.test(email.toLowerCase())) {
       setEmailAddressError(true);
-    }else{
+    } else {
       setEmailAddressError(false);
     }
   }
 
   const verifyPass = (event) => {
     const pass = event.target.value
-    
-    if(pass === ""){
+
+    if (pass === "") {
       setPasswordError(true);
-    }else{
+    } else {
       setPasswordError(false);
     }
   }
@@ -106,13 +107,16 @@ function AgencyLogin() {
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
           <Box
             sx={{
-              my: 8,
+              my: 4,
               mx: 4,
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
             }}
           >
+            <BackButton sx={{ alignSelf: "start" }} startIcon={<ArrowBack />} onClick={() => history.goBack()}>
+              Volver
+            </BackButton>
             <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
               <LockOutlinedIcon />
             </Avatar>
@@ -151,13 +155,6 @@ function AgencyLogin() {
                 onChange={verifyPass}
                 helperText={passwordError && passwordErrorText}
               />
-              <BackButton
-                onClick={() => history.goBack()}
-                fullWidth
-                variant="contained"
-                sx={{ mt: 5, mb: 1 }}>
-                Volver
-              </BackButton>
               <LoginButton
                 type="submit"
                 fullWidth

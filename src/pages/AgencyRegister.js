@@ -8,6 +8,7 @@ import * as registrationService from "./../services/registrationService";
 import { useHistory } from "react-router-dom";
 import { SessionContext } from "../store/SessionContext";
 import { useSnackbar } from "notistack";
+import { ArrowBack } from "@mui/icons-material";
 
 function AgencyRegister(props) {
   const history = useHistory();
@@ -333,6 +334,9 @@ function AgencyRegister(props) {
           boxShadow: "rgba(24, 154, 180, 0.4) 5px 5px, rgba(24, 154, 180, 0.3) 10px 10px, rgba(24, 154, 180, 0.2) 15px 15px, rgba(24, 154, 180, 0.1) 20px 20px, rgba(24, 154, 180, 0.05) 25px 25px;",
         }}
       >
+        <BackButton startIcon={<ArrowBack />} onClick={() => history.goBack()}>
+          Volver
+        </BackButton>
         <Grid>
           <Typography
             component="h1"
@@ -539,13 +543,6 @@ function AgencyRegister(props) {
               onChange={validateManagerCuit}
               helperText= {managerCuitError && managerCuitErrorMsg}
             />
-            <BackButton
-              onClick={() => history.goBack()}
-              fullWidth
-              variant="contained"
-              sx={{ mt: 8, mb: 1 }}>
-              Volver
-            </BackButton>
             <LoginButton
               type="submit"
               fullWidth

@@ -60,7 +60,7 @@ function Favorites() {
           <>
             <TripList trips={favorites} onFavoriteRemove={handleFavoriteRemove} />
             {favorites.length === 0 && 
-            <Grid sx={{ m: 3, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
+            <Grid sx={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
               <NoFavorites />
               <Typography
                   variant="h5"

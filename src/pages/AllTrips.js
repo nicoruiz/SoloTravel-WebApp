@@ -65,7 +65,7 @@ function AllTrips() {
             color="text.primary"
             className="page-title"
           >
-            Viajes
+            Descubrir viajes
           </Typography>
         </Container>
       </Box>
@@ -80,10 +80,11 @@ function AllTrips() {
           ? <div><Searching /> <Spinner /></div>
           : <TripList trips={trips} onFavoriteRemove={() => { }} />
         }
-        {trips.length === 0 && 
+        {trips.length === 0 && !loading && 
           <Grid sx={{ m: 3, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
             <NoResults />
             <Typography
+                sx={{ textAlign: "center"}}
                 variant="h5"
                 color="text.primary"
                 marginTop={3}

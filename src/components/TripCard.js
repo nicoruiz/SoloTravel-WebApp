@@ -48,7 +48,7 @@ function TripCard(props) {
           height: "100%",
           display: "flex",
           flexDirection: "column",
-          opacity: props.availableSlots > 0 ? 1 : 0.4,
+          opacity: props.availableSlots > 0 ? 1 : 0.5,
         }}
       >
         <CardActionArea onClick={handleTripDetails}>
