@@ -50,9 +50,10 @@ const bookTrip = async (session, tripId) => {
   const url = `${TRAVELERS_URL}/${userId}/book/${tripId}`
   const config = {
     headers: { Authorization: `Bearer ${token}` },
-  }
-  const response = await API.put(url, config);
-  console.log(response.data)
+  };
+  const response = await API.put(url, null, config);
+  
+  return response.data
 }
 
 export { getFavorites, addFavorite, removeFavorite, getTripsByUser, bookTrip };
