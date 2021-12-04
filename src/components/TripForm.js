@@ -1,8 +1,7 @@
 import Box from "@mui/material/Box";
-import { BackButton, LoginButton } from "../components/ui/Buttons";
+import { LoginButton } from "../components/ui/Buttons";
 import { TextField, Input, InputLabel } from "@mui/material";
 import Spinner from "./ui/Spinner";
-import { useHistory } from "react-router-dom";
 
 // Dates
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -10,8 +9,6 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 
 function TripForm(props) {
-  const history = useHistory();
-
   const {
     loading,
     trip,
@@ -38,6 +35,9 @@ function TripForm(props) {
     endDateErrorText,
   } = props;
 
+  let disabledSubmit = showNameError || showDestinationError || showImageError || 
+                       showDescriptionError || showPriceError || showSlotsError || 
+                       showStartDateError || showEndDateError;
   // Errors text
   const nameErrorText = "El nombre del viaje es requerido";
   const destinationErrorText = "El destino del viaje es requerido";
@@ -45,10 +45,6 @@ function TripForm(props) {
   const descriptionErrorText = "La descripción del viaje es requerida";
   const priceErrorText = "El precio del viaje es inválido";
   const slotsErrorText = "La cantidad de lugares indicada inválida";
-
-  const goBack = () => {
-    history.push("/agencyTrips");
-  }
 
   return (
     <Box
@@ -195,16 +191,10 @@ function TripForm(props) {
             />
           </Box>
         </LocalizationProvider>
-        <BackButton
-          onClick={goBack}
-          fullWidth
-          variant="contained"
-          sx={{ mt: 3, mb: 1 }}>
-          Volver
-        </BackButton>
         {loading ? <Spinner /> : <LoginButton
           type="submit"
           fullWidth
+          disabled={disabledSubmit}
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
         >

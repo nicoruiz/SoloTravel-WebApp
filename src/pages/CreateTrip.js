@@ -7,6 +7,8 @@ import { useHistory } from "react-router-dom";
 import TripForm from "../components/TripForm";
 import { useSnackbar } from "notistack";
 import * as validatorHelper from "./../helpers/validators";
+import { BackButton } from "../components/ui/Buttons";
+import { ArrowBack } from "@mui/icons-material";
 
 function CreateTrip() {
   const { session } = useContext(SessionContext);
@@ -143,6 +145,9 @@ function CreateTrip() {
           boxShadow: "rgba(24, 154, 180, 0.4) 5px 5px, rgba(24, 154, 180, 0.3) 10px 10px, rgba(24, 154, 180, 0.2) 15px 15px, rgba(24, 154, 180, 0.1) 20px 20px, rgba(24, 154, 180, 0.05) 25px 25px;",
         }}
       >
+        <BackButton startIcon={<ArrowBack />} onClick={() => history.goBack()}>
+          Volver
+        </BackButton>
         <Grid>
           <Typography
             component="h1"
