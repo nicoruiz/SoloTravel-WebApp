@@ -217,8 +217,8 @@ function TripDetails() {
         </Box>
       </Grid>
       <ConfirmationDialog
-        title="Para realizar dicha accion se necesita estar logeado"
-        message="desea logearse?"
+        title="Para realizar dicha accion se necesita estar logueado"
+        message="¿Desea iniciar sesión?"
         isOpened={isOpened}
         onConfirm={onLogConfirm}
         onClose={closeConfirmationDialog}
