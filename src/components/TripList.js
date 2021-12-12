@@ -18,6 +18,8 @@ function TripList(props) {
             onFavoriteRemove={props.onFavoriteRemove}
             onTripDelete={props.onTripDelete}
             duration={trip.duration}
+            totalSlots={trip.totalSlots}
+            availableSlots={trip.availableSlots}
           />
         </Grid>
       ))}

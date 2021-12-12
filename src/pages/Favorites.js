@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
-import { Container, Typography } from "@mui/material";
+import { Container, Grid, Typography } from "@mui/material";
 import * as travelersService from "./../services/travelersService";
 import TripList from "../components/TripList";
 import Spinner from "../components/ui/Spinner";
 import { useSnackbar } from "notistack";
 import { useContext } from "react";
 import { SessionContext } from "../store/SessionContext";
+import { NoFavorites } from "../components/ui/SvgIcons";
 
 function Favorites() {
   const { session } = useContext(SessionContext);
@@ -57,8 +58,18 @@ function Favorites() {
       <Container sx={{ pb: 20 }}>        
         {loading ? <Spinner /> :
           <>
-            {favorites.length === 0 && <p>Aún no tienes favoritos..</p>}
             <TripList trips={favorites} onFavoriteRemove={handleFavoriteRemove} />
+            {favorites.length === 0 && 
+            <Grid sx={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
+              <NoFavorites />
+              <Typography
+                  variant="h5"
+                  color="text.primary"
+                  marginTop={3}
+                >
+                  Aún no tienes favoritos..
+                </Typography>
+            </Grid>}
           </>
         }
       </Container>

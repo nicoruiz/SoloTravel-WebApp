@@ -67,7 +67,7 @@ function Login() {
           p: 2,
           pt: 5,
           backgroundColor: "white",
-          boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;",
+          boxShadow: "rgba(24, 154, 180, 0.4) 5px 5px, rgba(24, 154, 180, 0.3) 10px 10px, rgba(24, 154, 180, 0.2) 15px 15px, rgba(24, 154, 180, 0.1) 20px 20px, rgba(24, 154, 180, 0.05) 25px 25px;",
         }}
       >
         <Grid>

@@ -5,11 +5,11 @@ const checkValidAttr = (attr, setShowErrorFunc) => {
     return isValidAttr;
 }
 
-const checkValidPrice = (price, setShowErrorFunc) => {
-    const isValidPrice = price !== "" && price < 999999 && price > 0;
-    setShowErrorFunc(!isValidPrice);
+const checkValidNumber = (price, maxValue, setShowErrorFunc) => {
+    const isValidNumber = price !== "" && price > 0 && price <= maxValue;
+    setShowErrorFunc(!isValidNumber);
 
-    return isValidPrice;
+    return isValidNumber;
 }
 
-export { checkValidAttr, checkValidPrice }
+export { checkValidAttr, checkValidNumber }

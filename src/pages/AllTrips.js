@@ -4,18 +4,18 @@ import { Container, Grid, Typography } from "@mui/material";
 import * as tripsService from "./../services/tripsService";
 import Spinner from "../components/ui/Spinner";
 import TripList from "../components/TripList";
-import SearchInput from "../components/ui/SearchInput";
 import { useSnackbar } from "notistack";
-import { PrimaryButton } from "../components/ui/Buttons";
-import { Search } from "@mui/icons-material";
 import { useContext } from "react";
 import { SessionContext } from "../store/SessionContext";
+import SearchTripComponent from "../components/SearchTripComponent";
+import { NoResults, Searching } from "../components/ui/SvgIcons";
 
 function AllTrips() {
   const { session } = useContext(SessionContext);
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [searchDate, setSearchDate] = useState(new Date().toDateString());
   const { enqueueSnackbar } = useSnackbar();
 
   // Initial render
@@ -27,7 +27,8 @@ function AllTrips() {
     try {
       setLoading(true);
 
-      const data = await tripsService.getTrips(session, searchValue);
+      const _searchDate = new Date(searchDate).toISOString();
+      const data = await tripsService.getTrips(session, searchValue, _searchDate);
       setTrips(data.trips);
     } catch (err) {
       showError(err.message);
@@ -45,6 +46,10 @@ function AllTrips() {
     setSearchTerm(event.target.value);
   };
 
+  const handleOnSearchDateChange = (date) => {
+    setSearchDate(date);
+  }
+
   const handleOnSearchBtnClick = () => {
     getTrips(searchTerm);
   };
@@ -60,33 +65,33 @@ function AllTrips() {
             color="text.primary"
             className="page-title"
           >
-            Viajes disponibles
+            Descubrir viajes
           </Typography>
         </Container>
       </Box>
       <Container sx={{ pb: 20 }}>
-        {/* TODO: Create SearchComponent with all inner components needed */}
-        <Grid
-          container
-          spacing={2}
-          sx={{ display: "flex", alignItems: "center" }}
-        >
-          <Grid item xs={7} md={9}>
-            <SearchInput handleOnChange={handleOnSearchInputChange} />
-          </Grid>
-          <Grid item xs={5} md={3}>
-            <PrimaryButton
-              id="search-btn"
-              variant="contained"
-              startIcon={<Search />}
-              onClick={handleOnSearchBtnClick}
-            >
-              Buscar
-            </PrimaryButton>
-          </Grid>
-        </Grid>
-        {loading && <Spinner />}
-        <TripList trips={trips} onFavoriteRemove={() => {}} />
+        <SearchTripComponent 
+          handleOnSearchInputChange={handleOnSearchInputChange} 
+          searchDate={searchDate}
+          handleOnSearchDateChange={handleOnSearchDateChange} 
+          handleOnSearchBtnClick={handleOnSearchBtnClick}
+        />
+        {loading
+          ? <div><Searching /> <Spinner /></div>
+          : <TripList trips={trips} onFavoriteRemove={() => { }} />
+        }
+        {trips.length === 0 && !loading && 
+          <Grid sx={{ m: 3, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
+            <NoResults />
+            <Typography
+                sx={{ textAlign: "center"}}
+                variant="h5"
+                color="text.primary"
+                marginTop={3}
+              >
+                Sin resultados para su búsqueda
+              </Typography>
+          </Grid>}
       </Container>
     </>
   );

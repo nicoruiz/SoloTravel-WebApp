@@ -77,16 +77,11 @@ export const CancelButton = styled(Button)({
 
 export const BackButton = styled(Button)({
   color: "black",
-  backgroundColor: "whitesmoke",
+  backgroundColor: palette.fourth,
   "&:hover": {
-    backgroundColor: palette.lightGray,
+    backgroundColor: palette.third,
   },
-  border: "3px solid",
-  borderColor: palette.primary,
-  fontWeight: "bold",
-  width: "100%",
-  borderRadius: 40,
-  padding: 10,
+  marginBottom: "1rem"
 });
 
 export const PrimaryIconButton = styled(IconButton)({

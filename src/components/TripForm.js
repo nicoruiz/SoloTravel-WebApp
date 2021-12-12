@@ -1,8 +1,7 @@
 import Box from "@mui/material/Box";
-import { BackButton, LoginButton } from "../components/ui/Buttons";
+import { LoginButton } from "../components/ui/Buttons";
 import { TextField, Input, InputLabel } from "@mui/material";
 import Spinner from "./ui/Spinner";
-import { useHistory } from "react-router-dom";
 
 // Dates
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -10,8 +9,6 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 
 function TripForm(props) {
-  const history = useHistory(); 
-
   const {
     loading,
     trip,
@@ -20,6 +17,7 @@ function TripForm(props) {
     onImageChange,
     onDescriptionChange,
     onPriceChange,
+    onSlotsChange,
     startDate,
     onStartDateChange,
     endDate,
@@ -30,22 +28,23 @@ function TripForm(props) {
     showImageError,
     showDescriptionError,
     showPriceError,
+    showSlotsError,
     showStartDateError,
     showEndDateError,
     startDateErrorText,
     endDateErrorText,
   } = props;
 
+  let disabledSubmit = showNameError || showDestinationError || showImageError || 
+                       showDescriptionError || showPriceError || showSlotsError || 
+                       showStartDateError || showEndDateError;
   // Errors text
   const nameErrorText = "El nombre del viaje es requerido";
   const destinationErrorText = "El destino del viaje es requerido";
   const imageErrorText = "La imagen del viaje es inválida";
   const descriptionErrorText = "La descripción del viaje es requerida";
   const priceErrorText = "El precio del viaje es inválido";
-
-  const goBack = () => {
-    history.push("/agencyTrips");
-  }
+  const slotsErrorText = "La cantidad de lugares indicada inválida";
 
   return (
     <Box
@@ -125,20 +124,45 @@ function TripForm(props) {
           id="description"
           helperText={showDescriptionError && descriptionErrorText}
         />
-        <TextField
-          defaultValue={trip?.price}
-          onChange={onPriceChange}
-          error={showPriceError}
-          type="number"
-          margin="normal"
-          required
-          fullWidth
-          variant="standard"
-          name="price"
-          label="Precio"
-          id="price"
-          helperText={showPriceError && priceErrorText}
-        />
+        <Box
+          sx={{
+            my: 2,
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-evenly"
+          }}
+        >
+          <TextField            
+            defaultValue={trip?.price}
+            onChange={onPriceChange}
+            error={showPriceError}
+            type="number"
+            margin="normal"
+            required
+            fullWidth
+            variant="standard"
+            name="price"
+            label="Precio"
+            id="price"
+            helperText={showPriceError && priceErrorText}
+          />
+          <TextField
+            sx={{ ml: 10 }}
+            defaultValue={trip?.totalSlots}
+            onChange={onSlotsChange}
+            error={showSlotsError}
+            type="number"
+            margin="normal"
+            required
+            fullWidth
+            variant="standard"
+            name="totalSlots"
+            label="Lugares diponibles totales"
+            id="totalSlots"
+            helperText={showSlotsError && slotsErrorText}
+          />
+        </Box>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <Box
             sx={{
@@ -153,6 +177,7 @@ function TripForm(props) {
               label="Desde"
               inputFormat="dd/MM/yyyy"
               value={startDate}
+              minDate={new Date()}
               onChange={onStartDateChange}
               renderInput={(params) => <TextField {...params} error={showStartDateError} helperText={showStartDateError && startDateErrorText} />}
             />
@@ -160,21 +185,16 @@ function TripForm(props) {
               label="Hasta"
               inputFormat="dd/MM/yyyy"
               value={endDate}
+              minDate={new Date().setDate(new Date().getDate() + 1)}
               onChange={onEndDateChange}
               renderInput={(params) => <TextField {...params} error={showEndDateError} helperText={showEndDateError && endDateErrorText} />}
             />
           </Box>
         </LocalizationProvider>
-        <BackButton 
-          onClick={goBack}
-          fullWidth
-          variant="contained"
-          sx={{ mt: 3, mb: 1 }}>
-            Volver
-        </BackButton>
         {loading ? <Spinner /> : <LoginButton
           type="submit"
           fullWidth
+          disabled={disabledSubmit}
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
         >
