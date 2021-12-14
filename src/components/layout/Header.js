@@ -35,10 +35,6 @@ function Header() {
     setAnchorEl(null);
   };
 
-  const goToMyProfile = () => {
-    history.push("/myProfile");
-  }
-
   const logout = () => {
     setSession(defaultSession);
     sessionService.removeSessionFromLocalStorage();
@@ -137,7 +133,6 @@ function Header() {
           anchorEl={anchorEl}
           open={openProfileMenu}
           handleClose={handleProfileClose}
-          onMyProfileClick={goToMyProfile}
           onLogout={logout}
         />
       </Box>

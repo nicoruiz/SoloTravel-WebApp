@@ -1,15 +1,9 @@
-import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import Divider from '@mui/material/Divider';
 import Logout from '@mui/icons-material/Logout';
-import { useContext } from "react";
-import { SessionContext } from "./../../store/SessionContext";
 
-function ProfileMenu({ anchorEl, open, handleClose, onMyProfileClick, onLogout }) {
+function ProfileMenu({ anchorEl, open, handleClose, onLogout }) {
 
-	const { session, setSession } = useContext(SessionContext);
-	
 	return (
 		<Menu
 			anchorEl={anchorEl}
@@ -45,15 +39,7 @@ function ProfileMenu({ anchorEl, open, handleClose, onMyProfileClick, onLogout }
 			transformOrigin={{ horizontal: 'right', vertical: 'top' }}
 			anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
 		>
-			{session.isAgency && (
-				<MenuItem onClick={onMyProfileClick} sx={{ justifyContent:"space-between" }}>
-					<Avatar /> Profile
-				</MenuItem>	
-			)}
-			{session.isAgency && (
-				<Divider />
-			)}
-			<MenuItem onClick={onLogout} sx={{ justifyContent:"space-between" }}>
+			<MenuItem onClick={onLogout} sx={{ justifyContent: "space-between" }}>
 				<Logout /> Logout
 			</MenuItem>
 		</Menu>

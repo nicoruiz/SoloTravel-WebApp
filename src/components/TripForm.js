@@ -39,10 +39,10 @@ function TripForm(props) {
                        showDescriptionError || showPriceError || showSlotsError || 
                        showStartDateError || showEndDateError;
   // Errors text
-  const nameErrorText = "El nombre del viaje es requerido";
+  const nameErrorText = "El nombre debe tener entre 4 y 80 caracteres";
   const destinationErrorText = "El destino del viaje es requerido";
   const imageErrorText = "La imagen del viaje es inválida";
-  const descriptionErrorText = "La descripción del viaje es requerida";
+  const descriptionErrorText = "La descripción debe tener entre 10 y 800 caracteres";
   const priceErrorText = "El precio del viaje es inválido";
   const slotsErrorText = "La cantidad de lugares indicada inválida";
 

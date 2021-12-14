@@ -118,13 +118,13 @@ function EditTrip() {
 
   const isValidForm = (updateTripDto) => {
     // Name
-    const isValidName = validatorHelper.checkValidAttr(updateTripDto.name, setShowNameError);
+    const isValidName = validatorHelper.checkValidAttrWithRange(updateTripDto.name, 4, 80, setShowNameError);
     // Destination
     const isValidDestination = validatorHelper.checkValidAttr(updateTripDto.destination, setShowDestinationError);
     // Image
     const isValidImage = validatorHelper.checkValidAttr(updateTripDto.image.name, setShowImageError);
     // Description
-    const isValidDescription = validatorHelper.checkValidAttr(updateTripDto.description, setShowDescriptionError);
+    const isValidDescription = validatorHelper.checkValidAttrWithRange(updateTripDto.description, 10, 800, setShowDescriptionError);
     // Price
     const isValidPrice = validatorHelper.checkValidNumber(updateTripDto.price, 999999, setShowPriceError);
     // Slots
@@ -200,10 +200,10 @@ function EditTrip() {
           <TripForm
             loading={loading}
             trip={trip}
-            onNameChange={(e) => validatorHelper.checkValidAttr(e.target.value, setShowNameError)}
+            onNameChange={(e) => validatorHelper.checkValidAttrWithRange(e.target.value, 4, 80, setShowNameError)}
             onDestinationChange={(e) => validatorHelper.checkValidAttr(e.target.value, setShowDestinationError)}
             onImageChange={(e) => validatorHelper.checkValidAttr(e.target.value, setShowImageError)}
-            onDescriptionChange={(e) => validatorHelper.checkValidAttr(e.target.value, setShowDescriptionError)}
+            onDescriptionChange={(e) => validatorHelper.checkValidAttrWithRange(e.target.value, 10, 800, setShowDescriptionError)}
             onPriceChange={(e) => validatorHelper.checkValidNumber(e.target.value, 999999, setShowPriceError)}
             onSlotsChange={(e) => validatorHelper.checkValidNumber(e.target.value, 99, setShowSlotsError)}
             startDate={startDate}

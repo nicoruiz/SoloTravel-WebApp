@@ -12,4 +12,13 @@ const checkValidNumber = (price, maxValue, setShowErrorFunc) => {
     return isValidNumber;
 }
 
-export { checkValidAttr, checkValidNumber }
+const checkValidAttrWithRange = (attr, minLength, maxLength, setShowErrorFunc) => {
+    const isValidAttr = attr !== "" 
+                     && attr.length >= minLength 
+                     && attr.length <= maxLength;
+    setShowErrorFunc(!isValidAttr);
+
+    return isValidAttr;
+}
+
+export { checkValidAttr, checkValidNumber, checkValidAttrWithRange }
