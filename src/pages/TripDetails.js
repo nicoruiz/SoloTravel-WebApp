@@ -205,6 +205,7 @@ function TripDetails() {
             </Box>
           </>}
         <Box sx={{ mx: 10, mb: 3 }}>
+          {!session.isAgency &&
           <LoginButton
             disabled={tripDetails.availableSlots === 0}
             onClick={book}
@@ -214,6 +215,7 @@ function TripDetails() {
           >
             Reservar
           </LoginButton>
+          }
         </Box>
       </Grid>
       <ConfirmationDialog
