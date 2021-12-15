@@ -67,122 +67,121 @@ function AgencyRegister(props) {
         managerSurname: data.get("managerSurname"),
         managerDni: data.get("managerDni"),
         managerCuit: data.get("managerCuit")
-      };
-            
+      };  
       if(isValidForm(travelAgencyRegistrationDto)){
         await registrationService.registerTravelAgency(session, travelAgencyRegistrationDto);
         enqueueSnackbar("You have been registered successfully.", { variant: "success" });
         history.push("/login");
       }
     }catch(err){
-      console.log(err.data);
+      enqueueSnackbar(err.response.data.message, { variant: "error" });
     } 
   };
 
   const isValidForm = (travelAgencyRegistrationDto) => {
-    const nameLengthIsOk = travelAgencyRegistrationDto.name.length >= 3 && travelAgencyRegistrationDto.name.length < 20;
+    const nameLengthIsOk = travelAgencyRegistrationDto.name.length < 3 || travelAgencyRegistrationDto.name.length > 20;
     
     const pattern = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
-    const emailFormatIsOk = pattern.test(travelAgencyRegistrationDto.email.toLowerCase);
-    const emailLengthIsOk = travelAgencyRegistrationDto.email.lenght >= 3 && travelAgencyRegistrationDto.email.length < 40;
+    const emailFormatIsOk = pattern.test(travelAgencyRegistrationDto.email);
+    const emailLengthIsOk = travelAgencyRegistrationDto.email.lenght < 3 || travelAgencyRegistrationDto.email.length > 30;
 
-    const passwordLengthIsOk = travelAgencyRegistrationDto.password.length >= 3 && travelAgencyRegistrationDto.password.length < 20;
+    const passwordLengthIsOk = travelAgencyRegistrationDto.password.length < 3 || travelAgencyRegistrationDto.password.length > 20;
     
-    const fiscalNameLengthIsOk = travelAgencyRegistrationDto.fiscalName.length >= 3 && travelAgencyRegistrationDto.fiscalName.length < 20;
+    const fiscalNameLengthIsOk = travelAgencyRegistrationDto.fiscalName.length < 3 || travelAgencyRegistrationDto.fiscalName.length > 20;
 
-    const agencyCuitIsOk = travelAgencyRegistrationDto.cuit > 11111111111 && travelAgencyRegistrationDto.cuit < 99999999999;
+    const agencyCuitIsOk = travelAgencyRegistrationDto.cuit < 11111111111 || travelAgencyRegistrationDto.cuit > 99999999999;
     
-    const locationProvinceLengthIsOk = travelAgencyRegistrationDto.locationProvince.length >= 3 && travelAgencyRegistrationDto.locationProvince.length < 20;
+    const locationProvinceLengthIsOk = travelAgencyRegistrationDto.locationProvince.length < 3 || travelAgencyRegistrationDto.locationProvince.length > 20;
 
-    const locationCityLengthIsOk = travelAgencyRegistrationDto.locationCity.length >= 3 && travelAgencyRegistrationDto.locationCity.length < 20;
+    const locationCityLengthIsOk = travelAgencyRegistrationDto.locationCity.length < 3 || travelAgencyRegistrationDto.locationCity.length > 20;
 
-    const locationStreetLengthIsOk = travelAgencyRegistrationDto.locationStreet.length >= 3 && travelAgencyRegistrationDto.locationStreet.length < 20;
+    const locationStreetLengthIsOk = travelAgencyRegistrationDto.locationStreet.length < 3 || travelAgencyRegistrationDto.locationStreet.length > 20;
 
-    const locationNumberIsOk = travelAgencyRegistrationDto.locationNumber >= 1;
+    const locationNumberIsOk = travelAgencyRegistrationDto.locationNumber < 1;
 
-    const managerFirstNameLengthIsOk = travelAgencyRegistrationDto.managerFirstName.length >= 3 && travelAgencyRegistrationDto.managerFirstName.length < 20;
+    const managerFirstNameLengthIsOk = travelAgencyRegistrationDto.managerFirstName.length < 3 || travelAgencyRegistrationDto.managerFirstName.length > 20;
 
-    const managerSurnameLengthIsOk = travelAgencyRegistrationDto.managerSurname.length >= 3 && travelAgencyRegistrationDto.managerSurname.length < 20;
+    const managerSurnameLengthIsOk = travelAgencyRegistrationDto.managerSurname.length < 3 || travelAgencyRegistrationDto.managerSurname.length > 20;
 
-    const managerDniLengthIsOk = travelAgencyRegistrationDto.managerDni.length >= 3 && travelAgencyRegistrationDto.managerDni.length < 20;
+    const managerDniLengthIsOk = travelAgencyRegistrationDto.managerDni.length < 3 || travelAgencyRegistrationDto.managerDni.length > 20;
 
-    const managerCuitIsOk = travelAgencyRegistrationDto.managerCuit > 11111111111 && travelAgencyRegistrationDto.managerCuit < 99999999999;
+    const managerCuitIsOk = travelAgencyRegistrationDto.managerCuit < 11111111111 || travelAgencyRegistrationDto.managerCuit > 99999999999;
 
-    if(!nameLengthIsOk){
+    if(nameLengthIsOk){
       setAgencyNameError(true)
       setAgencyNameErrorMsg("Este campo debe tener entre 3 y 20 caracteres")
     }
     
-    if(!emailFormatIsOk && !emailLengthIsOk){
+    if(!emailFormatIsOk || emailLengthIsOk){
       setAgencyEmailError(true)
-      setAgencyEmailErrorMsg("Este campo debe tener entre 3 y 20 casacteres y cumplir con un formato de mail valido")
+      setAgencyEmailErrorMsg("Este campo debe tener entre 3 y 30 casacteres y cumplir con un formato de mail valido")
     }
 
-    if(!passwordLengthIsOk){
+    if(passwordLengthIsOk){
       setAgencyPasswordError(true)
       setAgencyPasswordErrorMsg("Este campo debe tener entre 3 y 20 casacteres")
     }
     
-    if(!fiscalNameLengthIsOk){
+    if(fiscalNameLengthIsOk){
       setAgencyFiscalNameError(true)
       setAgencyFiscalNameErrorMsg("Este campo debe tener entre 3 y 20 casacteres")
     }
 
-    if(!agencyCuitIsOk){
+    if(agencyCuitIsOk){
       setAgencyCuitError(true)
       setAgencyCuitErrorMsg("Este campo debe ser un valor numerico entre 11111111111 y 99999999999")
     }
 
-    if(!locationProvinceLengthIsOk){
+    if(locationProvinceLengthIsOk){
       setLocationProvinceError(true)
       setLocationProvinceErrorMsg("Este campo debe tener entre 3 y 20 casacteres")
     }
     
-    if(!locationCityLengthIsOk){
+    if(locationCityLengthIsOk){
       setLocationCityError(true)
       setLocationCityErrorMsg("Este campo debe tener entre 3 y 20 casacteres")
     }
 
-    if(!locationStreetLengthIsOk){
+    if(locationStreetLengthIsOk){
       setLocationStreetError(true)
       setLocationStreetErrorMsg("Este campo debe tener entre 3 y 20 casacteres")
     }
 
-    if(!locationNumberIsOk){
+    if(locationNumberIsOk){
       setLocationNumberError(true);
       setLocationNumberErrorMsg("Este campo debe ser un valor numerico mayor a 0")
     }
 
-    if(!managerFirstNameLengthIsOk){
+    if(managerFirstNameLengthIsOk){
       setManagerFirstNameError(true)
       setManagerFirstNameErrorMsg("Este campo debe tener entre 3 y 20 casacteres")
     }
 
-    if(!managerSurnameLengthIsOk){
+    if(managerSurnameLengthIsOk){
       setManagerSurnameError(true)
       setManagerSurnameErrorMsg("Este campo debe tener entre 3 y 20 casacteres")
     }
 
-    if(!managerDniLengthIsOk){
+    if(managerDniLengthIsOk){
       setManagerDniError(true)
       setManagerDniErrorMsg("Este campo debe tener entre 3 y 20 casacteres")
     }
 
-    if(!managerCuitIsOk){
+    if(managerCuitIsOk){
       setManagerCuitError(true)
       setManagerCuitErrorMsg("Este campo debe ser un valor numerico entre 11111111111 y 99999999999")
     }
 
-    return nameLengthIsOk && emailFormatIsOk && emailLengthIsOk && passwordLengthIsOk && fiscalNameLengthIsOk && agencyCuitIsOk && 
+    return !(nameLengthIsOk && !emailFormatIsOk && emailLengthIsOk && passwordLengthIsOk && fiscalNameLengthIsOk && agencyCuitIsOk && 
     locationProvinceLengthIsOk && locationCityLengthIsOk && locationStreetLengthIsOk && locationNumberIsOk && managerFirstNameLengthIsOk && 
-    managerSurnameLengthIsOk && managerDniLengthIsOk && managerCuitIsOk;
+    managerSurnameLengthIsOk && managerDniLengthIsOk && managerCuitIsOk);
   }
 
 
   const validateAgencyName = (event) => {
     const name = event.target.value
-    const nameLengthIsOk = name.length >= 3 && name.length < 20;
-    if(!nameLengthIsOk){
+    const nameLengthIsOk = name.length < 3 || name.length > 20;
+    if(nameLengthIsOk){
       setAgencyNameError(true)
       setAgencyNameErrorMsg("Este campo debe tener entre 3 y 20 caracteres")
     }else{
@@ -194,10 +193,10 @@ function AgencyRegister(props) {
     const email = event.target.value
     const pattern = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
     const emailFormatIsOk = pattern.test(email);
-    const emailLengthIsOk = email >= 3 && email < 40;
+    const emailLengthIsOk = email.length < 3 || email.length > 30;
     if(!emailFormatIsOk || emailLengthIsOk){
       setAgencyEmailError(true)
-      setAgencyEmailErrorMsg("Este campo debe tener entre 3 y 20 casacteres y cumplir con un formato de mail valido")
+      setAgencyEmailErrorMsg("Este campo debe tener entre 3 y 30 casacteres y cumplir con un formato de mail valido")
     }else{
       setAgencyEmailError(false)
     }
@@ -205,8 +204,8 @@ function AgencyRegister(props) {
 
   const validateAgencyPass = (event) => {
     const pass = event.target.value
-    const passwordLengthIsOk = pass >= 3 && pass < 20;
-    if(!passwordLengthIsOk){
+    const passwordLengthIsOk = pass.length < 3 || pass.length > 20;
+    if(passwordLengthIsOk){
       setAgencyPasswordError(true)
       setAgencyPasswordErrorMsg("Este campo debe tener entre 3 y 20 casacteres")
     }else{
@@ -216,19 +215,19 @@ function AgencyRegister(props) {
 
   const validateAgencyFiscalName = (event) => {
     const fiscalName = event.target.value
-    const fiscalNameLengthIsOk = fiscalName >= 3 && fiscalName < 20;
-    if(!fiscalNameLengthIsOk){
+    const fiscalNameLengthIsOk = fiscalName.length < 3 || fiscalName.length > 20;
+    if(fiscalNameLengthIsOk){
       setAgencyFiscalNameError(true)
       setAgencyFiscalNameErrorMsg("Este campo debe tener entre 3 y 20 casacteres")
     }else{
-      setAgencyFiscalNameError(true)
+      setAgencyFiscalNameError(false)
     }
   }
 
   const validateAgencyCuit = (event) => {
     const cuit = event.target.value
-    const agencyCuitIsOk = cuit > 11111111111 && cuit < 99999999999;
-    if(!agencyCuitIsOk){
+    const agencyCuitIsOk = cuit < 11111111111 || cuit > 99999999999;
+    if(agencyCuitIsOk){
       setAgencyCuitError(true)
       setAgencyCuitErrorMsg("Este campo debe ser un valor numerico entre 11111111111 y 99999999999")
     }else{
@@ -238,8 +237,8 @@ function AgencyRegister(props) {
 
   const validateLocationProvince = (event) => {
     const province = event.target.value
-    const locationProvinceLengthIsOk = province >= 3 && province < 20;
-    if(!locationProvinceLengthIsOk){
+    const locationProvinceLengthIsOk = province.length < 3 || province.length > 20;
+    if(locationProvinceLengthIsOk){
       setLocationProvinceError(true)
       setLocationProvinceErrorMsg("Este campo debe tener entre 3 y 20 casacteres")
     }else{
@@ -249,8 +248,8 @@ function AgencyRegister(props) {
 
   const validateLocationCity = (event) => {
     const city = event.target.value
-    const locationCityLengthIsOk = city >= 3 && city < 20;
-    if(!locationCityLengthIsOk){
+    const locationCityLengthIsOk = city.length < 3 || city.length > 20;
+    if(locationCityLengthIsOk){
       setLocationCityError(true)
       setLocationCityErrorMsg("Este campo debe tener entre 3 y 20 casacteres")
     }else{
@@ -260,8 +259,8 @@ function AgencyRegister(props) {
 
   const validateLocationStreet = (event) => {
     const number = event.target.value
-    const locationStreetLengthIsOk = number >= 3 && number < 20;
-    if(!locationStreetLengthIsOk){
+    const locationStreetLengthIsOk = number.length < 3 || number.length > 20;
+    if(locationStreetLengthIsOk){
       setLocationStreetError(true)
       setLocationStreetErrorMsg("Este campo debe tener entre 3 y 20 casacteres")
     }else{
@@ -282,8 +281,8 @@ function AgencyRegister(props) {
 
   const validateManagerName = (event) => {
     const name = event.target.value
-    const managerFirstNameLengthIsOk = name >= 3 && name < 20;
-    if(!managerFirstNameLengthIsOk){
+    const managerFirstNameLengthIsOk = name.length < 3 || name.length > 20;
+    if(managerFirstNameLengthIsOk){
       setManagerFirstNameError(true)
       setManagerFirstNameErrorMsg("Este campo debe tener entre 3 y 20 casacteres")
     }else{
@@ -293,8 +292,8 @@ function AgencyRegister(props) {
 
   const validateManagerSurname = (event) => {
     const surname = event.target.value
-    const managerSurnameLengthIsOk = surname >= 3 && surname < 20;
-    if(!managerSurnameLengthIsOk){
+    const managerSurnameLengthIsOk = surname.length < 3 || surname > 20;
+    if(managerSurnameLengthIsOk){
       setManagerSurnameError(true)
       setManagerSurnameErrorMsg("Este campo debe tener entre 3 y 20 casacteres")
     }else{
@@ -304,8 +303,8 @@ function AgencyRegister(props) {
 
   const validateManagerCuit = (event) => {
     const cuit = event.target.value
-    const managerCuitIsOk = cuit > 11111111111 && cuit < 99999999999;
-    if(!managerCuitIsOk){
+    const managerCuitIsOk = cuit < 11111111111 || cuit > 99999999999;
+    if(managerCuitIsOk){
       setManagerCuitError(true)
       setManagerCuitErrorMsg("Este campo debe ser un valor numerico entre 11111111111 y 99999999999")
     }else{
@@ -315,8 +314,8 @@ function AgencyRegister(props) {
 
   const validateManagerDni = (event) => {
     const dni = event.target.value
-    const managerDniLengthIsOk = dni >= 3 && dni < 20;
-    if(!managerDniLengthIsOk){
+    const managerDniLengthIsOk = dni.length < 3 || dni.length > 20;
+    if(managerDniLengthIsOk){
       setManagerDniError(true)
       setManagerDniErrorMsg("Este campo debe tener entre 3 y 20 casacteres")
     }else{
