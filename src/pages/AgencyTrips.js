@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
-import { Container, Typography } from "@mui/material";
+import { Container, Grid, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import * as travelAgencyService from "./../services/travelAgencyService";
 import Spinner from "../components/ui/Spinner";
@@ -10,6 +10,7 @@ import { useContext } from "react";
 import { SessionContext } from "../store/SessionContext";
 import { FloatActionButton } from "../components/ui/Buttons";
 import { useHistory } from "react-router-dom";
+import { NoResults } from "../components/ui/SvgIcons";
 
 function AgencyTrips() {
   const { session } = useContext(SessionContext);
@@ -71,6 +72,18 @@ function AgencyTrips() {
       <Container sx={{ pb: 20 }}>
         {loading && <Spinner />}
         <TripList trips={trips} onTripDelete={onTripDelete} />
+        {trips.length === 0 && !loading && 
+          <Grid sx={{ m: 8, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
+            <NoResults />
+            <Typography
+                sx={{ textAlign: "center"}}
+                variant="h5"
+                color="text.primary"
+                marginTop={3}
+              >
+                Aún no tienes viajes creados
+              </Typography>
+          </Grid>}
       </Container>
       <FloatActionButton color="primary" aria-label="add" onClick={() => history.push("/createTrip")}>
         <AddIcon />

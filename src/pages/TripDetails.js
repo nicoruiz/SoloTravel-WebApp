@@ -62,6 +62,7 @@ function TripDetails() {
     try{
       await travelerService.bookTrip(session, id);
       enqueueSnackbar(message, { variant: "success" });
+      history.push('/');
     }catch (err) {
       enqueueSnackbar(err.response.data.message, { variant: "error" });
     }
